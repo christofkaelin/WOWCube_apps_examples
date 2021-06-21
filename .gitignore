@@ -1,0 +1,19 @@
+# build artefacts
+/Resources_prj/__pycache__/
+/Resources_prj/build_output/
+/Resources_prj/*.img
+/Resources_prj/*.bin
+/Resources_prj/*.hex
+/Resources_prj/*.bat
+/Resources_prj/nopython.bat
+/Resources_prj/nopython.sh
+/Resources_prj/*.pyc
+/pawn/build_output/
+/pawn/*.c
+/pawn/*.amx
+/pawn/_build_*.bat
+
+# nodejs
+node_modules/
+package-lock.json
+/.idea/
