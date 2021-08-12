@@ -133,3 +133,35 @@ class example9(pawn_base.PawnModule):
         self.MenuIcon = 'icon.png'
         self.SoundPath = ''
         self.SoundList = []
+
+
+class fourelements(pawn_base.PawnModule):
+    def __init__(self):
+        super(fourelements, self).__init__()
+        self.scriptId = 10
+        self.name = 'fourelements'
+        self.ScriptFileName = 'fourelements.amx'
+        self.ScriptResourcePath = 'fourelements'
+        self.ScriptResourceList = [
+            '%d.webp' % ii for ii in range(0, 2048)
+        ]
+        self.MenuIcon = 'icon.png'
+        self.SoundPath = 'fourelements'
+        self.SoundList = [
+            'fire.wav', 'water.wav'
+        ]
+
+
+class worldclock(pawn_base.PawnModule):
+    def __init__(self):
+        super(worldclock, self).__init__()
+        self.scriptId = 10
+        self.name = 'worldclock'
+        self.ScriptFileName = 'worldclock.amx'
+        self.ScriptResourcePath = 'worldclock'
+        self.ScriptResourceList = [
+            '%d.webp' % ii for ii in range(0, 29)
+        ]
+        self.MenuIcon = 'icon.png'
+        self.SoundPath = 'worldclock'
+        self.SoundList = []
