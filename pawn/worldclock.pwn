@@ -32,7 +32,7 @@ ONTICK() {
         abi_CMD_FILL(0, 0, 0);
         
         //set time zone
-        gmt = (abi_cubeN + 1) * (screenI + 1);
+        gmt = ((abi_cubeN + 1) * FACES_MAX) - (FACES_MAX - (screenI + 1));
         
         //draw watch face
         abi_CMD_BITMAP(gmt, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI], MIRROR_BLANK);
