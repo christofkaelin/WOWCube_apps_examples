@@ -165,3 +165,18 @@ class worldclock(pawn_base.PawnModule):
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'worldclock'
         self.SoundList = []
+
+
+class cuberacer(pawn_base.PawnModule):
+    def __init__(self):
+        super(cuberacer, self).__init__()
+        self.scriptId = 10
+        self.name = 'cuberacer'
+        self.ScriptFileName = 'cuberacer.amx'
+        self.ScriptResourcePath = 'cuberacer'
+        self.ScriptResourceList = [
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 8)
+        ]
+        self.MenuIcon = 'icon.png'
+        self.SoundPath = 'cuberacer'
+        self.SoundList = []
