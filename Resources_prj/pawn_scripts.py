@@ -180,3 +180,17 @@ class cuberacer(pawn_base.PawnModule):
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'cuberacer'
         self.SoundList = []
+
+class exampletap(pawn_base.PawnModule):
+    def __init__(self):
+        super(exampletap, self).__init__()
+        self.scriptId = 11
+        self.name = 'exampletap'
+        self.ScriptFileName = 'exampletap.amx'
+        self.ScriptResourcePath = 'exampletap'
+        self.ScriptResourceList = [
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 8)
+        ]
+        self.MenuIcon = 'icon.png'
+        self.SoundPath = 'exampletap'
+        self.SoundList = []

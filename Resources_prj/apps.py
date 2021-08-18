@@ -13,6 +13,7 @@ script_list = [
     pawn_scripts.fourelements(),
     pawn_scripts.worldclock(),
     pawn_scripts.cuberacer(),
+    pawn_scripts.exampletap(),
 ]
 
 

@@ -14,14 +14,15 @@ ONTICK() {
   // TODO: Tap should turn road by 90 degrees clockwise.
   // Inspiration: https://wiki.wowcube.com/wiki/API#Examples_2
   for (new screenI = 0; screenI < FACES_MAX; screenI++) {
-    if (screenI == (abi_MTD_GetTapFace())) {
+    if (screenI == (abi_MTD_GetTapFace())) {    
       abi_CMD_FILL(0, 0, 0);
-      roads[abi_cubeN][screenI][1] = roads[abi_cubeN][screenI][1] + (90 * abi_MTD_GetTapsCount());
+      roads[abi_cubeN][screenI][1] = roads[abi_cubeN][screenI][1] + (90 * abi_MTD_GetTapsCount());   
       abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI] + roads[abi_cubeN][screenI][1], MIRROR_BLANK);
-    }
-    abi_CMD_REDRAW(screenI);
+      abi_CMD_REDRAW(screenI);
+    }  
   }
 }
+
 ON_PHYSICS_TICK() {}
 RENDER() {}
 ON_CMD_NET_RX(const pkt[]) {}
