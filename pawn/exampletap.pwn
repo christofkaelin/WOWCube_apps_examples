@@ -8,6 +8,7 @@
 
 #define TEXT_SIZE       8
 
+// Implementation of: https://wiki.wowcube.com/wiki/API#Examples_2
 new delay = 0;
 new color = 0x000000; 
 ONTICK() {

@@ -10,8 +10,25 @@
 
 new roads[8][3][2];
 
+new car_current_angles = 180;
+new car_position_x = 180;
+new car_position_y = 180;
+new car_position_module = 0;
+new car_position_screen = 0;
+
+new SHIFT_POS = 5;
+new SHIFT_ANGLE = 10; 
+new SCORE_GAIN_BASE = 10;
+
+new car_current_module = 0;
+new car_current_screem = 0;
+new car_neighbour_module = CUBES_MAX;
+new car_neighbour_screen = FACES_MAX;
+
+new delay = 0;
+
 ONTICK() {
-  // TODO: Tap should turn road by 90 degrees clockwise.
+  // Tapping the screen rotates the displayed element by 90 degrees clockwise.
   // Inspiration: https://wiki.wowcube.com/wiki/API#Examples_2
   for (new screenI = 0; screenI < FACES_MAX; screenI++) {
     if (screenI == (abi_MTD_GetTapFace())) {    
@@ -21,6 +38,17 @@ ONTICK() {
       abi_CMD_REDRAW(screenI);
     }  
   }
+
+  //Increases base speed (SHIFT_POS) after defined interval (currently 45s)
+  //TODO: Implement score system and elevate gain for each increase in movement speed
+  if (delay % 45000 == 0) {
+    SHIFT_POS = SHIFT_POS + 2;
+  }
+
+  //exit program on shake
+  if (0 == abi_cubeN) {
+        abi_checkShake();
+    }
 }
 
 ON_PHYSICS_TICK() {}
