@@ -33,29 +33,29 @@ ON_INIT() {
   roads[0][0][1] = 90;
   // TODO: set to random(8), once all elements are implemented.
   // We might want to set probabilities for special road types (boost, warp, guardian, k.o.).
-  roads[0][1][0] = random(2);
-  roads[0][2][0] = random(2);
-  roads[1][0][0] = random(2);
-  roads[1][1][0] = random(2);
-  roads[1][2][0] = random(2);
-  roads[2][0][0] = random(2);
-  roads[2][1][0] = random(2);
-  roads[2][2][0] = random(2);
-  roads[3][0][0] = random(2);
-  roads[3][1][0] = random(2);
-  roads[3][2][0] = random(2);
-  roads[4][0][0] = random(2);
-  roads[4][1][0] = random(2);
-  roads[4][2][0] = random(2);
-  roads[5][0][0] = random(2);
-  roads[5][1][0] = random(2);
-  roads[5][2][0] = random(2);
-  roads[6][0][0] = random(2);
-  roads[6][1][0] = random(2);
-  roads[6][2][0] = random(2);
-  roads[7][0][0] = random(2);
-  roads[7][1][0] = random(2);
-  roads[7][2][0] = random(2);
+  roads[0][1][0] = random(3);
+  roads[0][2][0] = random(3);
+  roads[1][0][0] = random(3);
+  roads[1][1][0] = random(3);
+  roads[1][2][0] = random(3);
+  roads[2][0][0] = random(3);
+  roads[2][1][0] = random(3);
+  roads[2][2][0] = random(3);
+  roads[3][0][0] = random(3);
+  roads[3][1][0] = random(3);
+  roads[3][2][0] = random(3);
+  roads[4][0][0] = random(3);
+  roads[4][1][0] = random(3);
+  roads[4][2][0] = random(3);
+  roads[5][0][0] = random(3);
+  roads[5][1][0] = random(3);
+  roads[5][2][0] = random(3);
+  roads[6][0][0] = random(3);
+  roads[6][1][0] = random(3);
+  roads[6][2][0] = random(3);
+  roads[7][0][0] = random(3);
+  roads[7][1][0] = random(3);
+  roads[7][2][0] = random(3);
 
   // Randomly generate rotation of the roads
   roads[0][1][1] = random(3) * 90;
