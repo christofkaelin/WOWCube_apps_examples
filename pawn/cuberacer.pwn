@@ -19,7 +19,7 @@ new car_position_y = 120;
 new car_position_module = 0;
 new car_position_screen = 0;
 
-new SHIFT_POS = 5;
+new SHIFT_POS = 10;
 new SHIFT_ANGLE = 10;
 new SCORE_GAIN_BASE = 10;
 
@@ -47,7 +47,6 @@ send_car() {
 
 ONTICK() {
     // Tapping the screen rotates the displayed element by 90 degrees clockwise.
-    // Inspiration: https://wiki.wowcube.com/wiki/API#Examples_2
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         if (screenI == (abi_MTD_GetTapFace())) {
             abi_CMD_FILL(0, 0, 0);
@@ -55,6 +54,7 @@ ONTICK() {
             abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI] + roads[abi_cubeN][screenI][1], MIRROR_BLANK);
             abi_CMD_REDRAW(screenI);
         }
+
         if (((car_position_module == abi_cubeN) && (car_position_screen == screenI)) || ((is_departing) && (car_neighbour_module == abi_cubeN) && (car_neighbour_screen == screenI))) {
             abi_CMD_BITMAP(8, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
 
@@ -86,13 +86,17 @@ ONTICK() {
         send_car();
     }
 
-    //Increases base speed (SHIFT_POS) after defined interval (currently 45s)
+    //Increases base speed (SHIFT_POS) after defined interval
     //TODO: Implement score system and elevate gain for each increase in movement speed
-    if (delay % 45000 == 0) {
-        SHIFT_POS = SHIFT_POS + 2;
+    /*if (delay % 100 == 0) {
+        if (SHIFT_POS != 40) {
+            SHIFT_POS = SHIFT_POS + 10;
+            SCORE_GAIN_BASE = SCORE_GAIN_BASE * 2;
+            printf("speeeeed = %d\n",SHIFT_POS);
+        }
         delay = 0;
     }
-
+*/
     //exit program on shake
     if (0 == abi_cubeN) {
         abi_checkShake();
