@@ -189,7 +189,7 @@ class exampletap(pawn_base.PawnModule):
         self.ScriptFileName = 'exampletap.amx'
         self.ScriptResourcePath = 'exampletap'
         self.ScriptResourceList = [
-            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 8)
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 12)
         ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'exampletap'

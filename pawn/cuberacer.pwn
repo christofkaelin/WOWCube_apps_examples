@@ -46,8 +46,8 @@ send_car() {
 }
 
 ONTICK() {
-    // Tapping the screen rotates the displayed element by 90 degrees clockwise.
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
+        // Tapping the screen rotates the displayed element by 90 degrees clockwise.
         if (screenI == (abi_MTD_GetTapFace())) {
             abi_CMD_FILL(0, 0, 0);
             roads[abi_cubeN][screenI][1] = roads[abi_cubeN][screenI][1] + (90 * abi_MTD_GetTapsCount());
