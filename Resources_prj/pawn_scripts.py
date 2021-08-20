@@ -194,3 +194,17 @@ class exampletap(pawn_base.PawnModule):
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'exampletap'
         self.SoundList = []
+
+class example7_1(pawn_base.PawnModule):
+    def __init__(self):
+        super(example7_1, self).__init__()
+        self.scriptId = 6
+        self.name = 'example7_1'
+        self.ScriptFileName = 'example7_1.amx'
+        self.ScriptResourcePath = 'example7_1'
+        self.ScriptResourceList = [
+            '000.webp'
+        ]
+        self.MenuIcon = 'icon.png'
+        self.SoundPath = ''
+        self.SoundList = []

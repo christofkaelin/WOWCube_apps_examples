@@ -8,6 +8,7 @@ script_list = [
     pawn_scripts.example5(),
     pawn_scripts.example6(),
     pawn_scripts.example7(),
+    pawn_scripts.example7_1(),
     pawn_scripts.example8(),
     pawn_scripts.example9(),
     pawn_scripts.fourelements(),
