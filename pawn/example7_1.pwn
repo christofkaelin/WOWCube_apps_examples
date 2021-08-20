@@ -10,11 +10,12 @@
 
 #define PICTURE         0
 
-#define SHIFT_POS       5
-#define SHIFT_ANGLE     5 
+#define SHIFT_POS       10
+#define SHIFT_ANGLE     10
 
 #define CMD_SEND_SHIP   150
 
+//Clone of example7 for experimental purposes.
 new current_angles = 180;
 new position_x = 180;
 new position_y = 180;

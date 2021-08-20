@@ -32,6 +32,7 @@ new car_neighbour_module = CUBES_MAX;
 new car_neighbour_screen = FACES_MAX;
 
 new delay = 0;
+new rand;
 
 //broadcast information to CPU
 send_car() {
@@ -43,6 +44,73 @@ send_car() {
     abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=0
     abi_CMD_NET_TX(1, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=1
     abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=2
+}
+//assigns element type according to custom probabilities (see documentation)
+draw_road() {
+
+    rand = random(100);
+
+    //Straight
+    if (rand <= 35) {
+        return 0;
+    }
+    //Turn
+    if (rand > 35 && rand <= 70) {
+        return 1;
+    }
+
+    //U-Turn
+    if (rand > 70 && rand <= 75) {
+        return 2;
+    }
+    //bomb
+    if (rand > 75 && rand <= 80) {
+        //bomb-straight
+        if (rand <= 78) {
+            return 3;
+        }
+        //bomb-turn
+        else {
+            return 4;
+        }
+    }
+
+    //jump
+    if (rand > 80 && rand <= 85) {
+        return 5;
+    }
+
+    //boost
+    if (rand > 85 && rand <= 90) {
+        //boost-straight
+        if (rand <= 88) {
+            return 6;
+        }
+        //boost-turn
+        else {
+            return 7;
+        }
+    }
+
+    //guardian
+    if (rand > 90 && rand <= 95) {
+        //guardian-straight
+        if (rand <= 93) {
+            return 8;
+        }
+        //guardian-turn
+        else {
+            return 9;
+        }
+    }
+
+    //warp
+    if (rand > 95 && rand <= 100) {
+        return 10;
+    
+    } else {
+        //printf("whoopsie daisy");
+    }
 }
 
 ONTICK() {
@@ -56,7 +124,7 @@ ONTICK() {
         }
 
         if (((car_position_module == abi_cubeN) && (car_position_screen == screenI)) || ((is_departing) && (car_neighbour_module == abi_cubeN) && (car_neighbour_screen == screenI))) {
-            abi_CMD_BITMAP(8, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
+            abi_CMD_BITMAP(11, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
 
             if ((car_position_x > 60) || (is_departing)) {
                 car_position_x = (((car_position_y == 120) && (car_current_angles == 180)) ? car_position_x - SHIFT_POS : car_position_x);
@@ -129,31 +197,30 @@ ON_INIT() {
     // First field will always be a straight road
     roads[0][0][0] = 0;
     roads[0][0][1] = 90;
-    // TODO: set to random(8), once all elements are implemented.
-    // We might want to set probabilities for special road types (boost, warp, guardian, k.o.).
-    roads[0][1][0] = random(3);
-    roads[0][2][0] = random(3);
-    roads[1][0][0] = random(3);
-    roads[1][1][0] = random(3);
-    roads[1][2][0] = random(3);
-    roads[2][0][0] = random(3);
-    roads[2][1][0] = random(3);
-    roads[2][2][0] = random(3);
-    roads[3][0][0] = random(3);
-    roads[3][1][0] = random(3);
-    roads[3][2][0] = random(3);
-    roads[4][0][0] = random(3);
-    roads[4][1][0] = random(3);
-    roads[4][2][0] = random(3);
-    roads[5][0][0] = random(3);
-    roads[5][1][0] = random(3);
-    roads[5][2][0] = random(3);
-    roads[6][0][0] = random(3);
-    roads[6][1][0] = random(3);
-    roads[6][2][0] = random(3);
-    roads[7][0][0] = random(3);
-    roads[7][1][0] = random(3);
-    roads[7][2][0] = random(3);
+
+    roads[0][1][0] = draw_road();
+    roads[0][2][0] = draw_road();
+    roads[1][0][0] = draw_road();
+    roads[1][1][0] = draw_road();
+    roads[1][2][0] = draw_road();
+    roads[2][0][0] = draw_road();
+    roads[2][1][0] = draw_road();
+    roads[2][2][0] = draw_road();
+    roads[3][0][0] = draw_road();
+    roads[3][1][0] = draw_road();
+    roads[3][2][0] = draw_road();
+    roads[4][0][0] = draw_road();
+    roads[4][1][0] = draw_road();
+    roads[4][2][0] = draw_road();
+    roads[5][0][0] = draw_road();
+    roads[5][1][0] = draw_road();
+    roads[5][2][0] = draw_road();
+    roads[6][0][0] = draw_road();
+    roads[6][1][0] = draw_road();
+    roads[6][2][0] = draw_road();
+    roads[7][0][0] = draw_road();
+    roads[7][1][0] = draw_road();
+    roads[7][2][0] = draw_road();
 
     // Randomly generate rotation of the roads
     roads[0][1][1] = random(3) * 90;
