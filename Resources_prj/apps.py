@@ -15,6 +15,7 @@ script_list = [
     pawn_scripts.worldclock(),
     pawn_scripts.cuberacer(),
     pawn_scripts.exampletap(),
+    pawn_scripts.examplecubeface(),
 ]
 
 

@@ -54,6 +54,7 @@ draw_road() {
     if (rand <= 35) {
         return 0;
     }
+
     //Turn
     if (rand > 35 && rand <= 70) {
         return 1;
@@ -63,6 +64,7 @@ draw_road() {
     if (rand > 70 && rand <= 75) {
         return 2;
     }
+
     //bomb
     if (rand > 75 && rand <= 80) {
         //bomb-straight
@@ -107,7 +109,7 @@ draw_road() {
     //warp
     if (rand > 95 && rand <= 100) {
         return 10;
-    
+
     } else {
         //printf("whoopsie daisy");
     }

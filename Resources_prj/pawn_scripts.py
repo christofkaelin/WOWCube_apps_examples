@@ -181,6 +181,7 @@ class cuberacer(pawn_base.PawnModule):
         self.SoundPath = 'cuberacer'
         self.SoundList = []
 
+
 class exampletap(pawn_base.PawnModule):
     def __init__(self):
         super(exampletap, self).__init__()
@@ -195,6 +196,7 @@ class exampletap(pawn_base.PawnModule):
         self.SoundPath = 'exampletap'
         self.SoundList = []
 
+
 class example7_1(pawn_base.PawnModule):
     def __init__(self):
         super(example7_1, self).__init__()
@@ -207,4 +209,17 @@ class example7_1(pawn_base.PawnModule):
         ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = ''
+        self.SoundList = []
+
+
+class examplecubeface(pawn_base.PawnModule):
+    def __init__(self):
+        super(examplecubeface, self).__init__()
+        self.scriptId = 11
+        self.name = 'examplecubeface'
+        self.ScriptFileName = 'examplecubeface.amx'
+        self.ScriptResourcePath = 'examplecubeface'
+        self.ScriptResourceList = []
+        self.MenuIcon = 'icon.png'
+        self.SoundPath = 'examplecubeface'
         self.SoundList = []
