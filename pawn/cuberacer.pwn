@@ -26,8 +26,6 @@ new SCORE_GAIN_BASE = 10;
 new bool:is_departing = false;
 new count_departing = 0;
 
-new car_current_module = 0;
-new car_current_screen = 0;
 new car_neighbour_module = CUBES_MAX;
 new car_neighbour_screen = FACES_MAX;
 
@@ -150,6 +148,8 @@ ONTICK() {
             abi_CMD_REDRAW(screenI);
         }
         delay++;
+        //printf("posM = %d\n", car_position_module);
+        //printf("posS = %d\n", car_position_screen);
     }
 
     if ((car_position_module == abi_cubeN) || ((is_departing) && (car_neighbour_module == abi_cubeN))) {

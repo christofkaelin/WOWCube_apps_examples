@@ -2,54 +2,119 @@
 #include "trbl.pwn"
 #include "math.pwn"
 #include "run.pwn"
+#include "angles.pwn"
 
 #define DISPLAY_WIDTH   240
 #define DISPLAY_HEIGHT  240
+#define DISPLAY_SHADOW  40
 
-#define TEXT_SIZE       8
+#define PICTURE         0
 
-// Implementation of: https://wiki.wowcube.com/wiki/API#Examples_2
-new delay = 0;
-new color = 0x000000;
-ONTICK() {
-    if (!color) {
-        switch (abi_MTD_GetTapsCount()) {
-            case 1:
-                color = 0xff0000;
-            case 2:
-                color = 0x00ff00;
-            case 3:
-                color = 0x0000ff;
-        }
-    }
-    if (delay % 25 == 0) {
-        for (new i = 0; i < FACES_MAX; i++) {
-            if (i == (abi_MTD_GetTapFace())) {
-                abi_CMD_FILL_2(color);
-                color = 0x000000;
-                switch (abi_MTD_GetTapFace()) {
-                    case 1:
-                        abi_CMD_TEXT(['1', '\0'], -1, 120, 120, 14, 0, 0xff, 0xff, 0xff);
-                    case 2:
-                        abi_CMD_TEXT(['2', '\0'], -1, 120, 120, 14, 0, 0xff, 0xff, 0xff);
-                    case 3:
-                        abi_CMD_TEXT(['3', '\0'], -1, 120, 120, 14, 0, 0xff, 0xff, 0xff);
-                }
-            } else {
-                abi_CMD_FILL(0, 0, 0);
-            }
-            abi_CMD_REDRAW(i);
-        }
-    }
-    delay++;
-    if (abi_cubeN == 0) {
-        abi_checkShake();
-    }
+#define SHIFT_POS       10
+#define SHIFT_ANGLE     10
+
+#define CMD_SEND_SHIP   150
+
+new current_angles = 180;
+new position_x = 180;
+new position_y = 180;
+new position_module = 0;
+new position_screen = 0;
+
+new bool:is_departing = false;
+new count_departing = 0;
+
+new neighbour_module = CUBES_MAX;
+new neighbour_screen = FACES_MAX;
+
+send_ship() {
+    new data[4];
+    data[0] = ((CMD_SEND_SHIP & 0xFF) | ((count_departing & 0xFF) << 8));
+    data[1] = ((position_module & 0xFF) | ((position_screen & 0xFF) << 8) | ((position_x & 0xFF) << 16) | ((position_y & 0xFF) << 24));
+
+
+    abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=0
+    abi_CMD_NET_TX(1, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=1
+    abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=2
 }
 
+ONTICK() {
+    new screenI;
+
+    for (screenI = 0; screenI < FACES_MAX; screenI++) {
+        //clear screen before output
+        abi_CMD_FILL(0, 0, 0);
+        //draw bitmap at screen on the frame buffer
+        if (((position_module == abi_cubeN) && (position_screen == screenI)) || ((is_departing) && (neighbour_module == abi_cubeN) && (neighbour_screen == screenI))) {
+            abi_CMD_BITMAP(PICTURE, position_x, position_y, current_angles, MIRROR_BLANK);
+
+            if ((position_x > 60) || (is_departing)) {
+                position_x = (((position_y == 180) && (current_angles == 180)) ? position_x - SHIFT_POS : position_x);
+                position_y = (((position_x == 180) && (current_angles == 90)) ? position_y + SHIFT_POS : position_y);
+                current_angles = (((position_x == 180) && (position_y == 180) && (current_angles != 180)) ? (current_angles + SHIFT_ANGLE) % 360 : current_angles);
+                //printf("posx = %d\n", position_x);
+            } else {
+                neighbour_module = abi_leftCubeN(abi_cubeN, screenI);
+                neighbour_screen = abi_leftFaceN(abi_cubeN, screenI);
+                if ((neighbour_module < CUBES_MAX) && (neighbour_screen < FACES_MAX)) {
+                    is_departing = true;
+                    position_module = neighbour_module;
+                    position_screen = neighbour_screen;
+                    neighbour_module = abi_cubeN;
+                    neighbour_screen = screenI;
+                    count_departing = (count_departing + 1) % 0xFF;
+                    //is_departing = ((position_y < -120) ? false: is_departing);
+                }
+            }
+
+        }
+        //push buffer at screen
+        abi_CMD_REDRAW(screenI);
+    }
+    if ((position_module == abi_cubeN) || ((is_departing) && (neighbour_module == abi_cubeN))) {
+        send_ship();
+    }
+    printf("Top:\n");
+    printf("M: %d\t", abi_topCubeN(position_module, position_screen));
+    printf("F: %d\n", abi_topFaceN(position_module, position_screen));
+    printf("Right:\n");
+    printf("M: %d\t", abi_rightCubeN(position_module, position_screen));
+    printf("F: %d\n", abi_rightFaceN(position_module, position_screen));
+    printf("Bottom:\n");
+    printf("M: %d\t", abi_bottomCubeN(position_module, position_screen));
+    printf("F: %d\n", abi_bottomFaceN(position_module, position_screen));
+    printf("Left:\n");
+    printf("M: %d\t", abi_leftCubeN(position_module, position_screen));
+    printf("F: %d\n", abi_leftFaceN(position_module, position_screen));
+    printf("---------------------------\n");
+
+    if (0 == abi_cubeN) {
+        abi_checkShake();
+    }
+
+    //printf("count = %d module =%d screen = %d\n", count_departing, position_module, position_screen);
+}
+ON_CMD_NET_RX(const pkt[]) {
+    switch (abi_ByteN(pkt, 4)) {
+        case CMD_SEND_SHIP:  {
+            if ((abi_ByteN(pkt, 5) > count_departing) || ((abi_ByteN(pkt, 5) == 0) && (count_departing != 0))) {
+                position_module = abi_ByteN(pkt, 8);
+                position_screen = abi_ByteN(pkt, 9);
+
+                is_departing = (((neighbour_module == abi_cubeN) && (position_x > -120)) ? true : false);
+
+                if (position_module == abi_cubeN) {
+                    position_y = -abi_ByteN(pkt, 10) - DISPLAY_SHADOW;
+                    position_x = abi_ByteN(pkt, 11);
+                    count_departing = abi_ByteN(pkt, 5) + 1;
+                    current_angles = 90;
+                }
+            }
+        }
+    }
+}
 ON_PHYSICS_TICK() {}
 RENDER() {}
-ON_CMD_NET_RX(const pkt[]) {}
 ON_LOAD_GAME_DATA() {}
 ON_INIT() {}
 ON_CHECK_ROTATE() {}

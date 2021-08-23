@@ -26,6 +26,7 @@ new position_screen = 0;
 new trackId;
 
 new bool:is_departing = false;
+new bool:turn_left;
 new count_departing = 0;
 
 new neighbour_module = CUBES_MAX;
@@ -42,10 +43,19 @@ send_ship() {
     abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=2
 }
 
+determine_direction() {
+    if (((position_module == 0) && (position_screen == 0)) || ((position_module == 1) && (position_screen == 1) || ((position_module == 4) && (position_screen == 0)) || ((position_module == 5) && (position_screen == 1)))) {
+        turn_left = true;
+    } else {
+        turn_left = false;
+    }
+}
+
 ONTICK() {
     new screenI;
 
     for (screenI = 0; screenI < FACES_MAX; screenI++) {
+        determine_direction();
         //clear screen before output
         //abi_CMD_FILL(0, 0, 0);
 
@@ -64,21 +74,7 @@ ONTICK() {
             strformat(string, sizeof(string), true, "SCREEN %d", screenI);
             abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 180, TEXT_SIZE, 0, TEXT_ALIGN_CENTER, 255, 255, 255);
         }
-        /* printf("Top: ");
-        printf("C: %d // ", abi_topCubeN(0, 1));
-        printf("F: %d\n", abi_topFaceN(0, 1));
-        printf("Right: ");
-        printf("C: %d // ", abi_rightCubeN(0, 1));
-        printf("F: %d\n", abi_rightFaceN(0, 1));
-        printf("Bottom: ");
-        printf("C: %d // ", abi_bottomCubeN(0, 1));
-        printf("F: %d\n", abi_bottomFaceN(0, 1));
-        printf("Left: ");
-        printf("C: %d // ", abi_leftCubeN(0, 1));
-        printf("F: %d\n", abi_leftFaceN(0, 1));
-        printf("---------------------------\n");
-        //abi_CMD_FILL(255, 255, 255);
-        */
+
         //push buffer at screen
         abi_CMD_REDRAW(screenI);
         /*  if (trackId % 2 == 0) {
@@ -118,19 +114,7 @@ ONTICK() {
                 //printf("posx = %d\n", position_x);
 
             } else {
-                neighbour_module = abi_leftCubeN(abi_cubeN, screenI);
-                neighbour_screen = abi_leftFaceN(abi_cubeN, screenI);
-                if ((neighbour_module < CUBES_MAX) && (neighbour_screen < FACES_MAX)) {
-                    is_departing = true;
-                    position_module = neighbour_module;
-                    position_screen = neighbour_screen;
-                    neighbour_module = abi_cubeN;
-                    neighbour_screen = screenI;
-                    count_departing = (count_departing + 1) % 0xFF;
-                    //is_departing = ((position_y < -120) ? false: is_departing);
-                    //trackId++;
-                }
-                if (trackId % 60 == 0) {
+                if (turn_left == false) {
                     neighbour_module = abi_bottomCubeN(abi_cubeN, screenI);
                     neighbour_screen = abi_bottomFaceN(abi_cubeN, screenI);
                     if ((neighbour_module < CUBES_MAX) && (neighbour_screen < FACES_MAX)) {
@@ -150,18 +134,33 @@ ONTICK() {
                         //printf("posx = %d\n", position_x);
 
                     }
+                } else {
+                    neighbour_module = abi_leftCubeN(abi_cubeN, screenI);
+                    neighbour_screen = abi_leftFaceN(abi_cubeN, screenI);
+                    if ((neighbour_module < CUBES_MAX) && (neighbour_screen < FACES_MAX)) {
+                        is_departing = true;
+                        position_module = neighbour_module;
+                        position_screen = neighbour_screen;
+                        neighbour_module = abi_cubeN;
+                        neighbour_screen = screenI;
+                        count_departing = (count_departing + 1) % 0xFF;
+                        //is_departing = ((position_y < -120) ? false: is_departing);
+                        //trackId++;
+                    }
                 }
             }
         }
         // }
         //push buffer at screen
         abi_CMD_REDRAW(screenI);
-
-        trackId++;
-        printf("trackId: %d\n", trackId);
+        // trackId++;
+        //determine_direction();
+        //printf("trackId: %d\n", trackId);
+        printf("dir: %d\n", turn_left);
     }
     if ((position_module == abi_cubeN) || ((is_departing) && (neighbour_module == abi_cubeN))) {
         send_ship();
+        // trackId++;
     }
     if (0 == abi_cubeN) {
         abi_checkShake();

@@ -189,9 +189,7 @@ class exampletap(pawn_base.PawnModule):
         self.name = 'exampletap'
         self.ScriptFileName = 'exampletap.amx'
         self.ScriptResourcePath = 'exampletap'
-        self.ScriptResourceList = [
-            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 12)
-        ]
+        self.ScriptResourceList = []
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'exampletap'
         self.SoundList = []
@@ -219,7 +217,9 @@ class examplecubeface(pawn_base.PawnModule):
         self.name = 'examplecubeface'
         self.ScriptFileName = 'examplecubeface.amx'
         self.ScriptResourcePath = 'examplecubeface'
-        self.ScriptResourceList = []
+        self.ScriptResourceList = [
+            '000.webp'
+        ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'examplecubeface'
         self.SoundList = []
