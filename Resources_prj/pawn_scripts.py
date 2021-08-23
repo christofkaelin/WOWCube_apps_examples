@@ -203,7 +203,7 @@ class example7_1(pawn_base.PawnModule):
         self.ScriptFileName = 'example7_1.amx'
         self.ScriptResourcePath = 'example7_1'
         self.ScriptResourceList = [
-            '000.webp'
+            '000.webp', '001.webp', '002.webp'
         ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = ''

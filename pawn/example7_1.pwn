@@ -8,9 +8,9 @@
 #define DISPLAY_HEIGHT  240
 #define DISPLAY_SHADOW  40
 
-#define PICTURE         0
+#define PICTURE         2
 
-#define SHIFT_POS       20
+#define SHIFT_POS       15
 #define SHIFT_ANGLE     10
 
 #define CMD_SEND_SHIP   150
@@ -57,11 +57,12 @@ ONTICK() {
     for (screenI = 0; screenI < FACES_MAX; screenI++) {
         determine_direction();
         //clear screen before output
-        //abi_CMD_FILL(0, 0, 0);
+        abi_CMD_FILL(0, 0, 0);
 
-        new red = 31, green = 63, blue = 31;
+        //new red = 31, green = 63, blue = 31;
         //clear screen before output
-        abi_CMD_FILL(red, green, blue);
+        //abi_CMD_FILL(red, green, blue);
+        abi_CMD_BITMAP(1, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, 0, MIRROR_BLANK);
         //abi_CMD_TEXT_ITOA(100, 0, 230, 180, TEXT_SIZE, 0, TEXT_ALIGN_CENTER, 255, 255, 255);
 
         //draw text
