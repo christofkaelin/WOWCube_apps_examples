@@ -32,22 +32,22 @@ ONTICK() {
         abi_CMD_FILL(0, 0, 0);
         
         //set time zone
-        gmt = ((abi_cubeN + 1) * FACES_MAX) - (FACES_MAX - (screenI + 1));
+        gmt = ((abi_cubeN + 1) * FACES_MAX) - (FACES_MAX - (screenI + 1)) - 1;
         
         //draw watch face
         abi_CMD_BITMAP(gmt, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI], MIRROR_BLANK);
         
         // draw hours
-        abi_CMD_BITMAP(25, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI] + ((getHour() + gmt) * 30), MIRROR_BLANK);
+        abi_CMD_BITMAP(24, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI] + ((getHour() + gmt) * 30), MIRROR_BLANK);
         
         // draw minutes
-        abi_CMD_BITMAP(26, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI] + (getMin() * 6), MIRROR_BLANK);
+        abi_CMD_BITMAP(25, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI] + (getMin() * 6), MIRROR_BLANK);
         
         // draw seconds
-        abi_CMD_BITMAP(27, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI] + (getSec() * 6), MIRROR_BLANK);
+        abi_CMD_BITMAP(26, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI] + (getSec() * 6), MIRROR_BLANK);
         
         //draw center
-        abi_CMD_BITMAP(28, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI], MIRROR_BLANK);
+        abi_CMD_BITMAP(27, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI], MIRROR_BLANK);
 
         //push buffer at screen
         abi_CMD_REDRAW(screenI);
