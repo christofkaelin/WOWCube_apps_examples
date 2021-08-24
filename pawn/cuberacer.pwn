@@ -43,7 +43,7 @@ send_car() {
     abi_CMD_NET_TX(1, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=1
     abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=2
 }
-//assigns element type according to custom probabilities (see documentation)
+//assigns element type according to custom probabilities (see documentation: https://wow-cube.atlassian.net/wiki/spaces/WOWCUBE/pages/17760267/CubeRacer)
 draw_road() {
 
     rand = random(100);
@@ -52,19 +52,16 @@ draw_road() {
     if (rand <= 35) {
         return 0;
     }
-
     //Turn
-    if (rand > 35 && rand <= 70) {
+    else if (rand > 35 && rand <= 70) {
         return 1;
     }
-
     //U-Turn
-    if (rand > 70 && rand <= 75) {
+    else if (rand > 70 && rand <= 75) {
         return 2;
     }
-
     //bomb
-    if (rand > 75 && rand <= 80) {
+    else if (rand > 75 && rand <= 80) {
         //bomb-straight
         if (rand <= 78) {
             return 3;
@@ -74,14 +71,12 @@ draw_road() {
             return 4;
         }
     }
-
     //jump
-    if (rand > 80 && rand <= 85) {
+    else if (rand > 80 && rand <= 85) {
         return 5;
     }
-
     //boost
-    if (rand > 85 && rand <= 90) {
+    else if (rand > 85 && rand <= 90) {
         //boost-straight
         if (rand <= 88) {
             return 6;
@@ -91,9 +86,8 @@ draw_road() {
             return 7;
         }
     }
-
     //guardian
-    if (rand > 90 && rand <= 95) {
+    else if (rand > 90 && rand <= 95) {
         //guardian-straight
         if (rand <= 93) {
             return 8;
@@ -103,13 +97,9 @@ draw_road() {
             return 9;
         }
     }
-
     //warp
-    if (rand > 95 && rand <= 100) {
+    else if (rand > 95 && rand <= 100) {
         return 10;
-
-    } else {
-        //printf("whoopsie daisy");
     }
 }
 
