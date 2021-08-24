@@ -11,6 +11,10 @@
 
 #define CMD_SEND_CAR   150
 
+new map = 1;
+// TODO: Work on a concept for car skins and add car effects (boost, guardian angel)
+new car = 22;
+
 new roads[8][3][2];
 
 new car_current_angles = 180;
@@ -50,56 +54,56 @@ draw_road() {
 
     //Straight
     if (rand <= 35) {
-        return 0;
+        return 0 + (map * 11);
     }
     //Turn
     else if (rand > 35 && rand <= 70) {
-        return 1;
+        return 1 + (map * 11);
     }
     //U-Turn
     else if (rand > 70 && rand <= 75) {
-        return 2;
+        return 2 + (map * 11);
     }
     //bomb
     else if (rand > 75 && rand <= 80) {
         //bomb-straight
         if (rand <= 78) {
-            return 3;
+            return 3 + (map * 11);
         }
         //bomb-turn
         else {
-            return 4;
+            return 4 + (map * 11);
         }
     }
     //jump
     else if (rand > 80 && rand <= 85) {
-        return 5;
+        return 5 + (map * 11);
     }
     //boost
     else if (rand > 85 && rand <= 90) {
         //boost-straight
         if (rand <= 88) {
-            return 6;
+            return 6 + (map * 11);
         }
         //boost-turn
         else {
-            return 7;
+            return 7 + (map * 11);
         }
     }
     //guardian
     else if (rand > 90 && rand <= 95) {
         //guardian-straight
         if (rand <= 93) {
-            return 8;
+            return 8 + (map * 11);
         }
         //guardian-turn
         else {
-            return 9;
+            return 9 + (map * 11);
         }
     }
     //warp
     else if (rand > 95 && rand <= 100) {
-        return 10;
+        return 10 + (map * 11);
     }
 }
 
@@ -114,7 +118,7 @@ ONTICK() {
         }
 
         if (((car_position_module == abi_cubeN) && (car_position_screen == screenI)) || ((is_departing) && (car_neighbour_module == abi_cubeN) && (car_neighbour_screen == screenI))) {
-            abi_CMD_BITMAP(11, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
+            abi_CMD_BITMAP(car, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
 
             if ((car_position_x > 60) || (is_departing)) {
                 car_position_x = (((car_position_y == 120) && (car_current_angles == 180)) ? car_position_x - SHIFT_POS : car_position_x);
@@ -187,8 +191,8 @@ RENDER() {}
 ON_LOAD_GAME_DATA() {}
 ON_INIT() {
     // First field will always be a straight road
-    roads[0][0][0] = 0;
-    roads[0][0][1] = 90;
+    roads[0][0][0] = 0 + (map * 11);
+    roads[0][0][1] = 0;
 
     roads[0][1][0] = draw_road();
     roads[0][2][0] = draw_road();

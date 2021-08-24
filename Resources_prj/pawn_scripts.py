@@ -175,7 +175,7 @@ class cuberacer(pawn_base.PawnModule):
         self.ScriptFileName = 'cuberacer.amx'
         self.ScriptResourcePath = 'cuberacer'
         self.ScriptResourceList = [
-            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 15)
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 27)
         ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'cuberacer'
