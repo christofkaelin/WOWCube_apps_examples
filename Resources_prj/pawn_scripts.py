@@ -210,6 +210,21 @@ class example7_1(pawn_base.PawnModule):
         self.SoundList = []
 
 
+class example7_2(pawn_base.PawnModule):
+    def __init__(self):
+        super(example7_2, self).__init__()
+        self.scriptId = 12
+        self.name = 'example7_2'
+        self.ScriptFileName = 'example7_2.amx'
+        self.ScriptResourcePath = 'example7_1'
+        self.ScriptResourceList = [
+            '000.webp', '001.webp', '002.webp'
+        ]
+        self.MenuIcon = 'icon.png'
+        self.SoundPath = ''
+        self.SoundList = []
+
+
 class examplecubeface(pawn_base.PawnModule):
     def __init__(self):
         super(examplecubeface, self).__init__()
