@@ -5,145 +5,100 @@
 #include "run.pwn"
 #include "angles.pwn"
 
-#define DISPLAY_WIDTH   240
-#define DISPLAY_HEIGHT  240
+#include "cuberacer/game.pwn"
+
+#define CMD_SEND_SETTINGS P2P_CMD_BASE_SCRIPT_1 + 1
+
 #define DISPLAY_SHADOW  40
 
-#define CMD_SEND_CAR   150
+new settings[2] = { 0, 0 };
 
-new map = 1;
-// TODO: Work on a concept for car skins and add car effects (boost, guardian angel)
-new car = 22;
+/* 
+----------------------------
+ASSET CONCEPT
+----------------------------
+0-9: MAIN MENU
+10-12: CAR SKIN SELECTION
+13-15: MAP SKIN SELECTION
+16-23: CAR 1 SKIN/ANIMATIONS
+24-31: CAR 2 SKIN/ANIMATIONS
+32-39: CAR 3 SKIN/ANIMATIONS
+40-50: MAP 1 SKIN/ANIMATIONS
+51-61: MAP 2 SKIN/ANIMATIONS
+62-72: MAP 3 SKIN/ANIMATIONS
+*/
 
-new roads[8][3][2];
+new bool:game_running = false;
+new bool:game_initialized = false;
 
-new car_current_angles = 180;
-new car_position_x = 120;
-new car_position_y = 120;
-new car_position_module = 0;
-new car_position_screen = 0;
-
-new SHIFT_POS = 10;
-new SHIFT_ANGLE = 10;
-new SCORE_GAIN_BASE = 10;
-
-new bool:is_departing = false;
-new count_departing = 0;
-
-new car_neighbour_module = CUBES_MAX;
-new car_neighbour_screen = FACES_MAX;
-
-new delay = 0;
-new rand;
-
-//broadcast information to CPU
-send_car() {
+// SEND MENU SETTINGS
+// TODO: Modularize this
+send_settings() {
     new data[4];
-    data[0] = ((CMD_SEND_CAR & 0xFF) | ((count_departing & 0xFF) << 8));
-    data[1] = ((car_position_module & 0xFF) | ((car_position_screen & 0xFF) << 8) | ((car_position_x & 0xFF) << 16) | ((car_position_y & 0xFF) << 24));
 
+    data[0] = ((CMD_SEND_SETTINGS & 0xFF));
+    data[1] = ((game_running & 0xFF) | ((settings[0] & 0xFF) << 8) | ((settings[1] & 0xFF) << 16));
 
-    abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=0
-    abi_CMD_NET_TX(1, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=1
-    abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=2
+    // send message through UART
+    abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, data);
+    abi_CMD_NET_TX(1, NET_BROADCAST_TTL_MAX, data);
+    abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data);
 }
-//assigns element type according to custom probabilities (see documentation: https://wow-cube.atlassian.net/wiki/spaces/WOWCUBE/pages/17760267/CubeRacer)
-draw_road() {
 
-    rand = random(100);
-
-    //Straight
-    if (rand <= 35) {
-        return 0 + (map * 11);
-    }
-    //Turn
-    else if (rand > 35 && rand <= 70) {
-        return 1 + (map * 11);
-    }
-    //U-Turn
-    else if (rand > 70 && rand <= 75) {
-        return 2 + (map * 11);
-    }
-    //bomb
-    else if (rand > 75 && rand <= 80) {
-        //bomb-straight
-        if (rand <= 78) {
-            return 3 + (map * 11);
-        }
-        //bomb-turn
-        else {
-            return 4 + (map * 11);
-        }
-    }
-    //jump
-    else if (rand > 80 && rand <= 85) {
-        return 5 + (map * 11);
-    }
-    //boost
-    else if (rand > 85 && rand <= 90) {
-        //boost-straight
-        if (rand <= 88) {
-            return 6 + (map * 11);
-        }
-        //boost-turn
-        else {
-            return 7 + (map * 11);
-        }
-    }
-    //guardian
-    else if (rand > 90 && rand <= 95) {
-        //guardian-straight
-        if (rand <= 93) {
-            return 8 + (map * 11);
-        }
-        //guardian-turn
-        else {
-            return 9 + (map * 11);
-        }
-    }
-    //warp
-    else if (rand > 95 && rand <= 100) {
-        return 10 + (map * 11);
-    }
-}
 
 ONTICK() {
-    for (new screenI = 0; screenI < FACES_MAX; screenI++) {
-        // Tapping the screen rotates the displayed element by 90 degrees clockwise.
-        if (screenI == (abi_MTD_GetTapFace())) {
-            abi_CMD_FILL(0, 0, 0);
-            roads[abi_cubeN][screenI][1] = roads[abi_cubeN][screenI][1] + (90 * abi_MTD_GetTapsCount());
-            abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI] + roads[abi_cubeN][screenI][1], MIRROR_BLANK);
-            abi_CMD_REDRAW(screenI);
+    if (game_running) {
+        if (!game_initialized) {
+            game_init(settings[1]);
+            game_initialized = true;
         }
+        game_run(settings[0]);
+    } else {
+        // MENU LOGIC
+        // TODO: Modularize this
+        CheckAngles();
+        for (new screenI = 0; screenI < FACES_MAX; screenI++) {
+            abi_CMD_FILL(0, 0, 0);
+            switch (newAngles[screenI]) {
+                case 180:
+                    abi_CMD_BITMAP(0, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
 
-        if (((car_position_module == abi_cubeN) && (car_position_screen == screenI)) || ((is_departing) && (car_neighbour_module == abi_cubeN) && (car_neighbour_screen == screenI))) {
-            abi_CMD_BITMAP(car, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
+                case 90:
+                    abi_CMD_BITMAP(2, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
 
-            if ((car_position_x > 60) || (is_departing)) {
-                car_position_x = (((car_position_y == 120) && (car_current_angles == 180)) ? car_position_x - SHIFT_POS : car_position_x);
-                car_position_y = (((car_position_x == 120) && (car_current_angles == 90)) ? car_position_y + SHIFT_POS : car_position_y);
-                car_current_angles = (((car_position_x == 120) && (car_position_y == 120) && (car_current_angles != 180)) ? (car_current_angles + SHIFT_ANGLE) % 360 : car_current_angles);
-                //printf("posx = %d\n", car_position_x);
-            } else {
-                car_neighbour_module = abi_leftCubeN(abi_cubeN, screenI);
-                car_neighbour_screen = abi_leftFaceN(abi_cubeN, screenI);
-                if ((car_neighbour_module < CUBES_MAX) && (car_neighbour_screen < FACES_MAX)) {
-                    is_departing = true;
-                    car_position_module = car_neighbour_module;
-                    car_position_screen = car_neighbour_screen;
-                    car_neighbour_module = abi_cubeN;
-                    car_neighbour_screen = screenI;
-                    count_departing = (count_departing + 1) % 0xFF;
-                    //is_departing = ((position_y < -120) ? false: is_departing);
+                case 270:
+                    abi_CMD_BITMAP(settings[0] + 10, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
+
+                case 0:
+                    abi_CMD_BITMAP(settings[1] + 13, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
+            }
+            abi_CMD_REDRAW(screenI);
+
+            if ((screenI == abi_MTD_GetTapFace()) && (abi_MTD_GetTapsCount() >= 1)) {
+                abi_CMD_FILL(0, 0, 0);
+
+                switch (newAngles[screenI]) {
+                    case 90 :  {
+                        printf("INFO - Tapped start\n");
+                        game_running = true;
+                        send_settings();
+                        //abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, game_running);
+                    }
+
+                    case 270 :  {
+                        settings[0] = (settings[0] + abi_MTD_GetTapsCount()) % 3;
+                        printf("INFO - Changed car, new car: %d\n", settings[0]);
+                        send_settings();
+                    }
+
+                    case 0 : {
+                        settings[1] = (settings[1] + abi_MTD_GetTapsCount()) % 3;
+                        printf("INFO - Changed map, new map: %d\n", settings[1]);
+                        send_settings();
+                    }
                 }
             }
-            //push buffer at screen
-            abi_CMD_REDRAW(screenI);
         }
-        delay++;
-        //printf("posM = %d\n", car_position_module);
-        //printf("posS = %d\n", car_position_screen);
     }
 
     if ((car_position_module == abi_cubeN) || ((is_departing) && (car_neighbour_module == abi_cubeN))) {
@@ -159,8 +114,8 @@ ONTICK() {
             printf("speeeeed = %d\n",SHIFT_POS);
         }
         delay = 0;
-    }
-*/
+    }*/
+
     //exit program on shake
     if (0 == abi_cubeN) {
         abi_checkShake();
@@ -183,69 +138,23 @@ ON_CMD_NET_RX(const pkt[]) {
                 }
             }
         }
+
+        case CMD_SEND_SETTINGS:  {
+            if (abi_ByteN(pkt, 5) == 0) {
+                printf("INFO - Received(%d/%d/%d)\n", abi_ByteN(pkt, 8), abi_ByteN(pkt, 9), abi_ByteN(pkt, 10));
+                game_running = abi_ByteN(pkt, 8);
+                settings[0] = abi_ByteN(pkt, 9);
+                settings[1] = abi_ByteN(pkt, 10);
+            }
+
+        }
     }
 }
-
 ON_PHYSICS_TICK() {}
 RENDER() {}
 ON_LOAD_GAME_DATA() {}
 ON_INIT() {
-    // First field will always be a straight road
-    roads[0][0][0] = 0 + (map * 11);
-    roads[0][0][1] = 0;
-
-    roads[0][1][0] = draw_road();
-    roads[0][2][0] = draw_road();
-    roads[1][0][0] = draw_road();
-    roads[1][1][0] = draw_road();
-    roads[1][2][0] = draw_road();
-    roads[2][0][0] = draw_road();
-    roads[2][1][0] = draw_road();
-    roads[2][2][0] = draw_road();
-    roads[3][0][0] = draw_road();
-    roads[3][1][0] = draw_road();
-    roads[3][2][0] = draw_road();
-    roads[4][0][0] = draw_road();
-    roads[4][1][0] = draw_road();
-    roads[4][2][0] = draw_road();
-    roads[5][0][0] = draw_road();
-    roads[5][1][0] = draw_road();
-    roads[5][2][0] = draw_road();
-    roads[6][0][0] = draw_road();
-    roads[6][1][0] = draw_road();
-    roads[6][2][0] = draw_road();
-    roads[7][0][0] = draw_road();
-    roads[7][1][0] = draw_road();
-    roads[7][2][0] = draw_road();
-
-    // Randomly generate rotation of the roads
-    roads[0][1][1] = random(3) * 90;
-    roads[0][2][1] = random(3) * 90;
-    roads[1][0][1] = random(3) * 90;
-    roads[1][1][1] = random(3) * 90;
-    roads[1][2][1] = random(3) * 90;
-    roads[2][0][1] = random(3) * 90;
-    roads[2][1][1] = random(3) * 90;
-    roads[2][2][1] = random(3) * 90;
-    roads[3][0][1] = random(3) * 90;
-    roads[3][1][1] = random(3) * 90;
-    roads[3][2][1] = random(3) * 90;
-    roads[4][0][1] = random(3) * 90;
-    roads[4][1][1] = random(3) * 90;
-    roads[4][2][1] = random(3) * 90;
-    roads[5][0][1] = random(3) * 90;
-    roads[5][1][1] = random(3) * 90;
-    roads[5][2][1] = random(3) * 90;
-    roads[6][0][1] = random(3) * 90;
-    roads[6][1][1] = random(3) * 90;
-    roads[6][2][1] = random(3) * 90;
-    roads[7][0][1] = random(3) * 90;
-    roads[7][1][1] = random(3) * 90;
-    roads[7][2][1] = random(3) * 90;
-    for (new screenI = 0; screenI < FACES_MAX; screenI++) {
-        abi_CMD_FILL(0, 0, 0);
-        abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI] + roads[abi_cubeN][screenI][1], MIRROR_BLANK);
-        abi_CMD_REDRAW(screenI);
-    }
+    //init_menu();
+    //game_running = true;
 }
 ON_CHECK_ROTATE() {}
