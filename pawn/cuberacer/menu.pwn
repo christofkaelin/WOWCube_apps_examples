@@ -15,7 +15,6 @@ send_settings() {
 }
 
 menu() {
-    // TODO: Implement logo with highscore and start button
     CheckAngles();
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         abi_CMD_FILL(0, 0, 0);
@@ -32,31 +31,53 @@ menu() {
             case 0:
                 abi_CMD_BITMAP(settings[1] + 28, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
         }
+        // TODO: Optimize this, maybe... at least it works ¯\_(ツ)_/¯
+        if (abi_cubeN == 0 && screenI == 0) {
+            abi_CMD_FILL(0, 0, 0);
+            abi_CMD_BITMAP(0, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
+        } else if (abi_cubeN == abi_leftCubeN(0, 0) && screenI == abi_leftFaceN(0, 0)) {
+            abi_CMD_FILL(0, 0, 0);
+            abi_CMD_BITMAP(1, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
+        } else if (abi_cubeN == abi_topCubeN(0, 0) && screenI == abi_topFaceN(0, 0)) {
+            abi_CMD_FILL(0, 0, 0);
+            abi_CMD_BITMAP(2, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
+        } else if (abi_cubeN == abi_leftCubeN(abi_leftCubeN(0, 0), abi_leftFaceN(0, 0)) && screenI == abi_leftFaceN(abi_leftCubeN(0, 0), abi_leftFaceN(0, 0))) {
+            abi_CMD_FILL(0, 0, 0);
+            abi_CMD_BITMAP(3, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
+        }
         abi_CMD_REDRAW(screenI);
 
         if ((screenI == abi_MTD_GetTapFace()) && (abi_MTD_GetTapsCount() >= 1)) {
             abi_CMD_FILL(0, 0, 0);
+            if (abi_cubeN == abi_leftCubeN(abi_leftCubeN(0, 0), abi_leftFaceN(0, 0)) && screenI == abi_leftFaceN(abi_leftCubeN(0, 0), abi_leftFaceN(0, 0))) {
+                printf("INFO - Starting game");
+                game_running = true;
+                send_settings();
+            } else if (abi_cubeN == abi_topCubeN(0, 0) && screenI == abi_topFaceN(0, 0)) {
+                // TODO: Go to high score
+                printf("INFO - Showing high score");
+            } else {
+                switch (newAngles[screenI]) {
+                    case 180 :  {
+                        // TODO: Go to settings menu
+                        printf("INFO - Showing settings menu");
+                    }
+                    case 90 :  {
+                        // TODO: Go to shop
+                        printf("INFO - Entering shop");
+                    }
 
-            switch (newAngles[screenI]) {
-                case 180 :  {
-                    // TODO: Go to settings menu
-                }
-                case 90 :  {
-                    // TODO: Go to shop
-                    game_running = true;
-                    send_settings();
-                }
+                    case 270 :  {
+                        settings[0] = (settings[0] + abi_MTD_GetTapsCount()) % 8;
+                        printf("INFO - Changed car, new car: %d\n", settings[0]);
+                        send_settings();
+                    }
 
-                case 270 :  {
-                    settings[0] = (settings[0] + abi_MTD_GetTapsCount()) % 8;
-                    printf("INFO - Changed car, new car: %d\n", settings[0]);
-                    send_settings();
-                }
-
-                case 0 :  {
-                    settings[1] = (settings[1] + abi_MTD_GetTapsCount()) % 8;
-                    printf("INFO - Changed map, new map: %d\n", settings[1]);
-                    send_settings();
+                    case 0 :  {
+                        settings[1] = (settings[1] + abi_MTD_GetTapsCount()) % 8;
+                        printf("INFO - Changed map, new map: %d\n", settings[1]);
+                        send_settings();
+                    }
                 }
             }
         }
