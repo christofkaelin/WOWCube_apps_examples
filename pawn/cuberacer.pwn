@@ -10,20 +10,44 @@
 
 #define DISPLAY_SHADOW  40
 
-
 /* 
-----------------------------
+==============================
 ASSET CONCEPT
-----------------------------
-0-9: MAIN MENU
-10-12: CAR SKIN SELECTION
-13-15: MAP SKIN SELECTION
-16-23: CAR 1 SKIN/ANIMATIONS
-24-31: CAR 2 SKIN/ANIMATIONS
-32-39: CAR 3 SKIN/ANIMATIONS
-40-50: MAP 1 SKIN/ANIMATIONS
-51-61: MAP 2 SKIN/ANIMATIONS
-62-72: MAP 3 SKIN/ANIMATIONS
+==============================
+0-35 MAIN MENU
+------------------------------
+0-1: LOGO
+2: Highscore
+3: Start
+4: Settings
+5: Shop
+6-7: Music on/off
+8-9: Sound on/off
+10: Back
+11-15: Credits
+16-19: Reserved
+20-27: Car seletion 0-7
+28-35: Map selection 0-7
+------------------------------
+36-187 GAME
+------------------------------
+36-43: Car 0 SKIN/ANIMATIONS
+44-51: Car 1 SKIN/ANIMATIONS
+52-59: Car 2 SKIN/ANIMATIONS
+60-67: Car 3 SKIN/ANIMATIONS
+68-75: Car 4 SKIN/ANIMATIONS
+76-83: Car 5 SKIN/ANIMATIONS
+84-91: Car 6 SKIN/ANIMATIONS
+92-99: Car 7 SKIN/ANIMATIONS
+------------------------------
+100-110: Map 0 SKIN/ANIMATIONS
+111-121: Map 1 SKIN/ANIMATIONS
+122-132: Map 2 SKIN/ANIMATIONS
+133-143: Map 3 SKIN/ANIMATIONS
+144-154: Map 4 SKIN/ANIMATIONS
+155-165: Map 5 SKIN/ANIMATIONS
+166-176: Map 6 SKIN/ANIMATIONS
+177-187: Map 7 SKIN/ANIMATIONS
 */
 
 new bool:game_initialized = false;

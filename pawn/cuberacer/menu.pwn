@@ -15,21 +15,22 @@ send_settings() {
 }
 
 menu() {
+    // TODO: Implement logo with highscore and start button
     CheckAngles();
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         abi_CMD_FILL(0, 0, 0);
         switch (newAngles[screenI]) {
             case 180:
-                abi_CMD_BITMAP(0, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
+                abi_CMD_BITMAP(4, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
 
             case 90:
-                abi_CMD_BITMAP(2, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
+                abi_CMD_BITMAP(5, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
 
             case 270:
-                abi_CMD_BITMAP(settings[0] + 10, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
+                abi_CMD_BITMAP(settings[0] + 20, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
 
             case 0:
-                abi_CMD_BITMAP(settings[1] + 13, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
+                abi_CMD_BITMAP(settings[1] + 28, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
         }
         abi_CMD_REDRAW(screenI);
 
@@ -37,21 +38,23 @@ menu() {
             abi_CMD_FILL(0, 0, 0);
 
             switch (newAngles[screenI]) {
+                case 180 :  {
+                    // TODO: Go to settings menu
+                }
                 case 90 :  {
-                    printf("INFO - Tapped start\n");
+                    // TODO: Go to shop
                     game_running = true;
                     send_settings();
-                    //abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, game_running);
                 }
 
                 case 270 :  {
-                    settings[0] = (settings[0] + abi_MTD_GetTapsCount()) % 3;
+                    settings[0] = (settings[0] + abi_MTD_GetTapsCount()) % 8;
                     printf("INFO - Changed car, new car: %d\n", settings[0]);
                     send_settings();
                 }
 
                 case 0 :  {
-                    settings[1] = (settings[1] + abi_MTD_GetTapsCount()) % 3;
+                    settings[1] = (settings[1] + abi_MTD_GetTapsCount()) % 8;
                     printf("INFO - Changed map, new map: %d\n", settings[1]);
                     send_settings();
                 }

@@ -24,62 +24,62 @@ draw_road(map) {
 
     //Straight
     if (rand <= 35) {
-        return 0 + ((map * 11) + 40);
+        return 0 + ((map * 11) + 108);
     }
     //Turn
     else if (rand > 35 && rand <= 70) {
-        return 1 + ((map * 11) + 40);
+        return 1 + ((map * 11) + 108);
     }
     //U-Turn
     else if (rand > 70 && rand <= 75) {
-        return 2 + ((map * 11) + 40);
+        return 2 + ((map * 11) + 108);
     }
     //bomb
     else if (rand > 75 && rand <= 80) {
         //bomb-straight
         if (rand <= 78) {
-            return 3 + ((map * 11) + 40);
+            return 3 + ((map * 11) + 108);
         }
         //bomb-turn
         else {
-            return 4 + ((map * 11) + 40);
+            return 4 + ((map * 11) + 108);
         }
     }
     //jump
     else if (rand > 80 && rand <= 85) {
-        return 5 + ((map * 11) + 40);
+        return 5 + ((map * 11) + 108);
     }
     //boost
     else if (rand > 85 && rand <= 90) {
         //boost-straight
         if (rand <= 88) {
-            return 6 + ((map * 11) + 40);
+            return 6 + ((map * 11) + 108);
         }
         //boost-turn
         else {
-            return 7 + ((map * 11) + 40);
+            return 7 + ((map * 11) + 108);
         }
     }
     //guardian
     else if (rand > 90 && rand <= 95) {
         //guardian-straight
         if (rand <= 93) {
-            return 8 + ((map * 11) + 40);
+            return 8 + ((map * 11) + 108);
         }
         //guardian-turn
         else {
-            return 9 + ((map * 11) + 40);
+            return 9 + ((map * 11) + 108);
         }
     }
     //warp
     else if (rand > 95 && rand <= 100) {
-        return 10 + ((map * 11) + 40);
+        return 10 + ((map * 11) + 108);
     }
 }
 
 game_init(map) {
     // First field will always be a straight road
-    roads[0][0][0] = 0 + ((map * 11) + 40);
+    roads[0][0][0] = 0 + ((map * 11) + 108);
     roads[0][0][1] = 0;
 
     roads[0][1][0] = draw_road(map);
@@ -159,7 +159,7 @@ game_run(car) {
         abi_CMD_REDRAW(screenI);
 
         if (((car_position_module == abi_cubeN) && (car_position_screen == screenI)) || ((is_departing) && (car_neighbour_module == abi_cubeN) && (car_neighbour_screen == screenI))) {
-            abi_CMD_BITMAP(car * 8 + 16, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
+            abi_CMD_BITMAP(car * 8 + 36, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
 
             if ((car_position_x > 60) || (is_departing)) {
                 car_position_x = (((car_position_y == 120) && (car_current_angles == 180)) ? car_position_x - SHIFT_POS : car_position_x);
