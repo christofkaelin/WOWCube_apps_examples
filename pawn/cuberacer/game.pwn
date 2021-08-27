@@ -151,7 +151,6 @@ send_car() {
 game_run(car) {
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         // Tapping the screen rotates the displayed element by 90 degrees clockwise.
-        //if ((((screenI == abi_MTD_GetTapFace() && (abi_MTD_GetTapsCount() >= 1)))) && (!(abi_cubeN == car_position_module) && (screenI == car_position_screen))) {
         if ((((screenI == abi_MTD_GetTapFace() && (abi_MTD_GetTapsCount() >= 1)))) && (!((abi_cubeN == car_position_module) && (screenI == car_position_screen)))) {
             roads[abi_cubeN][screenI][1] = roads[abi_cubeN][screenI][1] + (90 * abi_MTD_GetTapsCount());
         }
