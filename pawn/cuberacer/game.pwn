@@ -132,7 +132,7 @@ game_init(map) {
     roads[7][2][1] = random(3) * 90;
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         abi_CMD_FILL(0, 0, 0);
-        abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], 240 / 2, 240 / 2, newAngles[screenI] + roads[abi_cubeN][screenI][1], MIRROR_BLANK);
+        abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], 240 / 2, 240 / 2, roads[abi_cubeN][screenI][1], MIRROR_BLANK);
         abi_CMD_REDRAW(screenI);
     }
 }
@@ -148,15 +148,16 @@ send_car() {
     abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=2
 }
 
-game_run(car) {    
+game_run(car) {
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         // Tapping the screen rotates the displayed element by 90 degrees clockwise.
-        if (screenI == (abi_MTD_GetTapFace())) {
-            abi_CMD_FILL(0, 0, 0);
+        //if ((((screenI == abi_MTD_GetTapFace() && (abi_MTD_GetTapsCount() >= 1)))) && (!(abi_cubeN == car_position_module) && (screenI == car_position_screen))) {
+        if ((((screenI == abi_MTD_GetTapFace() && (abi_MTD_GetTapsCount() >= 1)))) && (!((abi_cubeN == car_position_module) && (screenI == car_position_screen)))) {
             roads[abi_cubeN][screenI][1] = roads[abi_cubeN][screenI][1] + (90 * abi_MTD_GetTapsCount());
-            abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], 240 / 2, 240 / 2, newAngles[screenI] + roads[abi_cubeN][screenI][1], MIRROR_BLANK);
-            abi_CMD_REDRAW(screenI);
         }
+        abi_CMD_FILL(0, 0, 0);
+        abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], 240 / 2, 240 / 2, roads[abi_cubeN][screenI][1], MIRROR_BLANK);
+        abi_CMD_REDRAW(screenI);
 
         if (((car_position_module == abi_cubeN) && (car_position_screen == screenI)) || ((is_departing) && (car_neighbour_module == abi_cubeN) && (car_neighbour_screen == screenI))) {
             abi_CMD_BITMAP(car * 8 + 16, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
@@ -181,8 +182,7 @@ game_run(car) {
             }
             //push buffer at screen
             abi_CMD_REDRAW(screenI);
-            //printf("posM = %d\n", car_position_module);
-            //printf("posS = %d\n", car_position_screen);
+            printf("INFO - Car{position_x: %d, position_y: %d, angle: %d, module: %d, screen: %d}\n", car_position_x, car_position_y, car_current_angles, car_position_module, car_position_screen);
         }
     }
 }

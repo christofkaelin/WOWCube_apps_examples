@@ -141,7 +141,7 @@ ON_CMD_NET_RX(const pkt[]) {
 
         case CMD_SEND_SETTINGS:  {
             if (abi_ByteN(pkt, 5) == 0) {
-                printf("INFO - Received(%d/%d/%d)\n", abi_ByteN(pkt, 8), abi_ByteN(pkt, 9), abi_ByteN(pkt, 10));
+                printf("INFO - Received CMD_SEND_SETTINGS{game_running: %d, car (settings[0]): %d, map (settings[1]): %d}\n", abi_ByteN(pkt, 8), abi_ByteN(pkt, 9), abi_ByteN(pkt, 10));
                 game_running = abi_ByteN(pkt, 8);
                 settings[0] = abi_ByteN(pkt, 9);
                 settings[1] = abi_ByteN(pkt, 10);
