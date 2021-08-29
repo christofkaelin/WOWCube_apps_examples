@@ -143,7 +143,7 @@ class fourelements(pawn_base.PawnModule):
         self.ScriptFileName = 'fourelements.amx'
         self.ScriptResourcePath = 'fourelements'
         self.ScriptResourceList = [
-            '%d.webp' % ii for ii in range(0, 2048)
+            '%d.webp' % ii for ii in range(0, 2052)
         ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'fourelements'
