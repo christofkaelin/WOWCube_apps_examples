@@ -160,7 +160,7 @@ class worldclock(pawn_base.PawnModule):
         self.ScriptFileName = 'worldclock.amx'
         self.ScriptResourcePath = 'worldclock'
         self.ScriptResourceList = [
-            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 28)
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 5)
         ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'worldclock'
