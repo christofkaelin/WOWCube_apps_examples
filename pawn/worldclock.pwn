@@ -27,53 +27,53 @@ getSec() {
 setCity(gmt) {
     switch (gmt) {
         case 0:
-            strformat(city, sizeof(city), true, "Berlin");
-        case 1:
-            strformat(city, sizeof(city), true, "Bucharest");
-        case 2:
-            strformat(city, sizeof(city), true, "Moscow");
-        case 3:
-            strformat(city, sizeof(city), true, "Dubai");
-        case 4:
-            strformat(city, sizeof(city), true, "Karachi");
-        case 5:
-            strformat(city, sizeof(city), true, "Dhaka");
-        case 6:
-            strformat(city, sizeof(city), true, "Bangkok");
-        case 7:
-            strformat(city, sizeof(city), true, "Hong Kong");
-        case 8:
-            strformat(city, sizeof(city), true, "Seoul");
-        case 9:
-            strformat(city, sizeof(city), true, "Sydney");
-        case 10:
-            strformat(city, sizeof(city), true, "Kolonia");
-        case 11:
-            strformat(city, sizeof(city), true, "Auckland");
-        case 12:
-            strformat(city, sizeof(city), true, "Samoa");
-        case 13:
-            strformat(city, sizeof(city), true, "Honolulu");
-        case 14:
-            strformat(city, sizeof(city), true, "Anchorage");
-        case 15:
-            strformat(city, sizeof(city), true, "Vancouver");
-        case 16:
-            strformat(city, sizeof(city), true, "Denver");
-        case 17:
-            strformat(city, sizeof(city), true, "Mexico City");
-        case 18:
-            strformat(city, sizeof(city), true, "New York");
-        case 19:
-            strformat(city, sizeof(city), true, "Halifax");
-        case 20:
-            strformat(city, sizeof(city), true, "Sao Paulo");
-        case 21:
-            strformat(city, sizeof(city), true, "Grytviken");
-        case 22:
-            strformat(city, sizeof(city), true, "Santa Cruz");
-        case 23:
             strformat(city, sizeof(city), true, "London");
+        case 1:
+            strformat(city, sizeof(city), true, "Berlin");
+        case 2:
+            strformat(city, sizeof(city), true, "Bucharest");
+        case 3:
+            strformat(city, sizeof(city), true, "Moscow");
+        case 4:
+            strformat(city, sizeof(city), true, "Dubai");
+        case 5:
+            strformat(city, sizeof(city), true, "Karachi");
+        case 6:
+            strformat(city, sizeof(city), true, "Dhaka");
+        case 7:
+            strformat(city, sizeof(city), true, "Bangkok");
+        case 8:
+            strformat(city, sizeof(city), true, "Hong Kong");
+        case 9:
+            strformat(city, sizeof(city), true, "Seoul");
+        case 10:
+            strformat(city, sizeof(city), true, "Sydney");
+        case 11:
+            strformat(city, sizeof(city), true, "Kolonia");
+        case 12:
+            strformat(city, sizeof(city), true, "Auckland");
+        case 13:
+            strformat(city, sizeof(city), true, "Samoa");
+        case 14:
+            strformat(city, sizeof(city), true, "Honolulu");
+        case 15:
+            strformat(city, sizeof(city), true, "Anchorage");
+        case 16:
+            strformat(city, sizeof(city), true, "Vancouver");
+        case 17:
+            strformat(city, sizeof(city), true, "Denver");
+        case 18:
+            strformat(city, sizeof(city), true, "Mexico City");
+        case 19:
+            strformat(city, sizeof(city), true, "New York");
+        case 20:
+            strformat(city, sizeof(city), true, "Halifax");
+        case 21:
+            strformat(city, sizeof(city), true, "Sao Paulo");
+        case 22:
+            strformat(city, sizeof(city), true, "Grytviken");
+        case 23:
+            strformat(city, sizeof(city), true, "Santa Cruz");
     }
 }
 
