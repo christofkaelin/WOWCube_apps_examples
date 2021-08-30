@@ -40,14 +40,16 @@ ASSET CONCEPT
 84-91: Car 6 SKIN/ANIMATIONS
 92-99: Car 7 SKIN/ANIMATIONS
 ------------------------------
-100-110: Map 0 SKIN/ANIMATIONS
-111-121: Map 1 SKIN/ANIMATIONS
-122-132: Map 2 SKIN/ANIMATIONS
-133-143: Map 3 SKIN/ANIMATIONS
-144-154: Map 4 SKIN/ANIMATIONS
-155-165: Map 5 SKIN/ANIMATIONS
-166-176: Map 6 SKIN/ANIMATIONS
-177-187: Map 7 SKIN/ANIMATIONS
+100-103: ITMES
+------------------------------
+104-108: Map 0 SKIN/ANIMATIONS
+109-113: Map 1 SKIN/ANIMATIONS
+114-119: Map 2 SKIN/ANIMATIONS
+120-125: Map 3 SKIN/ANIMATIONS
+126-131: Map 4 SKIN/ANIMATIONS
+132-137: Map 5 SKIN/ANIMATIONS
+138-143: Map 6 SKIN/ANIMATIONS
+144-187: Map 7 SKIN/ANIMATIONS
 */
 
 new bool:game_initialized = false;
@@ -55,10 +57,10 @@ new bool:game_initialized = false;
 ONTICK() {
     if (game_running) {
         if (!game_initialized) {
-            game_init(settings[1]);
+            game_init();
             game_initialized = true;
         }
-        game_run(settings[0]);
+        game_run(settings[0], settings[1]);
     } else {
         menu();
     }

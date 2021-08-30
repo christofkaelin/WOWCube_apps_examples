@@ -17,9 +17,9 @@
 
 new delay = 0;
 
-new current_angles = 180;
-new position_x = 180;
-new position_y = 180;
+new current_angles = 90;
+new position_x = 120;
+new position_y = 120;
 new position_module = 0;
 new position_screen = 0;
 
@@ -68,16 +68,15 @@ ONTICK() {
             if (((position_module == abi_cubeN) && (position_screen == screenI)) || ((is_departing) && (neighbour_module == abi_cubeN) && (neighbour_screen == screenI))) {
                 abi_CMD_BITMAP(PICTURE, position_x, position_y, current_angles, MIRROR_BLANK);
 
-                if ((position_x > 60) || (is_departing)) {
-                    position_x = (((position_y == 180) && (current_angles == 180)) ? position_x - SHIFT_POS : position_x);
-                    position_y = (((position_x == 180) && (current_angles == 90)) ? position_y + SHIFT_POS : position_y);
-                    current_angles = (((position_x == 180) && (position_y == 180) && (current_angles != 180)) ? (current_angles + SHIFT_ANGLE) % 360 : current_angles);
+                if ((position_y < 240) || (is_departing)) {
+                    position_x = (((position_y == 120) && (current_angles == 180)) ? position_x - SHIFT_POS : position_x);
+                    position_y = (((position_x == 120) && (current_angles == 90)) ? position_y + SHIFT_POS : position_y);
+                    current_angles = (((position_x == 120) && (position_y == 120) && (current_angles != 90)) ? (current_angles - SHIFT_ANGLE) % 360 : current_angles);
                     // 7.2 IMPROVE DEBUG
-                    printf("P(%d/", position_x);
-                    printf("%d)\n", position_y);
+                    printf("Pos(%d/%d) on Cube(%d/%d) with Angl(%d)\n", position_x, position_y, position_module, position_screen, current_angles);
                 } else {
-                    neighbour_module = abi_leftCubeN(abi_cubeN, screenI);
-                    neighbour_screen = abi_leftFaceN(abi_cubeN, screenI);
+                    neighbour_module = abi_bottomCubeN(abi_cubeN, screenI);
+                    neighbour_screen = abi_bottomFaceN(abi_cubeN, screenI);
                     if ((neighbour_module < CUBES_MAX) && (neighbour_screen < FACES_MAX)) {
                         is_departing = true;
                         position_module = neighbour_module;
@@ -85,6 +84,10 @@ ONTICK() {
                         neighbour_module = abi_cubeN;
                         neighbour_screen = screenI;
                         count_departing = (count_departing + 1) % 0xFF;
+                        // 7.2 MAKE FIRST TURN POSSIBLE
+                        position_x = 240;
+                        position_y = 120;
+                        current_angles = 180;
                         //is_departing = ((position_y < -120) ? false: is_departing);
                     }
                 }
@@ -117,7 +120,7 @@ ON_CMD_NET_RX(const pkt[]) {
                     position_y = -abi_ByteN(pkt, 10) - DISPLAY_SHADOW;
                     position_x = abi_ByteN(pkt, 11);
                     count_departing = abi_ByteN(pkt, 5) + 1;
-                    current_angles = 90;
+                    current_angles = 180;
                 }
             }
         }
