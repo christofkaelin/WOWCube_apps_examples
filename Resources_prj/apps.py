@@ -17,6 +17,10 @@ script_list = [
     pawn_scripts.example7_1(),
     pawn_scripts.example7_2(),
     pawn_scripts.examplecubeface(),
+    pawn_scripts.Menu(),
+    pawn_scripts.Pong(),
+    pawn_scripts.Rubik_2x2(),
+    pawn_scripts.Ladybug()
 ]
 
 

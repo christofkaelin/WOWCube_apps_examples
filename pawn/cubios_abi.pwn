@@ -44,7 +44,7 @@ native sendpacket(const packet[], const size);
 #define CMD_G2D_ADD_RECTANGLE	CMD_GUI_BASE+11 /* add rectangle layer */
 #define CMD_G2D_END				CMD_GUI_BASE+12 /* stop adding G2D layers and start blendind process */
 #define CMD_G2D_BEGIN_DISPLAY	CMD_GUI_BASE+14 /* start to add G2D layers to blend them into display framebuffer */
-#define CMD_TEXT            CMD_GUI_BASE+13 /* CMD_TEXT{8},fontResID{16},x{16},y{16},scale{16},angle{16},align{8},r{8},g{8},b{8},text{8...} - to framebuffer, RGB565 */
+#define CMD_TEXT            CMD_GUI_BASE+13 /* CMD_TEXT{8},fontResID{16},x{16},y{16},scale{16},angle{16},align{8},r{8},g{8},b{8},useG2D{8},text{8...} - to framebuffer, RGB565 */
 #define CMD_PLAYSND  					 CMD_GUI_BASE+15 /* play sound {sound_id, volume (0..100)} */
 #define CMD_TRIGGER_NIGHTLAMP  CMD_GUI_BASE+16 /* switch to night lamp mode */ 
 #define CMD_G2D_DYNAMIC_TEXTURE		CMD_GUI_BASE+17 /* draw dynamic effect */
@@ -539,7 +539,7 @@ abi_CMD_FILL_2(const rgb) /* rgb is a 24-bit number (3 bytes). The most signific
 #endif
 }
 
-abi_CMD_TEXT(const text[], const fontResID, const x, const y, const scale, const angle, const align, const r, const g, const b, text_cell_size = sizeof(text)) {
+abi_CMD_TEXT(const text[], const fontResID, const x, const y, const scale, const angle, const align, const r, const g, const b, useG2D=false, text_cell_size = sizeof(text)) {
   // to use system font: fontResID = -1
   new pkt[4 + 16] = 0; // max text length is 63 letters + null-char (zero-terminated string)
   if (text_cell_size > 16)
@@ -559,7 +559,7 @@ abi_CMD_TEXT(const text[], const fontResID, const x, const y, const scale, const
   pkt[0] = abi_ToByte(CMD_TEXT) | abi_PackWordIn32(fontResID, 1) | abi_PackIn32(abi_WordFirst(x), 3);
   pkt[1] = abi_WordSecond(x) | abi_PackWordIn32(y, 1) | abi_PackIn32(abi_WordFirst(scale), 3);
   pkt[2] = abi_WordSecond(scale) | abi_PackWordIn32(angle, 1) | abi_PackByteIn32(align, 3);
-  pkt[3] = abi_ToByte(r & 0x1f) | abi_PackByteIn32(g & 0x3f, 1) | abi_PackByteIn32(b & 0x1f, 2);
+  pkt[3] = abi_ToByte(r) | abi_PackByteIn32(g, 1) | abi_PackByteIn32(b, 2) |  abi_PackByteIn32(useG2D, 3);
 
   new j = 4;
   new sizeof_cell = 4;
@@ -583,10 +583,10 @@ abi_CMD_TEXT(const text[], const fontResID, const x, const y, const scale, const
   #endif
 }
 
-abi_CMD_TEXT_ITOA(const num, const fontResID, const x, const y, const scale, const angle, const align, const r, const g, const b) {
+abi_CMD_TEXT_ITOA(const num, const fontResID, const x, const y, const scale, const angle, const align, const r, const g, const b, useG2D=false) {
     new string[3];
     valstr(string, num, true);
-    abi_CMD_TEXT(string, fontResID, x, y, scale, angle, align, r, g, b)
+    abi_CMD_TEXT(string, fontResID, x, y, scale, angle, align, r, g, b, .useG2D = useG2D);
 }
 
 abi_CMD_BITMAP(const resID, const x, const y, const angle, const mirror, const bool:g2d = false)
