@@ -154,7 +154,7 @@ new roadway[CUBES_MAX][.road_cube, .road_face[FACES_MAX], .fruit[FACES_MAX]];
 
 //presets for leveling and models of roads
 new background[][.color, .red, .green, .blue, .crosroad, .straight_road, .end_of_road, .turning, .fruit_pic, .landscape_pic] = [
-    [0xFF83C547, 19, 48, 8, PIC_CROSROADS + 12, PIC_CROSROADS + 1 + 12, PIC_CROSROADS + 2 + 12, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE + 12], //0xFFFF9933
+    [0xFF21A800, 19, 48, 8, PIC_CROSROADS + 12, PIC_CROSROADS + 1 + 12, PIC_CROSROADS + 2 + 12, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE + 12], //0xFFFF9933
    // [0xFFFF9933, 31, 38, 6, PIC_CROSROADS, PIC_CROSROADS + 1, PIC_CROSROADS + 2, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE] //0xFF9EC547
 ];
 
