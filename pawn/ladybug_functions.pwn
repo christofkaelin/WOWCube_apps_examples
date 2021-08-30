@@ -569,7 +569,7 @@ RotateAngle(const c_angle, & c_current_angle) {
     if (c_current_angle >= 360) c_current_angle -= 360;
     else if (c_current_angle < 0) c_current_angle += 360;
 }
-CheckEating(curr_pos[POINT], prev_pos[POINT]) {
+CheckEating(curr_pos[POINT], prev_pos[POINT]) { /*
 
     new l_figure[LANDSCAPE_TYPE];
     l_figure = landscapes[ladybug.face][PLACE_FRUIT];
@@ -601,7 +601,7 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) {
         }
         landscapes[ladybug.face][PLACE_FRUIT].object = ENUM_FRUITS_MAX;
         roadway[ladybug.cube].fruit[ladybug.face] = landscapes[ladybug.face][PLACE_FRUIT].object;
-    }
+    } */
 }
 CalcCountDown() {
     if ((!game.is_generated) || (abi_cubeN != 0)) return;
@@ -782,7 +782,7 @@ DrawLandScape(l_face) {
         }
     }
 }
-DrawFruits(l_face) {
+DrawFruits(l_face) { 
     #ifdef G2D
     if (!game.is_set_back) return;
     #endif
@@ -874,7 +874,7 @@ DrawTitres(l_face) {
     if (!(game.status == GAME_OVER || game.status == GAME_COMPLETE)) return;
     if (!game.is_set_titres) return;
 
-    new bool:is_draw = false;
+    new bool:is_draw = true;
     for (new counter = 0; counter < FACES_ON_PLANE; counter++) {
         if ((game.titres_cube[counter] == abi_cubeN) && (game.titres_face[counter] == l_face)) {
             is_draw = true;
@@ -951,6 +951,7 @@ DrawTitres(l_face) {
         abi_CMD_G2D_ADD_RECTANGLE(0, 0, 240, 240, 0xC8010101);
         #endif
     }
+    is_draw = false;
 }
 DrawLadyBug(l_face) {
     #ifdef G2D
@@ -977,7 +978,7 @@ DrawLadyBug(l_face) {
     }
 }
 DrawCountDown(l_face) {
-    new bool:is_draw = false;
+    new bool:is_draw = true;
 
     new neighborCubeN = ladybug.cube;
     new neighborFaceN = ladybug.face;
@@ -1089,6 +1090,7 @@ DrawCountDown(l_face) {
             #endif
         }
     }
+    is_draw = false;
 }
 GetPlacesPosition() {
     new l_place, l_road[ROADS];

@@ -528,8 +528,8 @@ class Ladybug(pawn_base.PawnModule):
         self.ScriptFileName = 'ladybug.amx'
         self.MenuIcon = 'icon.png'
         self.SoundList = [
-            'starting.c',
-            'game_over.c',
+            'start.wav',
+            'crash.wav',
             'poison.c',
             'berry_eaten.c',
         ]
