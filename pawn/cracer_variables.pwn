@@ -148,7 +148,7 @@ new game[.local_ticks,
 ];
 
 new landscapes[FACES_MAX][PLACES_MAX][LANDSCAPE_TYPE];
-new ladybug[LADYBUG_POSITIONS];
+new cr[LADYBUG_POSITIONS];
 
 new roadway[CUBES_MAX][.road_cube, .road_face[FACES_MAX], .fruit[FACES_MAX]];
 

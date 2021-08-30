@@ -10,29 +10,29 @@ InitVariables() {
     game.is_set_titres = false;
     game.status = GAME_PLAY;
 
-    ladybug.cube = CUBES_MAX;
-    ladybug.face = FACES_MAX;
-    ladybug.x = 120;
-    ladybug.y = 120;
-    ladybug.speed_x = 0;
-    ladybug.speed_y = -SPEED;
-    ladybug.angle = CalculateAngle();
-    ladybug.target_angle = TURN_NULL;
+    cr.cube = CUBES_MAX;
+    cr.face = FACES_MAX;
+    cr.x = 120;
+    cr.y = 120;
+    cr.speed_x = 0;
+    cr.speed_y = -SPEED;
+    cr.angle = CalculateAngle();
+    cr.target_angle = TURN_NULL;
 
-    ladybug.dep_cube = CUBES_MAX;
-    ladybug.dep_face = FACES_MAX;
-    ladybug.dep_x = 120;
-    ladybug.dep_y = 120;
-    ladybug.dep_angle = ladybug.angle;
-    ladybug.is_departing = false;
-    ladybug.count_transition = 0;
+    cr.dep_cube = CUBES_MAX;
+    cr.dep_face = FACES_MAX;
+    cr.dep_x = 120;
+    cr.dep_y = 120;
+    cr.dep_angle = cr.angle;
+    cr.is_departing = false;
+    cr.count_transition = 0;
 
     if (abi_cubeN == 0) {
         game.level_trying++;
         game.level_trying %= 0xFF;
     }
 
-    ladybug.slippage = 0;
+    cr.slippage = 0;
 
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
@@ -66,17 +66,17 @@ GenerateLevel() {
 
     if (!((neighbor_cube < CUBES_MAX) && (neighbor_face < FACES_MAX))) return;
 
-    ladybug.cube = start_cube;
-    ladybug.face = start_face;
+    cr.cube = start_cube;
+    cr.face = start_face;
 
-    if (ladybug.cube != abi_cubeN) {
-        ladybug.is_departing = true;
-        //ladybug.speed_y *= -1;
+    if (cr.cube != abi_cubeN) {
+        cr.is_departing = true;
+        //cr.speed_y *= -1;
     }
 
     for (cube = 0; cube < CUBES_MAX; cube++) {
-        l_cube = ((cube == ladybug.cube) ? 0 : ((cube == neighbor_cube) ? Random(1, CUBES_MAX - 2) : Random(1, CUBES_MAX - 1)));
-        start_face = ((cube == ladybug.cube) ? ladybug.face : Random(1, FACES_MAX - 1));
+        l_cube = ((cube == cr.cube) ? 0 : ((cube == neighbor_cube) ? Random(1, CUBES_MAX - 2) : Random(1, CUBES_MAX - 1)));
+        start_face = ((cube == cr.cube) ? cr.face : Random(1, FACES_MAX - 1));
         if (cube == neighbor_cube) {
             for (face = 0; face < FACES_MAX; face++) {
                 l_figure = models_of_roads[l_cube][face];
@@ -169,7 +169,7 @@ GenerateFruits() {
             cube = Random(0, CUBES_MAX - 1);
             face = Random(0, FACES_MAX - 1);
 
-            if (((cube == ladybug.cube) && (face == ladybug.face)) || (roadway[cube].fruit[face] == POISON)) {
+            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].fruit[face] == POISON)) {
                 cube = CUBES_MAX;
                 face = FACES_MAX;
             } else {
@@ -180,7 +180,7 @@ GenerateFruits() {
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
 
-            if (((cube == ladybug.cube) && (face == ladybug.face)) || (roadway[cube].fruit[face] == POISON)) continue;
+            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].fruit[face] == POISON)) continue;
 
             fruit = Random(1, ENUM_FRUITS_MAX);
 
@@ -192,14 +192,14 @@ GenerateFruits() {
     }
 }
 CalculateAngle() {
-    if (ladybug.speed_x > 0) return 90;
-    else if (ladybug.speed_x < 0) return 270;
-    else if (ladybug.speed_y > 0) return 180;
-    else if (ladybug.speed_y < 0) return 0;
+    if (cr.speed_x > 0) return 90;
+    else if (cr.speed_x < 0) return 270;
+    else if (cr.speed_y > 0) return 180;
+    else if (cr.speed_y < 0) return 0;
     return 0;
 }
 CheckMigration() {
-    if ((ladybug.cube != abi_cubeN) || (game.status != GAME_PLAY)) return;
+    if ((cr.cube != abi_cubeN) || (game.status != GAME_PLAY)) return;
 
     new l_cube = CUBES_MAX;
     new l_face = FACES_MAX;
@@ -207,9 +207,9 @@ CheckMigration() {
 
     new bool:is_migration = true;
     new l_side_to_move = MOVE_NONE;
-    if ((ladybug.y + ladybug.speed_y < LADYBUG_SIZE / 2) && (ladybug.speed_y < 0)) {
-        l_cube = abi_topCubeN(abi_cubeN, ladybug.face);
-        l_face = abi_topFaceN(abi_cubeN, ladybug.face);
+    if ((cr.y + cr.speed_y < LADYBUG_SIZE / 2) && (cr.speed_y < 0)) {
+        l_cube = abi_topCubeN(abi_cubeN, cr.face);
+        l_face = abi_topFaceN(abi_cubeN, cr.face);
 
         l_figure = models_of_roads[roadway[l_cube].road_cube][roadway[l_cube].road_face[l_face]];
 
@@ -218,9 +218,9 @@ CheckMigration() {
             ((l_figure.road_type == END_OF_ROAD) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_180)))) {
             l_side_to_move = MOVE_TO_TOP;
         }
-    } else if ((ladybug.x + ladybug.speed_x > DISPLAY_WIDTH - LADYBUG_SIZE / 2) && (ladybug.speed_x > 0)) {
-        l_cube = abi_rightCubeN(abi_cubeN, ladybug.face);
-        l_face = abi_rightFaceN(abi_cubeN, ladybug.face);
+    } else if ((cr.x + cr.speed_x > DISPLAY_WIDTH - LADYBUG_SIZE / 2) && (cr.speed_x > 0)) {
+        l_cube = abi_rightCubeN(abi_cubeN, cr.face);
+        l_face = abi_rightFaceN(abi_cubeN, cr.face);
 
         l_figure = models_of_roads[roadway[l_cube].road_cube][roadway[l_cube].road_face[l_face]];
 
@@ -229,9 +229,9 @@ CheckMigration() {
             ((l_figure.road_type == END_OF_ROAD) && ((l_figure.angle == ANGLE_90) || (l_figure.angle == ANGLE_270)))) {
             l_side_to_move = MOVE_TO_RIGHT;
         }
-    } else if ((ladybug.y + ladybug.speed_y > DISPLAY_HEIGHT - LADYBUG_SIZE / 2) && (ladybug.speed_y > 0)) {
-        l_cube = abi_bottomCubeN(abi_cubeN, ladybug.face);
-        l_face = abi_bottomFaceN(abi_cubeN, ladybug.face);
+    } else if ((cr.y + cr.speed_y > DISPLAY_HEIGHT - LADYBUG_SIZE / 2) && (cr.speed_y > 0)) {
+        l_cube = abi_bottomCubeN(abi_cubeN, cr.face);
+        l_face = abi_bottomFaceN(abi_cubeN, cr.face);
 
         l_figure = models_of_roads[roadway[l_cube].road_cube][roadway[l_cube].road_face[l_face]];
 
@@ -240,9 +240,9 @@ CheckMigration() {
             ((l_figure.road_type == END_OF_ROAD) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_180)))) {
             l_side_to_move = MOVE_TO_BOTTOM;
         }
-    } else if ((ladybug.x + ladybug.speed_x < LADYBUG_SIZE / 2) && (ladybug.speed_x < 0)) {
-        l_cube = abi_leftCubeN(abi_cubeN, ladybug.face);
-        l_face = abi_leftFaceN(abi_cubeN, ladybug.face);
+    } else if ((cr.x + cr.speed_x < LADYBUG_SIZE / 2) && (cr.speed_x < 0)) {
+        l_cube = abi_leftCubeN(abi_cubeN, cr.face);
+        l_face = abi_leftFaceN(abi_cubeN, cr.face);
 
         l_figure = models_of_roads[roadway[l_cube].road_cube][roadway[l_cube].road_face[l_face]];
 
@@ -257,69 +257,69 @@ CheckMigration() {
 
     if (l_side_to_move != MOVE_NONE) {
 
-        ladybug.dep_cube = ladybug.cube;
-        ladybug.dep_face = ladybug.face;
-        ladybug.dep_x = ladybug.x;
-        ladybug.dep_y = ladybug.y;
-        ladybug.dep_speed_x = ladybug.speed_x;
-        ladybug.dep_speed_y = ladybug.speed_y;
-        ladybug.dep_angle = ladybug.angle;
+        cr.dep_cube = cr.cube;
+        cr.dep_face = cr.face;
+        cr.dep_x = cr.x;
+        cr.dep_y = cr.y;
+        cr.dep_speed_x = cr.speed_x;
+        cr.dep_speed_y = cr.speed_y;
+        cr.dep_angle = cr.angle;
 
-        ladybug.cube = l_cube;
-        ladybug.face = l_face;
+        cr.cube = l_cube;
+        cr.face = l_face;
 
-        l_figure = models_of_roads[roadway[ladybug.cube].road_cube][roadway[ladybug.cube].road_face[ladybug.face]];
+        l_figure = models_of_roads[roadway[cr.cube].road_cube][roadway[cr.cube].road_face[cr.face]];
         switch (l_side_to_move) {
             case MOVE_TO_TOP:  {
-                ladybug.x = -ladybug.y - SHADOW_DIST;
-                ladybug.y = 120;
-                ladybug.speed_x = -ladybug.speed_y;
-                ladybug.speed_y = 0;
-                ladybug.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_180) ? TURN_LEFT : TURN_RIGHT));
+                cr.x = -cr.y - SHADOW_DIST;
+                cr.y = 120;
+                cr.speed_x = -cr.speed_y;
+                cr.speed_y = 0;
+                cr.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_180) ? TURN_LEFT : TURN_RIGHT));
 
-                ladybug.is_departing = true;
+                cr.is_departing = true;
             }
             case MOVE_TO_RIGHT:  {
-                ladybug.y = DISPLAY_HEIGHT + SHADOW_DIST + (DISPLAY_HEIGHT - ladybug.x);
-                ladybug.x = 120;
-                ladybug.speed_y = -ladybug.speed_x;
-                ladybug.speed_x = 0;
-                ladybug.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_90) ? TURN_LEFT : TURN_RIGHT));
+                cr.y = DISPLAY_HEIGHT + SHADOW_DIST + (DISPLAY_HEIGHT - cr.x);
+                cr.x = 120;
+                cr.speed_y = -cr.speed_x;
+                cr.speed_x = 0;
+                cr.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_90) ? TURN_LEFT : TURN_RIGHT));
             }
             case MOVE_TO_BOTTOM:  {
-                ladybug.x = DISPLAY_WIDTH + SHADOW_DIST + (DISPLAY_WIDTH - ladybug.y);
-                ladybug.y = 120;
-                ladybug.speed_x = -ladybug.speed_y;
-                ladybug.speed_y = 0;
-                ladybug.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_0) ? TURN_LEFT : TURN_RIGHT));
+                cr.x = DISPLAY_WIDTH + SHADOW_DIST + (DISPLAY_WIDTH - cr.y);
+                cr.y = 120;
+                cr.speed_x = -cr.speed_y;
+                cr.speed_y = 0;
+                cr.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_0) ? TURN_LEFT : TURN_RIGHT));
             }
             case MOVE_TO_LEFT:  {
-                ladybug.y = -ladybug.x - SHADOW_DIST;
-                ladybug.x = 120;
-                ladybug.speed_y = -ladybug.speed_x;
-                ladybug.speed_x = 0;
-                ladybug.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_270) ? TURN_LEFT : TURN_RIGHT));
+                cr.y = -cr.x - SHADOW_DIST;
+                cr.x = 120;
+                cr.speed_y = -cr.speed_x;
+                cr.speed_x = 0;
+                cr.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_270) ? TURN_LEFT : TURN_RIGHT));
 
-                ladybug.is_departing = true;
+                cr.is_departing = true;
             }
         }
-        ladybug.angle = CalculateAngle();
-        ladybug.target_angle = (ladybug.angle + 360 + ladybug.target_angle) % 360;
+        cr.angle = CalculateAngle();
+        cr.target_angle = (cr.angle + 360 + cr.target_angle) % 360;
 
-        ladybug.target_angle = (((ladybug.angle == 270) && (ladybug.target_angle == 0)) ? 360 : ladybug.target_angle);
-        ladybug.angle = (((ladybug.angle == 0) && (ladybug.target_angle == 270)) ? 360 : ladybug.angle);
+        cr.target_angle = (((cr.angle == 270) && (cr.target_angle == 0)) ? 360 : cr.target_angle);
+        cr.angle = (((cr.angle == 0) && (cr.target_angle == 270)) ? 360 : cr.angle);
 
-        ladybug.count_transition++;
-        ladybug.count_transition %= 0xFF;
+        cr.count_transition++;
+        cr.count_transition %= 0xFF;
     } else if (is_migration) {
-        ladybug.slippage++;
-        if (ladybug.slippage == SLIPPAGE_TICKS) {
+        cr.slippage++;
+        if (cr.slippage == SLIPPAGE_TICKS) {
             //game.status = GAME_OVER;
             #ifdef SOUND
             abi_CMD_PLAYSND(SOUND_GAMEOVER, SOUND_VOLUME);
             #endif 
             //if (abi_cubeN == 0)
-            //    ladybug.count_transition++;
+            //    cr.count_transition++;
         }
     }
 }
@@ -330,164 +330,164 @@ CalcGameLogic() {
         game.time_bonus = ((game.time_bonus == 0 || game.status != GAME_PLAY || game.local_ticks % 10 != 0 || game.countdown != COUNTDOWN_PLAY) ? game.time_bonus : game.time_bonus - 1);
     }
 }
-CalcMoveLadyBug(l_face) {
+CalcMoveCar(l_face) {
     if ((game.status != GAME_PLAY) || (game.countdown != COUNTDOWN_PLAY)) return;
 
-    if ((abi_cubeN == ladybug.cube) && (l_face == ladybug.face)) {
+    if ((abi_cubeN == cr.cube) && (l_face == cr.face)) {
 
-        MoveLadyBug();
+        MoveCar();
     }
-    if ((abi_cubeN == ladybug.dep_cube) && (l_face == ladybug.dep_face)) {
-        ladybug.dep_x += ladybug.dep_speed_x + GetSign(ladybug.dep_speed_x) * ladybug.multiplier * MULTIPLIER_PKT;
-        ladybug.dep_y += ladybug.dep_speed_y + GetSign(ladybug.dep_speed_y) * ladybug.multiplier * MULTIPLIER_PKT;
+    if ((abi_cubeN == cr.dep_cube) && (l_face == cr.dep_face)) {
+        cr.dep_x += cr.dep_speed_x + GetSign(cr.dep_speed_x) * cr.multiplier * MULTIPLIER_PKT;
+        cr.dep_y += cr.dep_speed_y + GetSign(cr.dep_speed_y) * cr.multiplier * MULTIPLIER_PKT;
 
 
-        if ((ladybug.dep_x < -LADYBUG_SIZE / 2) || (ladybug.dep_y < -LADYBUG_SIZE / 2)) {
+        if ((cr.dep_x < -LADYBUG_SIZE / 2) || (cr.dep_y < -LADYBUG_SIZE / 2)) {
 
-            ladybug.dep_cube = CUBES_MAX;
-            ladybug.dep_face = FACES_MAX;
+            cr.dep_cube = CUBES_MAX;
+            cr.dep_face = FACES_MAX;
         }
     }
 }
-MoveLadyBug() {
+MoveCar() {
     #define CROSROAD_MIN 60
     #define CROSROAD_MAX 180
 
     test = 9;
     //DEBUG
-    ladybug_debug.x = ladybug.x;
-    ladybug_debug.y = ladybug.y;
-    ladybug_debug.angle = ladybug.angle;
-    ladybug_debug.target_angle = ladybug.target_angle;
+    cr_debug.x = cr.x;
+    cr_debug.y = cr.y;
+    cr_debug.angle = cr.angle;
+    cr_debug.target_angle = cr.target_angle;
 
     new new_positions[POINT] = [0, 0, 0];
     new last_positions[POINT];
 
-    last_positions.x = ladybug.x;
-    last_positions.y = ladybug.y;
+    last_positions.x = cr.x;
+    last_positions.y = cr.y;
 
-    ladybug.multiplier = 0;
+    cr.multiplier = 0;
 
-    new_positions.x = ladybug.x + ladybug.speed_x + GetSign(ladybug.speed_x) * ladybug.multiplier * MULTIPLIER_PKT;
-    new_positions.y = ladybug.y + ladybug.speed_y + GetSign(ladybug.speed_y) * ladybug.multiplier * MULTIPLIER_PKT;
+    new_positions.x = cr.x + cr.speed_x + GetSign(cr.speed_x) * cr.multiplier * MULTIPLIER_PKT;
+    new_positions.y = cr.y + cr.speed_y + GetSign(cr.speed_y) * cr.multiplier * MULTIPLIER_PKT;
 
-    if (ladybug.slippage) return;
+    if (cr.slippage) return;
 
     new l_figure[ROADS];
-    l_figure = models_of_roads[roadway[abi_cubeN].road_cube][roadway[abi_cubeN].road_face[ladybug.face]];
+    l_figure = models_of_roads[roadway[abi_cubeN].road_cube][roadway[abi_cubeN].road_face[cr.face]];
 
     if (l_figure.road_type == STRAIGHT_ROAD) {
-        ladybug.x = new_positions.x;
-        ladybug.y = new_positions.y;
+        cr.x = new_positions.x;
+        cr.y = new_positions.y;
     } else if (l_figure.road_type == END_OF_ROAD) {
-        if ((ladybug.angle != 0) && (ladybug.y > 120)) {
-            ladybug.angle -= 15;
-            ladybug.speed_y = -ABS(ladybug.speed_y);
+        if ((cr.angle != 0) && (cr.y > 120)) {
+            cr.angle -= 15;
+            cr.speed_y = -ABS(cr.speed_y);
         } else {
-            ladybug.x = new_positions.x;
-            ladybug.y = new_positions.y;
+            cr.x = new_positions.x;
+            cr.y = new_positions.y;
         }
     } else if (l_figure.road_type == CROSROAD) {
-        if (((ladybug.x >= CROSROAD_MIN) && (ladybug.x <= CROSROAD_MAX) && (ladybug.y >= CROSROAD_MIN) && (ladybug.y <= CROSROAD_MAX)) ||
+        if (((cr.x >= CROSROAD_MIN) && (cr.x <= CROSROAD_MAX) && (cr.y >= CROSROAD_MIN) && (cr.y <= CROSROAD_MAX)) ||
             ((new_positions.x >= CROSROAD_MIN) && (new_positions.x <= CROSROAD_MAX) && (new_positions.y >= CROSROAD_MIN) && (new_positions.y <= CROSROAD_MAX))) {
 
-            new step = ABS(ladybug.speed_x) + ABS(ladybug.speed_y) + ladybug.multiplier * MULTIPLIER_PKT;
+            new step = ABS(cr.speed_x) + ABS(cr.speed_y) + cr.multiplier * MULTIPLIER_PKT;
             new center[POINT];
 
-            if (ladybug.x < 60) {
-                step -= 60 - ladybug.x;
-                ladybug.x = 60;
-            } else if (ladybug.x > 180) {
-                step -= ladybug.x - 180;
-                ladybug.x = 180;
-            } else if (ladybug.y < 60) {
-                step -= 60 - ladybug.y;
-                ladybug.y = 60;
-            } else if (ladybug.y > 180) {
-                step -= ladybug.y - 180;
-                ladybug.y = 180;
+            if (cr.x < 60) {
+                step -= 60 - cr.x;
+                cr.x = 60;
+            } else if (cr.x > 180) {
+                step -= cr.x - 180;
+                cr.x = 180;
+            } else if (cr.y < 60) {
+                step -= 60 - cr.y;
+                cr.y = 60;
+            } else if (cr.y > 180) {
+                step -= cr.y - 180;
+                cr.y = 180;
             }
 
             switch (l_figure.angle) {
                 case 0 :  {
                     center.x = 180;
                     center.y = 180;
-                    center.angle = ((ladybug.target_angle == 180) ? 0 : 180);
+                    center.angle = ((cr.target_angle == 180) ? 0 : 180);
                 }
                 case 1 :  {
                     center.x = 60;
                     center.y = 180;
-                    center.angle = ((ladybug.target_angle == 180) ? 180 : 0);
+                    center.angle = ((cr.target_angle == 180) ? 180 : 0);
                 }
                 case 2 :  {
                     center.x = 60;
                     center.y = 60;
-                    center.angle = ((ladybug.target_angle == 0) ? 0 : 180);
+                    center.angle = ((cr.target_angle == 0) ? 0 : 180);
                 }
                 case 3 :  {
                     center.x = 180;
                     center.y = 60;
-                    center.angle = ((ladybug.target_angle == 360) ? 180 : 0);
+                    center.angle = ((cr.target_angle == 360) ? 180 : 0);
                 }
             }
 
-            if (ABS(ladybug.angle - ladybug.target_angle) < step) {
-                step = ABS(ladybug.angle - ladybug.target_angle);
-                ladybug.angle = ladybug.target_angle;
+            if (ABS(cr.angle - cr.target_angle) < step) {
+                step = ABS(cr.angle - cr.target_angle);
+                cr.angle = cr.target_angle;
             } else {
                 //circumference of the circle is around 377 pixels. Thus, we will assume that for 1 degree the bug passes 1 pixel.
-                ladybug.angle += ((ladybug.angle > ladybug.target_angle) ? -1 : 1) * step;
-                ladybug.angle = ((ladybug.angle < 0) ? ladybug.angle + 360 : ladybug.angle);
-                //ladybug.angle %= 360;
+                cr.angle += ((cr.angle > cr.target_angle) ? -1 : 1) * step;
+                cr.angle = ((cr.angle < 0) ? cr.angle + 360 : cr.angle);
+                //cr.angle %= 360;
             }
-            ladybug.x = center.x + (60 * FixedCos(ladybug.angle + center.angle) >> 8);
-            ladybug.y = center.y + (60 * FixedSin(ladybug.angle + center.angle) >> 8);
+            cr.x = center.x + (60 * FixedCos(cr.angle + center.angle) >> 8);
+            cr.y = center.y + (60 * FixedSin(cr.angle + center.angle) >> 8);
 
-            if (ladybug.angle == ladybug.target_angle) {
-                step = ABS(ladybug.speed_x) + ABS(ladybug.speed_y) - step;
-                switch (ladybug.angle) {
+            if (cr.angle == cr.target_angle) {
+                step = ABS(cr.speed_x) + ABS(cr.speed_y) - step;
+                switch (cr.angle) {
                     case 0 :  {
-                        ladybug.speed_x = 0;
-                        ladybug.speed_y = -SPEED;
+                        cr.speed_x = 0;
+                        cr.speed_y = -SPEED;
                     }
                     case 90 :  {
-                        ladybug.speed_x = SPEED;
-                        ladybug.speed_y = 0;
+                        cr.speed_x = SPEED;
+                        cr.speed_y = 0;
                     }
                     case 180 :  {
-                        ladybug.speed_x = 0;
-                        ladybug.speed_y = SPEED;
+                        cr.speed_x = 0;
+                        cr.speed_y = SPEED;
                     }
                     case 270 :  {
-                        ladybug.speed_x = -SPEED;
-                        ladybug.speed_y = 0;
+                        cr.speed_x = -SPEED;
+                        cr.speed_y = 0;
                     }
                     case 360 :  {
-                        ladybug.speed_x = 0;
-                        ladybug.speed_y = -SPEED;
+                        cr.speed_x = 0;
+                        cr.speed_y = -SPEED;
                     }
                 }
 
-                ladybug.x += ((ladybug.speed_x != 0) ? GetSign(ladybug.speed_x) * step : 0) + GetSign(ladybug.speed_x) * ladybug.multiplier * MULTIPLIER_PKT;
-                ladybug.y += ((ladybug.speed_y != 0) ? GetSign(ladybug.speed_y) * step : 0) + GetSign(ladybug.speed_y) * ladybug.multiplier * MULTIPLIER_PKT;
+                cr.x += ((cr.speed_x != 0) ? GetSign(cr.speed_x) * step : 0) + GetSign(cr.speed_x) * cr.multiplier * MULTIPLIER_PKT;
+                cr.y += ((cr.speed_y != 0) ? GetSign(cr.speed_y) * step : 0) + GetSign(cr.speed_y) * cr.multiplier * MULTIPLIER_PKT;
 
             }
-            new_positions.x = ladybug.x;
-            new_positions.y = ladybug.y;
+            new_positions.x = cr.x;
+            new_positions.y = cr.y;
         } else {
-            ladybug.x = new_positions.x;
-            ladybug.y = new_positions.y;
+            cr.x = new_positions.x;
+            cr.y = new_positions.y;
         }
     }
 
-    new_positions.x = ladybug.x - ABS(ladybug.speed_x + ladybug.speed_y);
-    new_positions.y = ladybug.y - ABS(ladybug.speed_x + ladybug.speed_y);
-    last_positions.x = ladybug.x + ABS(ladybug.speed_x + ladybug.speed_y);
-    last_positions.y = ladybug.y + ABS(ladybug.speed_x + ladybug.speed_y);
+    new_positions.x = cr.x - ABS(cr.speed_x + cr.speed_y);
+    new_positions.y = cr.y - ABS(cr.speed_x + cr.speed_y);
+    last_positions.x = cr.x + ABS(cr.speed_x + cr.speed_y);
+    last_positions.y = cr.y + ABS(cr.speed_x + cr.speed_y);
 
     CheckEating(new_positions, last_positions);
 
-    pause = ((!((60 <= ladybug.x && 180 >= ladybug.x) && (60 <= ladybug.y && 180 >= ladybug.y)) && (ladybug.x != 120) && (ladybug.y != 120)) ? true : false);
+    pause = ((!((60 <= cr.x && 180 >= cr.x) && (60 <= cr.y && 180 >= cr.y)) && (cr.x != 120) && (cr.y != 120)) ? true : false);
 }
 CheckAngles() {
     new far_cubeN = 0;
@@ -572,7 +572,7 @@ RotateAngle(const c_angle, & c_current_angle) {
 CheckEating(curr_pos[POINT], prev_pos[POINT]) { /*
 
     new l_figure[LANDSCAPE_TYPE];
-    l_figure = landscapes[ladybug.face][PLACE_FRUIT];
+    l_figure = landscapes[cr.face][PLACE_FRUIT];
     if (l_figure.object == ENUM_FRUITS_MAX) return;
 
     if ((Min(curr_pos.x, prev_pos.x) <= l_figure.x) && (Max(curr_pos.x, prev_pos.x) >= l_figure.x) &&
@@ -599,8 +599,8 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) { /*
                 #endif
             }
         }
-        landscapes[ladybug.face][PLACE_FRUIT].object = ENUM_FRUITS_MAX;
-        roadway[ladybug.cube].fruit[ladybug.face] = landscapes[ladybug.face][PLACE_FRUIT].object;
+        landscapes[cr.face][PLACE_FRUIT].object = ENUM_FRUITS_MAX;
+        roadway[cr.cube].fruit[cr.face] = landscapes[cr.face][PLACE_FRUIT].object;
     } */
 }
 CalcCountDown() {
@@ -626,8 +626,8 @@ SetTitresPositions() {
     if (game.status == GAME_PLAY) return;
     if (game.is_set_titres) return;
 
-    game.titres_cube[0] = ladybug.cube;
-    game.titres_face[0] = ladybug.face;
+    game.titres_cube[0] = cr.cube;
+    game.titres_face[0] = cr.face;
     for (new counter = 1; counter < FACES_ON_PLANE; counter++) {
         game.titres_cube[counter] = game.titres_cube[counter - 1];
         game.titres_face[counter] = game.titres_face[counter - 1];
@@ -953,7 +953,7 @@ DrawTitres(l_face) {
     }
     is_draw = false;
 }
-DrawLadyBug(l_face) {
+DrawCar(l_face) {
     #ifdef G2D
     if (!game.is_set_back) return;
     #endif
@@ -962,26 +962,26 @@ DrawLadyBug(l_face) {
 
     new l_figure = PIC_LADYBUG + ((game.countdown == COUNTDOWN_PLAY) ? game.local_ticks % LADYBUG_ANIMATION_MAX : 0);
 
-    if ((abi_cubeN == ladybug.cube) && (l_face == ladybug.face)) {
+    if ((abi_cubeN == cr.cube) && (l_face == cr.face)) {
         #ifdef G2D
-        abi_CMD_G2D_ADD_SPRITE(l_figure, false, ladybug.x, ladybug.y, 0xFF, 0, ladybug.angle, MIRROR_BLANK);
+        abi_CMD_G2D_ADD_SPRITE(l_figure, false, cr.x, cr.y, 0xFF, 0, cr.angle, MIRROR_BLANK);
         #else
-        abi_CMD_BITMAP(l_figure, ladybug.x, ladybug.y, ladybug.angle, MIRROR_BLANK);
+        abi_CMD_BITMAP(l_figure, cr.x, cr.y, cr.angle, MIRROR_BLANK);
         #endif
     }
-    if ((abi_cubeN == ladybug.dep_cube) && (l_face == ladybug.dep_face)) {
+    if ((abi_cubeN == cr.dep_cube) && (l_face == cr.dep_face)) {
         #ifdef G2D
-        abi_CMD_G2D_ADD_SPRITE(l_figure, false, ladybug.dep_x, ladybug.dep_y, 0xFF, 0, ladybug.dep_angle, MIRROR_BLANK);
+        abi_CMD_G2D_ADD_SPRITE(l_figure, false, cr.dep_x, cr.dep_y, 0xFF, 0, cr.dep_angle, MIRROR_BLANK);
         #else
-        abi_CMD_BITMAP(l_figure, ladybug.dep_x, ladybug.dep_y, ladybug.dep_angle, MIRROR_BLANK);
+        abi_CMD_BITMAP(l_figure, cr.dep_x, cr.dep_y, cr.dep_angle, MIRROR_BLANK);
         #endif
     }
 }
 DrawCountDown(l_face) {
     new bool:is_draw = true;
 
-    new neighborCubeN = ladybug.cube;
-    new neighborFaceN = ladybug.face;
+    new neighborCubeN = cr.cube;
+    new neighborFaceN = cr.face;
     //new pos_x, pos_y;
     new position[POINT];
 
@@ -1245,11 +1245,11 @@ SendGameInfo() {
         abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=2
     }
 }
-SendLadybug() {
-    if (!((ladybug.cube == abi_cubeN) || (ladybug.is_departing))) return;
+SendCar() {
+    if (!((cr.cube == abi_cubeN) || (cr.is_departing))) return;
 
     new data[4];
-    data = SerializyLadybug();
+    data = SerializyCar();
 
     abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=0
     abi_CMD_NET_TX(1, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=1
@@ -1316,7 +1316,7 @@ DeSerializeGameInfo(const data[]) {
     game.score = (data[3] >> 9) & 0x1F;
     game.health = (data[3] >> 14) & 0x7;
 
-    //if (!((abi_cubeN == ladybug.cube) && ((game.status == GAME_OVER) || (game.status == GAME_COMPLETE))))
+    //if (!((abi_cubeN == cr.cube) && ((game.status == GAME_OVER) || (game.status == GAME_COMPLETE))))
     game.status = ((data[1] >> 27) & 0x3);
 
     game.is_set_titres = (((data[3] >> 17) & 0x1 == 1) ? true : false);
@@ -1350,50 +1350,50 @@ DeSerializeGameInfo(const data[]) {
     GenerateLandscape();
     GetPlacesPosition();
 }
-SerializyLadybug() {
+SerializyCar() {
     new data[4];
     data[0] = ((CMD_SEND_LADYBUG) |
-        ((ladybug.cube & 0x7) << 8) |
-        ((ladybug.face & 0x3) << 11) |
-        (((ladybug.angle / 90) & 0x3) << 13) |
-        ((ABS(ladybug.speed_x) & 0x7) << 15) |
-        (((ladybug.speed_x < 0) ? 1 : 0) << 18) |
-        ((ABS(ladybug.speed_y) & 0x7) << 19) |
-        (((ladybug.speed_y < 0) ? 1 : 0) << 22) |
-        ((ladybug.count_transition & 0xFF) << 23)
+        ((cr.cube & 0x7) << 8) |
+        ((cr.face & 0x3) << 11) |
+        (((cr.angle / 90) & 0x3) << 13) |
+        ((ABS(cr.speed_x) & 0x7) << 15) |
+        (((cr.speed_x < 0) ? 1 : 0) << 18) |
+        ((ABS(cr.speed_y) & 0x7) << 19) |
+        (((cr.speed_y < 0) ? 1 : 0) << 22) |
+        ((cr.count_transition & 0xFF) << 23)
     );
-    data[1] = (((ABS(ladybug.x) & 0xFF)) |
-        (((ladybug.x < 0) ? 1 : 0) << 8) |
-        ((ABS(ladybug.y) & 0xFF) << 9) |
-        (((ladybug.y < 0) ? 1 : 0) << 17) |
-        ((ladybug.target_angle / 90 & 0x3) << 18) |
+    data[1] = (((ABS(cr.x) & 0xFF)) |
+        (((cr.x < 0) ? 1 : 0) << 8) |
+        ((ABS(cr.y) & 0xFF) << 9) |
+        (((cr.y < 0) ? 1 : 0) << 17) |
+        ((cr.target_angle / 90 & 0x3) << 18) |
         ((game.level_trying & 0xFF) << 20)
     );
     return data;
 }
-DeSerializyLadybug(const data[]) {
+DeSerializyCar(const data[]) {
 
 
     if (((data[2] >> 20) & 0xFF) != game.level_trying) return;
-    if ((((data[1] >> 23) & 0xFF) < ladybug.count_transition) && (((data[1] >> 23) & 0xFF) != 0)) return;
+    if ((((data[1] >> 23) & 0xFF) < cr.count_transition) && (((data[1] >> 23) & 0xFF) != 0)) return;
 
-    ladybug.cube = (data[1] >> 8) & 0x7;
-    ladybug.face = (data[1] >> 11) & 0x3;
-    ladybug.angle = ((data[1] >> 13) & 0x3) * 90;
-    ladybug.speed_x = ((data[1] >> 15) & 0x7) * ((((data[1] >> 18) & 0x1) == 1) ? -1 : 1);
-    ladybug.speed_y = ((data[1] >> 19) & 0x7) * ((((data[1] >> 22) & 0x1) == 1) ? -1 : 1);
-    ladybug.count_transition = (data[1] >> 23) & 0xFF;
-    ladybug.is_departing = false;
+    cr.cube = (data[1] >> 8) & 0x7;
+    cr.face = (data[1] >> 11) & 0x3;
+    cr.angle = ((data[1] >> 13) & 0x3) * 90;
+    cr.speed_x = ((data[1] >> 15) & 0x7) * ((((data[1] >> 18) & 0x1) == 1) ? -1 : 1);
+    cr.speed_y = ((data[1] >> 19) & 0x7) * ((((data[1] >> 22) & 0x1) == 1) ? -1 : 1);
+    cr.count_transition = (data[1] >> 23) & 0xFF;
+    cr.is_departing = false;
 
-    ladybug.x = (data[2] & 0xFF) * ((((data[2] >> 8) & 0x1) == 1) ? -1 : 1);
-    ladybug.y = ((data[2] >> 9) & 0xFF) * ((((data[2] >> 17) & 0x1) == 1) ? -1 : 1);
-    ladybug.angle = CalculateAngle();
+    cr.x = (data[2] & 0xFF) * ((((data[2] >> 8) & 0x1) == 1) ? -1 : 1);
+    cr.y = ((data[2] >> 9) & 0xFF) * ((((data[2] >> 17) & 0x1) == 1) ? -1 : 1);
+    cr.angle = CalculateAngle();
 
-    ladybug.target_angle = ((data[2] >> 18) & 0x3) * 90;
+    cr.target_angle = ((data[2] >> 18) & 0x3) * 90;
 
-    if (ladybug.cube == abi_cubeN) {
-        ladybug.count_transition = (ladybug.count_transition + 1) % 0xFF;
-        ladybug.slippage = 0;
+    if (cr.cube == abi_cubeN) {
+        cr.count_transition = (cr.count_transition + 1) % 0xFF;
+        cr.slippage = 0;
     }
 }
 SerializeToMaster() {
@@ -1403,17 +1403,17 @@ SerializeToMaster() {
         ((landscapes[0][PLACE_FRUIT].object & 0x7) << 11) |
         ((landscapes[1][PLACE_FRUIT].object & 0x7) << 14) |
         ((landscapes[2][PLACE_FRUIT].object & 0x7) << 17) |
-        ((ladybug.slippage & 0x1F) << 20)
+        ((cr.slippage & 0x1F) << 20)
     );
     data[1] = ((game.level_trying & 0xFF) |
-        ((ladybug.count_transition & 0xFF) << 8)
+        ((cr.count_transition & 0xFF) << 8)
     );
     return data;
 }
 DeSerializeToMaster(const data[]) {
     if (abi_cubeN != 0) return;
 
-    if ((((data[2] >> 8) & 0xFF) != ladybug.count_transition) || ((data[2] & 0xFF) != game.level_trying)) return;
+    if ((((data[2] >> 8) & 0xFF) != cr.count_transition) || ((data[2] & 0xFF) != game.level_trying)) return;
 
     new l_cube = (data[1] >> 8) & 0x7;
 
@@ -1424,8 +1424,8 @@ DeSerializeToMaster(const data[]) {
 
 
     //game.status = (data[1] >> 20) & 0x3;
-    if (l_cube == ladybug.cube)
-        ladybug.slippage = (data[1] >> 20) & 0x1F;
+    if (l_cube == cr.cube)
+        cr.slippage = (data[1] >> 20) & 0x1F;
 
 }
 CalculateGameStatus() {
@@ -1446,12 +1446,12 @@ CalculateGameStatus() {
     }
     if (game.score == CUBES_MAX * FACES_MAX - 1 - (game.level + 1)) {
         game.status = GAME_COMPLETE;
-        ladybug.count_transition++;
+        cr.count_transition++;
     } else if (game.health < 1) {
         game.status = GAME_OVER;
-        ladybug.count_transition++;
-    } else if (ladybug.slippage == SLIPPAGE_TICKS) {
+        cr.count_transition++;
+    } else if (cr.slippage == SLIPPAGE_TICKS) {
         game.status = GAME_OVER;
-        ladybug.count_transition++;
+        cr.count_transition++;
     }
 }

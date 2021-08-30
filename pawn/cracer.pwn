@@ -6,7 +6,7 @@ forward run(const pkt[], size, const src[]); // public Pawn function seen from C
 #include "run.pwn"
 
 new pause = false;
-new ladybug_debug[.x, .y, .angle, .target_angle];
+new cr_debug[.x, .y, .angle, .target_angle];
 new test = 0;
 
 #include "cracer_variables.pwn" 
@@ -19,7 +19,7 @@ ON_PHYSICS_TICK() {
 
     for (face = 0; face < FACES_MAX; face++) {
         RotateAngle(newAngles[face], current_angle[face]);
-        CalcMoveLadyBug(face);
+        CalcMoveCar(face);
 
     }
     CalcCountDown();
@@ -46,7 +46,7 @@ RENDER() {
 
         DrawFruits(face);
 
-        DrawLadyBug(face);
+        DrawCar(face);
         DrawLandScape(face);
 
         DrawHud(face);
@@ -58,10 +58,10 @@ RENDER() {
                 //abi_CMD_TEXT_ITOA(game.level, 0, 40, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
                 //abi_CMD_TEXT_ITOA(game.level_trying, 0, 40, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
                 //abi_CMD_TEXT_ITOA(game.is_generated, 0, 80, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug.is_departing, 0, 20, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug.count_transition, 0, 20, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr.is_departing, 0, 20, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr.count_transition, 0, 20, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
                 abi_CMD_TEXT_ITOA(CUBES_MAX * FACES_MAX - 1 - (game.level + 1), 0, 20, 60, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug.slippage, 0, 20, 80, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr.slippage, 0, 20, 80, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
                 abi_CMD_TEXT_ITOA(game.countdown, 0, 20, 100, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
                 abi_CMD_TEXT_ITOA(game.status, 0, 20, 120, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
                 abi_CMD_TEXT_ITOA(test, 0, 20, 140, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
@@ -70,23 +70,23 @@ RENDER() {
         //abi_CMD_TEXT_ITOA(roadway[abi_cubeN].road_cube, 0, 180, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
         //abi_CMD_TEXT_ITOA(roadway[abi_cubeN].road_face[face], 0, 200, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
         /*
-                abi_CMD_TEXT_ITOA(ladybug.cube, 0, 180, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug.face, 0, 200, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr.cube, 0, 180, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr.face, 0, 200, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
 
                 abi_CMD_TEXT_ITOA(abi_cubeN, 0, 20, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
                 abi_CMD_TEXT_ITOA(face, 0, 40, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
 
-                abi_CMD_TEXT_ITOA(ladybug.x, 0, 200, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug.y, 0, 200, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug.speed_x, 0, 200, 60, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug.speed_y, 0, 200, 80, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug.angle, 0, 200, 100, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr.x, 0, 200, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr.y, 0, 200, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr.speed_x, 0, 200, 60, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr.speed_y, 0, 200, 80, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr.angle, 0, 200, 100, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
         */
         /*
-                abi_CMD_TEXT_ITOA(ladybug_debug.x, 0, 120, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug_debug.y, 0, 120, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug_debug.target_angle, 0, 120, 60, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(ladybug_debug.angle, 0, 120, 80, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr_debug.x, 0, 120, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr_debug.y, 0, 120, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr_debug.target_angle, 0, 120, 60, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT_ITOA(cr_debug.angle, 0, 120, 80, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
         */
 
 
@@ -107,7 +107,7 @@ ONTICK() {
     CheckMigration();
 
     SendGameInfo();
-    SendLadybug();
+    SendCar();
 
     //check the shake to exit the menu
     if (0 == abi_cubeN) {
@@ -129,7 +129,7 @@ ON_CMD_NET_RX(const pkt[]) {
             DeSerializeGameInfo(pkt);
         }
         case CMD_SEND_LADYBUG:  {
-            DeSerializyLadybug(pkt);
+            DeSerializyCar(pkt);
         }
         case CMD_SEND_TO_MASTER:  {
             DeSerializeToMaster(pkt);
