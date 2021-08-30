@@ -9,8 +9,8 @@ new pause = false;
 new ladybug_debug[.x, .y, .angle, .target_angle];
 new test = 0;
 
-#include "ladybug_variables.pwn" 
-#include "ladybug_functions.pwn" 
+#include "cracer_variables.pwn" 
+#include "cracer_functions.pwn" 
 
 
 ON_PHYSICS_TICK() {

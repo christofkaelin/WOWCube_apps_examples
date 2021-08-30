@@ -1,5 +1,5 @@
 GAMES_LIST = example1 example2 example3 example4 example5 example6 example7 example8 example9 fourelements worldclock cuberacer exampletap example7_1 example7_2 
-examplecubeface ladybug pong rubik_2x2
+examplecubeface cracer pong rubik_2x2
 AMX_FILES_LIST = $(addsuffix .amx, $(GAMES_LIST))
 
 # bytes for .AMX script bytecode and its stack - must be equal to platform config

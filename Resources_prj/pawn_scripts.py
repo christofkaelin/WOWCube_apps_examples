@@ -516,16 +516,16 @@ class Shapes(pawn_base.PawnModule):
         self.SoundPath = ''
 
 
-class Ladybug(pawn_base.PawnModule):
+class Cracer(pawn_base.PawnModule):
     def __init__(self):
-        super(Ladybug, self).__init__()
-        self.name = 'Ladybug'
+        super(Cracer, self).__init__()
+        self.name = 'Cracer'
         self.scriptId = 13
         self.ScriptResourceList = [
             self.FILE_TEMPLATE_PNG % ii for ii in range(0, 59)
         ]
-        self.ScriptResourcePath = 'ladybug'
-        self.ScriptFileName = 'ladybug.amx'
+        self.ScriptResourcePath = 'cracer'
+        self.ScriptFileName = 'cracer.amx'
         self.MenuIcon = 'icon.png'
         self.SoundList = [
             'start.wav',
@@ -533,7 +533,7 @@ class Ladybug(pawn_base.PawnModule):
             'poison.c',
             'berry_eaten.c',
         ]
-        self.SoundPath = 'ladybug'
+        self.SoundPath = 'cracer'
 
 
 class Widgets(pawn_base.PawnModule):

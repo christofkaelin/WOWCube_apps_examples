@@ -20,7 +20,7 @@ script_list = [
     pawn_scripts.Menu(),
     pawn_scripts.Pong(),
     pawn_scripts.Rubik_2x2(),
-    pawn_scripts.Ladybug()
+    pawn_scripts.Cracer()
 ]
 
 
