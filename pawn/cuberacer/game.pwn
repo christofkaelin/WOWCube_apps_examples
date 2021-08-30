@@ -24,62 +24,62 @@ draw_road(map) {
 
     //Straight
     if (rand <= 35) {
-        return 0 + ((map * 11) + 40);
+        return 0 + ((map * 11) + 100);
     }
     //Turn
     else if (rand > 35 && rand <= 70) {
-        return 1 + ((map * 11) + 40);
+        return 1 + ((map * 11) + 100);
     }
     //U-Turn
     else if (rand > 70 && rand <= 75) {
-        return 2 + ((map * 11) + 40);
+        return 2 + ((map * 11) + 100);
     }
     //bomb
     else if (rand > 75 && rand <= 80) {
         //bomb-straight
         if (rand <= 78) {
-            return 3 + ((map * 11) + 40);
+            return 3 + ((map * 11) + 100);
         }
         //bomb-turn
         else {
-            return 4 + ((map * 11) + 40);
+            return 4 + ((map * 11) + 100);
         }
     }
     //jump
     else if (rand > 80 && rand <= 85) {
-        return 5 + ((map * 11) + 40);
+        return 5 + ((map * 11) + 100);
     }
     //boost
     else if (rand > 85 && rand <= 90) {
         //boost-straight
         if (rand <= 88) {
-            return 6 + ((map * 11) + 40);
+            return 6 + ((map * 11) + 100);
         }
         //boost-turn
         else {
-            return 7 + ((map * 11) + 40);
+            return 7 + ((map * 11) + 100);
         }
     }
     //guardian
     else if (rand > 90 && rand <= 95) {
         //guardian-straight
         if (rand <= 93) {
-            return 8 + ((map * 11) + 40);
+            return 8 + ((map * 11) + 100);
         }
         //guardian-turn
         else {
-            return 9 + ((map * 11) + 40);
+            return 9 + ((map * 11) + 100);
         }
     }
     //warp
     else if (rand > 95 && rand <= 100) {
-        return 10 + ((map * 11) + 40);
+        return 10 + ((map * 11) + 100);
     }
 }
 
 game_init(map) {
     // First field will always be a straight road
-    roads[0][0][0] = 0 + ((map * 11) + 40);
+    roads[0][0][0] = 0 + ((map * 11) + 100);
     roads[0][0][1] = 0;
 
     roads[0][1][0] = draw_road(map);
@@ -132,7 +132,7 @@ game_init(map) {
     roads[7][2][1] = random(3) * 90;
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         abi_CMD_FILL(0, 0, 0);
-        abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], 240 / 2, 240 / 2, newAngles[screenI] + roads[abi_cubeN][screenI][1], MIRROR_BLANK);
+        abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], 240 / 2, 240 / 2, roads[abi_cubeN][screenI][1], MIRROR_BLANK);
         abi_CMD_REDRAW(screenI);
     }
 }
@@ -148,18 +148,18 @@ send_car() {
     abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=2
 }
 
-game_run(car) {    
+game_run(car) {
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         // Tapping the screen rotates the displayed element by 90 degrees clockwise.
-        if (screenI == (abi_MTD_GetTapFace())) {
-            abi_CMD_FILL(0, 0, 0);
+        if ((((screenI == abi_MTD_GetTapFace() && (abi_MTD_GetTapsCount() >= 1)))) && (!((abi_cubeN == car_position_module) && (screenI == car_position_screen)))) {
             roads[abi_cubeN][screenI][1] = roads[abi_cubeN][screenI][1] + (90 * abi_MTD_GetTapsCount());
-            abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], 240 / 2, 240 / 2, newAngles[screenI] + roads[abi_cubeN][screenI][1], MIRROR_BLANK);
-            abi_CMD_REDRAW(screenI);
         }
+        abi_CMD_FILL(0, 0, 0);
+        abi_CMD_BITMAP(roads[abi_cubeN][screenI][0], 240 / 2, 240 / 2, roads[abi_cubeN][screenI][1], MIRROR_BLANK);
+        abi_CMD_REDRAW(screenI);
 
         if (((car_position_module == abi_cubeN) && (car_position_screen == screenI)) || ((is_departing) && (car_neighbour_module == abi_cubeN) && (car_neighbour_screen == screenI))) {
-            abi_CMD_BITMAP(car * 8 + 16, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
+            abi_CMD_BITMAP(car * 8 + 36, car_position_x, car_position_y, car_current_angles, MIRROR_BLANK);
 
             if ((car_position_x > 60) || (is_departing)) {
                 car_position_x = (((car_position_y == 120) && (car_current_angles == 180)) ? car_position_x - SHIFT_POS : car_position_x);
@@ -181,8 +181,7 @@ game_run(car) {
             }
             //push buffer at screen
             abi_CMD_REDRAW(screenI);
-            //printf("posM = %d\n", car_position_module);
-            //printf("posS = %d\n", car_position_screen);
+            printf("INFO - Car{position_x: %d, position_y: %d, angle: %d, module: %d, screen: %d}\n", car_position_x, car_position_y, car_current_angles, car_position_module, car_position_screen);
         }
     }
 }

@@ -5,46 +5,52 @@
 #include "run.pwn"
 #include "angles.pwn"
 
+#include "cuberacer/menu.pwn"
 #include "cuberacer/game.pwn"
-
-#define CMD_SEND_SETTINGS P2P_CMD_BASE_SCRIPT_1 + 1
 
 #define DISPLAY_SHADOW  40
 
-new settings[2] = { 0, 0 };
-
 /* 
-----------------------------
+==============================
 ASSET CONCEPT
-----------------------------
-0-9: MAIN MENU
-10-12: CAR SKIN SELECTION
-13-15: MAP SKIN SELECTION
-16-23: CAR 1 SKIN/ANIMATIONS
-24-31: CAR 2 SKIN/ANIMATIONS
-32-39: CAR 3 SKIN/ANIMATIONS
-40-50: MAP 1 SKIN/ANIMATIONS
-51-61: MAP 2 SKIN/ANIMATIONS
-62-72: MAP 3 SKIN/ANIMATIONS
+==============================
+0-35 MAIN MENU
+------------------------------
+0-1: LOGO
+2: Highscore
+3: Start
+4: Settings
+5: Shop
+6-7: Music on/off
+8-9: Sound on/off
+10: Back
+11-15: Credits
+16-19: Reserved
+20-27: Car seletion 0-7
+28-35: Map selection 0-7
+------------------------------
+36-187 GAME
+------------------------------
+36-43: Car 0 SKIN/ANIMATIONS
+44-51: Car 1 SKIN/ANIMATIONS
+52-59: Car 2 SKIN/ANIMATIONS
+60-67: Car 3 SKIN/ANIMATIONS
+68-75: Car 4 SKIN/ANIMATIONS
+76-83: Car 5 SKIN/ANIMATIONS
+84-91: Car 6 SKIN/ANIMATIONS
+92-99: Car 7 SKIN/ANIMATIONS
+------------------------------
+100-110: Map 0 SKIN/ANIMATIONS
+111-121: Map 1 SKIN/ANIMATIONS
+122-132: Map 2 SKIN/ANIMATIONS
+133-143: Map 3 SKIN/ANIMATIONS
+144-154: Map 4 SKIN/ANIMATIONS
+155-165: Map 5 SKIN/ANIMATIONS
+166-176: Map 6 SKIN/ANIMATIONS
+177-187: Map 7 SKIN/ANIMATIONS
 */
 
-new bool:game_running = false;
 new bool:game_initialized = false;
-
-// SEND MENU SETTINGS
-// TODO: Modularize this
-send_settings() {
-    new data[4];
-
-    data[0] = ((CMD_SEND_SETTINGS & 0xFF));
-    data[1] = ((game_running & 0xFF) | ((settings[0] & 0xFF) << 8) | ((settings[1] & 0xFF) << 16));
-
-    // send message through UART
-    abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, data);
-    abi_CMD_NET_TX(1, NET_BROADCAST_TTL_MAX, data);
-    abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data);
-}
-
 
 ONTICK() {
     if (game_running) {
@@ -54,51 +60,7 @@ ONTICK() {
         }
         game_run(settings[0]);
     } else {
-        // MENU LOGIC
-        // TODO: Modularize this
-        CheckAngles();
-        for (new screenI = 0; screenI < FACES_MAX; screenI++) {
-            abi_CMD_FILL(0, 0, 0);
-            switch (newAngles[screenI]) {
-                case 180:
-                    abi_CMD_BITMAP(0, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
-
-                case 90:
-                    abi_CMD_BITMAP(2, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
-
-                case 270:
-                    abi_CMD_BITMAP(settings[0] + 10, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
-
-                case 0:
-                    abi_CMD_BITMAP(settings[1] + 13, 240 / 2, 240 / 2, newAngles[screenI], MIRROR_BLANK);
-            }
-            abi_CMD_REDRAW(screenI);
-
-            if ((screenI == abi_MTD_GetTapFace()) && (abi_MTD_GetTapsCount() >= 1)) {
-                abi_CMD_FILL(0, 0, 0);
-
-                switch (newAngles[screenI]) {
-                    case 90 :  {
-                        printf("INFO - Tapped start\n");
-                        game_running = true;
-                        send_settings();
-                        //abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, game_running);
-                    }
-
-                    case 270 :  {
-                        settings[0] = (settings[0] + abi_MTD_GetTapsCount()) % 3;
-                        printf("INFO - Changed car, new car: %d\n", settings[0]);
-                        send_settings();
-                    }
-
-                    case 0 : {
-                        settings[1] = (settings[1] + abi_MTD_GetTapsCount()) % 3;
-                        printf("INFO - Changed map, new map: %d\n", settings[1]);
-                        send_settings();
-                    }
-                }
-            }
-        }
+        menu();
     }
 
     if ((car_position_module == abi_cubeN) || ((is_departing) && (car_neighbour_module == abi_cubeN))) {
@@ -141,7 +103,7 @@ ON_CMD_NET_RX(const pkt[]) {
 
         case CMD_SEND_SETTINGS:  {
             if (abi_ByteN(pkt, 5) == 0) {
-                printf("INFO - Received(%d/%d/%d)\n", abi_ByteN(pkt, 8), abi_ByteN(pkt, 9), abi_ByteN(pkt, 10));
+                printf("INFO - Received CMD_SEND_SETTINGS{game_running: %d, car (settings[0]): %d, map (settings[1]): %d}\n", abi_ByteN(pkt, 8), abi_ByteN(pkt, 9), abi_ByteN(pkt, 10));
                 game_running = abi_ByteN(pkt, 8);
                 settings[0] = abi_ByteN(pkt, 9);
                 settings[1] = abi_ByteN(pkt, 10);
@@ -153,8 +115,5 @@ ON_CMD_NET_RX(const pkt[]) {
 ON_PHYSICS_TICK() {}
 RENDER() {}
 ON_LOAD_GAME_DATA() {}
-ON_INIT() {
-    //init_menu();
-    //game_running = true;
-}
+ON_INIT() {}
 ON_CHECK_ROTATE() {}

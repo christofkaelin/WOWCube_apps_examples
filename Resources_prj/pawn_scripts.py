@@ -143,7 +143,7 @@ class fourelements(pawn_base.PawnModule):
         self.ScriptFileName = 'fourelements.amx'
         self.ScriptResourcePath = 'fourelements'
         self.ScriptResourceList = [
-            '%d.webp' % ii for ii in range(0, 2048)
+            '%d.webp' % ii for ii in range(0, 2052)
         ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'fourelements'
@@ -160,7 +160,7 @@ class worldclock(pawn_base.PawnModule):
         self.ScriptFileName = 'worldclock.amx'
         self.ScriptResourcePath = 'worldclock'
         self.ScriptResourceList = [
-            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 28)
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 5)
         ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'worldclock'
@@ -175,7 +175,7 @@ class cuberacer(pawn_base.PawnModule):
         self.ScriptFileName = 'cuberacer.amx'
         self.ScriptResourcePath = 'cuberacer'
         self.ScriptResourceList = [
-            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 73)
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 188)
         ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'cuberacer'
