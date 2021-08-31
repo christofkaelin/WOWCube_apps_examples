@@ -849,15 +849,15 @@ DrawHud(l_face) {
 
     switch (newAngles[l_face]) {
         case 0 :  {
-            abi_CMD_TEXT("SHAKE TO EXIT", 0, 120, 230, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+            abi_CMD_TEXT("SHAKE TO EXIT", 0, 120, 230, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
         case 90 :  {
-            abi_CMD_TEXT("SCORE", 0, 230, 100, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-            abi_CMD_TEXT_ITOA(game.score * 100, 0, 230, 180, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+            abi_CMD_TEXT("SCORE", 0, 230, 100, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(game.score * 100, 0, 230, 180, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
         case 180 :  {
-            abi_CMD_TEXT("LEVEL", 0, 120, 230, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-            abi_CMD_TEXT_ITOA(game.level + 1, 0, 60, 230, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+            abi_CMD_TEXT("LEVEL", 0, 120, 230, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(game.level + 1, 0, 60, 230, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             #ifdef G2D
             abi_CMD_G2D_ADD_SPRITE(((game.health < 1) ? HUD_HEALTH : HUD_HEALTH_FULL), false, 225, 225, 0xFF, 0, newAngles[l_face], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(((game.health < 2) ? HUD_HEALTH : HUD_HEALTH_FULL), false, 195, 225, 0xFF, 0, newAngles[l_face], MIRROR_BLANK);
@@ -871,8 +871,8 @@ DrawHud(l_face) {
             #endif
         }
         case 270 :  {
-            abi_CMD_TEXT("TIME BONUS", 0, 230, 160, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-            abi_CMD_TEXT_ITOA(game.time_bonus, 0, 230, 60, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+            abi_CMD_TEXT("TIME BONUS", 0, 230, 160, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(game.time_bonus, 0, 230, 60, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
     }
 }
@@ -893,30 +893,30 @@ DrawTitle(l_face) {
         abi_CMD_G2D_ADD_SPRITE(PIC_PLATE, false, 120, 120, 0xFF, 0, newAngles[l_face], MIRROR_BLANK);
         switch (newAngles[l_face]) {
             case 0 :  {
-                abi_CMD_TEXT("SHAKE", 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT("TO", 0, 120, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT("EXIT", 0, 120, 150, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT("SHAKE", 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("TO", 0, 120, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("EXIT", 0, 120, 150, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 90 :  {
-                abi_CMD_TEXT("TIME", 0, 160, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT("BONUS", 0, 120, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(game.time_bonus, 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT("TIME", 0, 160, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("BONUS", 0, 120, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT_ITOA(game.time_bonus, 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 180 :  {
-                abi_CMD_TEXT("SCORE", 0, 120, 140, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(game.score * 100, 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT("SCORE", 0, 120, 140, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT_ITOA(game.score * 100, 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 270 :  {
                 if (game.status == GAME_OVER) {
-                    abi_CMD_TEXT("GAME", 0, 60, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("OVER", 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("PLAY AGAIN", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                    abi_CMD_TEXT("GAME", 0, 60, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("OVER", 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("PLAY AGAIN", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
                 } else {
-                    abi_CMD_TEXT("LEVEL", 0, 60, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("COMPLETE", 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("NEXT LEVEL", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                    abi_CMD_TEXT("LEVEL", 0, 60, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("COMPLETE", 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("NEXT LEVEL", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
                 }
             }
         }
@@ -924,30 +924,30 @@ DrawTitle(l_face) {
         abi_CMD_BITMAP(PIC_PLATE, 120, 120, newAngles[l_face], MIRROR_BLANK);
         switch (newAngles[l_face]) {
             case 0 :  {
-                abi_CMD_TEXT("SHAKE", 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT("TO", 0, 120, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT("EXIT", 0, 120, 150, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT("SHAKE", 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("TO", 0, 120, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("EXIT", 0, 120, 150, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 90 :  {
-                abi_CMD_TEXT("TIME", 0, 160, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT("BONUS", 0, 130, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(game.time_bonus, 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT("TIME", 0, 160, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("BONUS", 0, 130, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT_ITOA(game.time_bonus, 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 180 :  {
-                abi_CMD_TEXT("SCORE", 0, 120, 140, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(game.score * 100, 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                abi_CMD_TEXT("SCORE", 0, 120, 140, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT_ITOA(game.score * 100, 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 270 :  {
                 if (game.status == GAME_OVER) {
-                    abi_CMD_TEXT("GAME", 0, 70, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("OVER", 0, 100, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("PLAY AGAIN", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                    abi_CMD_TEXT("GAME", 0, 70, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("OVER", 0, 100, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("PLAY AGAIN", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
                 } else {
-                    abi_CMD_TEXT("LEVEL ", 0, 70, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("COMPLETE", 0, 100, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                    abi_CMD_TEXT("LEVEL UP", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
+                    abi_CMD_TEXT("LEVEL ", 0, 70, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("COMPLETE", 0, 100, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("LEVEL UP", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
                 }
             }
         }
