@@ -652,6 +652,7 @@ DrawBackgroundBitmap(l_face) {
     
     //Grass Background as Sprite
     abi_CMD_G2D_ADD_SPRITE(PIC_BACKGROUND, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
+        
     switch (l_figure.road_type) {
         case TURN:  {
             switch (position.angle) {
