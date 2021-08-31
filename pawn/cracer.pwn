@@ -44,7 +44,7 @@ RENDER() {
         DrawBackgroundBitmap(face);
         #endif
 
-        DrawFruits(face);
+        DrawItems(face);
 
         DrawCar(face);
         DrawLandScape(face);
@@ -128,7 +128,7 @@ ON_CMD_NET_RX(const pkt[]) {
         case CMD_SEND_GAME_INFO:  {
             DeSerializeGameInfo(pkt);
         }
-        case CMD_SEND_LADYBUG:  {
+        case CMD_SEND_CAR:  {
             DeSerializeCar(pkt);
         }
         case CMD_SEND_TO_MASTER:  {

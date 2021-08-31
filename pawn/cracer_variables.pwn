@@ -13,7 +13,7 @@ new bool:useG2D = false;
 
 #define POINT               .x, .y, .angle
 #define DEPARTING           .dep_cube, .dep_face, .dep_x, .dep_y, .dep_angle, .dep_speed_x, .dep_speed_y, bool: .is_departing
-#define LADYBUG_POSITIONS   .cube, .face, POINT, DEPARTING, .speed_x, .speed_y, .count_transition, .multiplier, .target_angle, .slippage
+#define CAR_POSITIONS   .cube, .face, POINT, DEPARTING, .speed_x, .speed_y, .count_transition, .multiplier, .target_angle, .slippage
 #define ROADS               .road_type, .angle
 #define LANDSCAPE_TYPE      .object, POINT, .mirror   
 
@@ -21,7 +21,7 @@ new bool:useG2D = false;
 #define CMD_PAWN 150
 
 #define CMD_SEND_GAME_INFO      CMD_PAWN
-#define CMD_SEND_LADYBUG        CMD_PAWN + 1
+#define CMD_SEND_CAR        CMD_PAWN + 1
 #define CMD_SEND_TO_MASTER      CMD_PAWN + 2
 
 #define HUD_SHAKE           26
@@ -29,14 +29,14 @@ new bool:useG2D = false;
 #define HUD_LEVEL           28
 #define HUD_BONUS           29
 
-#define LADYBUG_ANIMATION_MAX    8
+#define CAR_ANIMATION_MAX    8
 
 #define HUD_HEALTH_FULL     16
 #define HUD_HEALTH          17
 #define PIC_SHADOWS_BIG     18
-#define PIC_POISON          21
+#define PIC_BOMB          21
 #define PIC_PLATE           25
-#define PIC_LADYBUG         26
+#define PIC_CAR         26
 #define PIC_TURN        34
 #define PIC_STRAIGHT_ROAD   PIC_TURN + 1
 #define PIC_END_OF_ROAD     PIC_TURN + 2
@@ -58,7 +58,7 @@ new bool:useG2D = false;
 
 #define SPEED               7
 
-#define LADYBUG_SIZE        100
+#define CAR_SIZE        100
 
 #define MINIROAD_SIZE       60
 
@@ -113,7 +113,7 @@ new bool:useG2D = false;
 #define PIC_TURNS   34
 #define PIC_LANDSCAPE   37
 
-#define POISON          0
+#define BOMB          0
 
 new cube, face;
 
@@ -146,14 +146,14 @@ new game[.local_ticks,
 ];
 
 new landscapes[FACES_MAX][PLACES_MAX][LANDSCAPE_TYPE];
-new cr[LADYBUG_POSITIONS];
+new cr[CAR_POSITIONS];
 
 new roadway[CUBES_MAX][.road_cube, .road_face[FACES_MAX], .item[FACES_MAX]];
 
 //presets for leveling and models of roads
 new background[][.color, .red, .green, .blue, .turn, .straight_road, .end_of_road, .turning, .item_pic, .landscape_pic] = [
-    [0xFF21A800, 19, 48, 8, PIC_TURNS + 12, PIC_TURNS + 1 + 12, PIC_TURNS + 2 + 12, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE + 12], //0xFFFF9933
-   // [0xFFFF9933, 31, 38, 6, PIC_TURNS, PIC_TURNS + 1, PIC_TURNS + 2, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE] //0xFF9EC547
+    [0xFF21A800, 19, 48, 8, PIC_TURNS + 12, PIC_TURNS + 1 + 12, PIC_TURNS + 2 + 12, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE + 12], //0xFFFF9933
+   // [0xFFFF9933, 31, 38, 6, PIC_TURNS, PIC_TURNS + 1, PIC_TURNS + 2, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE] //0xFF9EC547
 ];
 
 new models_of_roads[CUBES_MAX][FACES_MAX][ROADS] = [

@@ -104,7 +104,7 @@ GenerateLevel() {
 
     GenerateLandscape();
 
-    GenerateFruits();
+    GenerateItems();
 
     GetPlacesPosition();
 
@@ -158,7 +158,7 @@ GenerateLandscape() {
         }
     }
 }
-GenerateFruits() {
+GenerateItems() {
     new item;
 
     for (new counter = 0; counter < game.level + 1; counter++) {
@@ -169,18 +169,18 @@ GenerateFruits() {
             cube = Random(0, CUBES_MAX - 1);
             face = Random(0, FACES_MAX - 1);
 
-            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == POISON)) {
+            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == BOMB)) {
                 cube = CUBES_MAX;
                 face = FACES_MAX;
             } else {
-                roadway[cube].item[face] = POISON;
+                roadway[cube].item[face] = BOMB;
             }
         }
     }
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
 
-            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == POISON)) continue;
+            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == BOMB)) continue;
 
             item = Random(1, ENUM_ITEMS_MAX);
 
@@ -207,7 +207,7 @@ CheckMigration() {
 
     new bool:is_migration = true;
     new l_side_to_move = MOVE_NONE;
-    if ((cr.y + cr.speed_y < LADYBUG_SIZE / 2) && (cr.speed_y < 0)) {
+    if ((cr.y + cr.speed_y < CAR_SIZE / 2) && (cr.speed_y < 0)) {
         l_cube = abi_topCubeN(abi_cubeN, cr.face);
         l_face = abi_topFaceN(abi_cubeN, cr.face);
 
@@ -218,7 +218,7 @@ CheckMigration() {
             ((l_figure.road_type == END_OF_ROAD) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_180)))) {
             l_side_to_move = MOVE_TO_TOP;
         }
-    } else if ((cr.x + cr.speed_x > DISPLAY_WIDTH - LADYBUG_SIZE / 2) && (cr.speed_x > 0)) {
+    } else if ((cr.x + cr.speed_x > DISPLAY_WIDTH - CAR_SIZE / 2) && (cr.speed_x > 0)) {
         l_cube = abi_rightCubeN(abi_cubeN, cr.face);
         l_face = abi_rightFaceN(abi_cubeN, cr.face);
 
@@ -229,7 +229,7 @@ CheckMigration() {
             ((l_figure.road_type == END_OF_ROAD) && ((l_figure.angle == ANGLE_90) || (l_figure.angle == ANGLE_270)))) {
             l_side_to_move = MOVE_TO_RIGHT;
         }
-    } else if ((cr.y + cr.speed_y > DISPLAY_HEIGHT - LADYBUG_SIZE / 2) && (cr.speed_y > 0)) {
+    } else if ((cr.y + cr.speed_y > DISPLAY_HEIGHT - CAR_SIZE / 2) && (cr.speed_y > 0)) {
         l_cube = abi_bottomCubeN(abi_cubeN, cr.face);
         l_face = abi_bottomFaceN(abi_cubeN, cr.face);
 
@@ -240,7 +240,7 @@ CheckMigration() {
             ((l_figure.road_type == END_OF_ROAD) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_180)))) {
             l_side_to_move = MOVE_TO_BOTTOM;
         }
-    } else if ((cr.x + cr.speed_x < LADYBUG_SIZE / 2) && (cr.speed_x < 0)) {
+    } else if ((cr.x + cr.speed_x < CAR_SIZE / 2) && (cr.speed_x < 0)) {
         l_cube = abi_leftCubeN(abi_cubeN, cr.face);
         l_face = abi_leftFaceN(abi_cubeN, cr.face);
 
@@ -342,7 +342,7 @@ CalcMoveCar(l_face) {
         cr.dep_y += cr.dep_speed_y + GetSign(cr.dep_speed_y) * cr.multiplier * MULTIPLIER_PKT;
 
 
-        if ((cr.dep_x < -LADYBUG_SIZE / 2) || (cr.dep_y < -LADYBUG_SIZE / 2)) {
+        if ((cr.dep_x < -CAR_SIZE / 2) || (cr.dep_y < -CAR_SIZE / 2)) {
 
             cr.dep_cube = CUBES_MAX;
             cr.dep_face = FACES_MAX;
@@ -588,7 +588,7 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) {
                     #endif
                 } else if (game.health >= 0) {
                     #ifdef SOUND
-                    //abi_CMD_PLAYSND(SOUND_POISON, SOUND_VOLUME);
+                    //abi_CMD_PLAYSND(SOUND_BOMB, SOUND_VOLUME);
                     #endif
                 }
             }
@@ -782,7 +782,7 @@ DrawLandScape(l_face) {
         }
     }
 }
-DrawFruits(l_face) { 
+DrawItems(l_face) { 
     #ifdef G2D
     if (!game.is_set_back) return;
     #endif
@@ -951,7 +951,7 @@ DrawTitle(l_face) {
         abi_CMD_G2D_ADD_RECTANGLE(0, 0, 240, 240, 0xC8010101);
         #endif
     }
-    is_draw = false;
+    //is_draw = false;
 }
 DrawCar(l_face) {
     #ifdef G2D
@@ -960,7 +960,7 @@ DrawCar(l_face) {
 
     if (game.status != GAME_PLAY) return;
 
-    new l_figure = PIC_LADYBUG + ((game.countdown == COUNTDOWN_PLAY) ? game.local_ticks % LADYBUG_ANIMATION_MAX : 0);
+    new l_figure = PIC_CAR + ((game.countdown == COUNTDOWN_PLAY) ? game.local_ticks % CAR_ANIMATION_MAX : 0);
 
     if ((abi_cubeN == cr.cube) && (l_face == cr.face)) {
         #ifdef G2D
@@ -1108,7 +1108,7 @@ GetPlacesPosition() {
                 landscapes[face][l_place].mirror = MIRROR_BLANK;
 
                 if (l_place == PLACE_ITEM) {
-                    GetFruitsPositions(landscapes[face][l_place], l_road);
+                    GetItemsPositions(landscapes[face][l_place], l_road);
                 } else
                     GetLandPosiotions(landscapes[face][l_place], l_road, place_x, place_y)
 
@@ -1116,7 +1116,7 @@ GetPlacesPosition() {
         }
     }
 }
-GetFruitsPositions(l_position[LANDSCAPE_TYPE], l_figure[ROADS]) {
+GetItemsPositions(l_position[LANDSCAPE_TYPE], l_figure[ROADS]) {
     if (l_figure.road_type == TURN) {
         switch (l_figure.angle) {
             case 0 :  {
@@ -1249,7 +1249,7 @@ SendCar() {
     if (!((cr.cube == abi_cubeN) || (cr.is_departing))) return;
 
     new data[4];
-    data = SerializyCar();
+    data = SerializeCar();
 
     abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=0
     abi_CMD_NET_TX(1, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=1
@@ -1350,9 +1350,9 @@ DeSerializeGameInfo(const data[]) {
     GenerateLandscape();
     GetPlacesPosition();
 }
-SerializyCar() {
+SerializeCar() {
     new data[4];
-    data[0] = ((CMD_SEND_LADYBUG) |
+    data[0] = ((CMD_SEND_CAR) |
         ((cr.cube & 0x7) << 8) |
         ((cr.face & 0x3) << 11) |
         (((cr.angle / 90) & 0x3) << 13) |
@@ -1437,7 +1437,7 @@ CalculateGameStatus() {
 
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
-            if (roadway[cube].item[face] == POISON) {
+            if (roadway[cube].item[face] == BOMB) {
                 game.health++;
             } else if (roadway[cube].item[face] < ENUM_ITEMS_MAX) {
                 game.score--;
