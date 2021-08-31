@@ -64,10 +64,10 @@ ONTICK() {
     } else {
         menu();
     }
-
-    if ((car_position_module == abi_cubeN) || ((is_departing) && (car_neighbour_module == abi_cubeN))) {
+    //TODO: Remove this in case we deem it as completely obsolete
+    /*if ((car_position_module == abi_cubeN) || ((is_departing) && (car_neighbour_module == abi_cubeN))) {
         send_car();
-    }
+    }*/
 
     //Increases base speed (SHIFT_POS) after defined interval
     //TODO: Implement score system and elevate gain for each increase in movement speed
@@ -87,7 +87,8 @@ ONTICK() {
 }
 ON_CMD_NET_RX(const pkt[]) {
     switch (abi_ByteN(pkt, 4)) {
-        case CMD_SEND_CAR:  {
+        //TODO: Remove this in case we deem it as completely obsolete
+        /*case CMD_SEND_CAR:  {
             if ((abi_ByteN(pkt, 5) > count_departing) || ((abi_ByteN(pkt, 5) == 0) && (count_departing != 0))) {
                 car_position_module = abi_ByteN(pkt, 8);
                 car_position_screen = abi_ByteN(pkt, 9);
@@ -101,7 +102,7 @@ ON_CMD_NET_RX(const pkt[]) {
                     car_current_angles = 90;
                 }
             }
-        }
+        }*/
 
         case CMD_SEND_SETTINGS:  {
             if (abi_ByteN(pkt, 5) == 0) {
@@ -117,5 +118,8 @@ ON_CMD_NET_RX(const pkt[]) {
 ON_PHYSICS_TICK() {}
 RENDER() {}
 ON_LOAD_GAME_DATA() {}
-ON_INIT() {}
+ON_INIT() {
+    // Skip menu screen
+    game_running = true;
+}
 ON_CHECK_ROTATE() {}
