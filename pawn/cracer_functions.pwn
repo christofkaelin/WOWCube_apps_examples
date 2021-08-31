@@ -80,8 +80,8 @@ GenerateLevel() {
         if (cube == neighbor_cube) {
             for (face = 0; face < FACES_MAX; face++) {
                 l_figure = models_of_roads[l_cube][face];
-                if (((l_figure.road_type == CROSROAD) && (l_figure.angle == ANGLE_90)) ||
-                    ((l_figure.road_type == CROSROAD) && (l_figure.angle == ANGLE_180)) ||
+                if (((l_figure.road_type == TURN) && (l_figure.angle == ANGLE_90)) ||
+                    ((l_figure.road_type == TURN) && (l_figure.angle == ANGLE_180)) ||
                     ((l_figure.road_type == STRAIGHT_ROAD) && (l_figure.angle == ANGLE_0)) ||
                     ((l_figure.road_type == STRAIGHT_ROAD) && (l_figure.angle == ANGLE_180))) {
 
@@ -131,7 +131,7 @@ GenerateLandscape() {
                         if (((l_figure.angle == 0) || (l_figure.angle == 2)) && ((l_place == 3) || (l_place == 5))) continue;
                         if (((l_figure.angle == 1) || (l_figure.angle == 3)) && ((l_place == 1) || (l_place == 7))) continue;
                     }
-                    case CROSROAD:  {
+                    case TURN:  {
                         switch (l_figure.angle) {
                             case 0 :  {
                                 if ((l_place == 5) || (l_place == 7)) continue;
@@ -213,7 +213,7 @@ CheckMigration() {
 
         l_figure = models_of_roads[roadway[l_cube].road_cube][roadway[l_cube].road_face[l_face]];
 
-        if (((l_figure.road_type == CROSROAD) && ((l_figure.angle == ANGLE_90) || (l_figure.angle == ANGLE_180))) ||
+        if (((l_figure.road_type == TURN) && ((l_figure.angle == ANGLE_90) || (l_figure.angle == ANGLE_180))) ||
             ((l_figure.road_type == STRAIGHT_ROAD) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_180))) ||
             ((l_figure.road_type == END_OF_ROAD) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_180)))) {
             l_side_to_move = MOVE_TO_TOP;
@@ -224,7 +224,7 @@ CheckMigration() {
 
         l_figure = models_of_roads[roadway[l_cube].road_cube][roadway[l_cube].road_face[l_face]];
 
-        if (((l_figure.road_type == CROSROAD) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_90))) ||
+        if (((l_figure.road_type == TURN) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_90))) ||
             ((l_figure.road_type == STRAIGHT_ROAD) && ((l_figure.angle == ANGLE_90) || (l_figure.angle == ANGLE_270))) ||
             ((l_figure.road_type == END_OF_ROAD) && ((l_figure.angle == ANGLE_90) || (l_figure.angle == ANGLE_270)))) {
             l_side_to_move = MOVE_TO_RIGHT;
@@ -235,7 +235,7 @@ CheckMigration() {
 
         l_figure = models_of_roads[roadway[l_cube].road_cube][roadway[l_cube].road_face[l_face]];
 
-        if (((l_figure.road_type == CROSROAD) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_270))) ||
+        if (((l_figure.road_type == TURN) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_270))) ||
             ((l_figure.road_type == STRAIGHT_ROAD) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_180))) ||
             ((l_figure.road_type == END_OF_ROAD) && ((l_figure.angle == ANGLE_0) || (l_figure.angle == ANGLE_180)))) {
             l_side_to_move = MOVE_TO_BOTTOM;
@@ -246,7 +246,7 @@ CheckMigration() {
 
         l_figure = models_of_roads[roadway[l_cube].road_cube][roadway[l_cube].road_face[l_face]];
 
-        if (((l_figure.road_type == CROSROAD) && ((l_figure.angle == ANGLE_180) || (l_figure.angle == ANGLE_270))) ||
+        if (((l_figure.road_type == TURN) && ((l_figure.angle == ANGLE_180) || (l_figure.angle == ANGLE_270))) ||
             ((l_figure.road_type == STRAIGHT_ROAD) && ((l_figure.angle == ANGLE_90) || (l_figure.angle == ANGLE_270))) ||
             ((l_figure.road_type == END_OF_ROAD) && ((l_figure.angle == ANGLE_90) || (l_figure.angle == ANGLE_270)))) {
             l_side_to_move = MOVE_TO_LEFT;
@@ -275,7 +275,7 @@ CheckMigration() {
                 cr.y = 120;
                 cr.speed_x = -cr.speed_y;
                 cr.speed_y = 0;
-                cr.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_180) ? TURN_LEFT : TURN_RIGHT));
+                cr.target_angle = ((l_figure.road_type != TURN) ? TURN_NULL: ((l_figure.angle == ANGLE_180) ? TURN_LEFT : TURN_RIGHT));
 
                 cr.is_departing = true;
             }
@@ -284,21 +284,21 @@ CheckMigration() {
                 cr.x = 120;
                 cr.speed_y = -cr.speed_x;
                 cr.speed_x = 0;
-                cr.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_90) ? TURN_LEFT : TURN_RIGHT));
+                cr.target_angle = ((l_figure.road_type != TURN) ? TURN_NULL: ((l_figure.angle == ANGLE_90) ? TURN_LEFT : TURN_RIGHT));
             }
             case MOVE_TO_BOTTOM:  {
                 cr.x = DISPLAY_WIDTH + SHADOW_DIST + (DISPLAY_WIDTH - cr.y);
                 cr.y = 120;
                 cr.speed_x = -cr.speed_y;
                 cr.speed_y = 0;
-                cr.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_0) ? TURN_LEFT : TURN_RIGHT));
+                cr.target_angle = ((l_figure.road_type != TURN) ? TURN_NULL: ((l_figure.angle == ANGLE_0) ? TURN_LEFT : TURN_RIGHT));
             }
             case MOVE_TO_LEFT:  {
                 cr.y = -cr.x - SHADOW_DIST;
                 cr.x = 120;
                 cr.speed_y = -cr.speed_x;
                 cr.speed_x = 0;
-                cr.target_angle = ((l_figure.road_type != CROSROAD) ? TURN_NULL: ((l_figure.angle == ANGLE_270) ? TURN_LEFT : TURN_RIGHT));
+                cr.target_angle = ((l_figure.road_type != TURN) ? TURN_NULL: ((l_figure.angle == ANGLE_270) ? TURN_LEFT : TURN_RIGHT));
 
                 cr.is_departing = true;
             }
@@ -350,8 +350,8 @@ CalcMoveCar(l_face) {
     }
 }
 MoveCar() {
-    #define CROSROAD_MIN 60
-    #define CROSROAD_MAX 180
+    #define TURN_MIN 60
+    #define TURN_MAX 180
 
     test = 9;
     //DEBUG
@@ -387,9 +387,9 @@ MoveCar() {
             cr.x = new_positions.x;
             cr.y = new_positions.y;
         }
-    } else if (l_figure.road_type == CROSROAD) {
-        if (((cr.x >= CROSROAD_MIN) && (cr.x <= CROSROAD_MAX) && (cr.y >= CROSROAD_MIN) && (cr.y <= CROSROAD_MAX)) ||
-            ((new_positions.x >= CROSROAD_MIN) && (new_positions.x <= CROSROAD_MAX) && (new_positions.y >= CROSROAD_MIN) && (new_positions.y <= CROSROAD_MAX))) {
+    } else if (l_figure.road_type == TURN) {
+        if (((cr.x >= TURN_MIN) && (cr.x <= TURN_MAX) && (cr.y >= TURN_MIN) && (cr.y <= TURN_MAX)) ||
+            ((new_positions.x >= TURN_MIN) && (new_positions.x <= TURN_MAX) && (new_positions.y >= TURN_MIN) && (new_positions.y <= TURN_MAX))) {
 
             new step = ABS(cr.speed_x) + ABS(cr.speed_y) + cr.multiplier * MULTIPLIER_PKT;
             new center[POINT];
@@ -651,7 +651,7 @@ DrawBackgroundBitmap(l_face) {
     abi_CMD_FILL(background[game.level % MAX_LANDS].red, background[game.level % MAX_LANDS].green, background[game.level % MAX_LANDS].blue);
 
     switch (l_figure.road_type) {
-        case CROSROAD:  {
+        case TURN:  {
             switch (position.angle) {
                 case 0 :  {
                     position.x = 150;
@@ -670,7 +670,7 @@ DrawBackgroundBitmap(l_face) {
                     position.y = 90;
                 }
             }
-            abi_CMD_BITMAP(background[game.level % MAX_LANDS].crosroad, position.x, position.y, position.angle, MIRROR_BLANK);
+            abi_CMD_BITMAP(background[game.level % MAX_LANDS].turn, position.x, position.y, position.angle, MIRROR_BLANK);
         }
         case STRAIGHT_ROAD:  {
             position.x = 120;
@@ -707,7 +707,7 @@ RememberBackGroundG2D() {
         abi_CMD_G2D_ADD_RECTANGLE(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, background[game.level % MAX_LANDS].color);
 
         switch (l_figure.road_type) {
-            case CROSROAD:  {
+            case TURN:  {
                 switch (position.angle) {
                     case 0 :  {
                         position.x = 150;
@@ -726,7 +726,7 @@ RememberBackGroundG2D() {
                         position.y = 90;
                     }
                 }
-                abi_CMD_G2D_ADD_SPRITE(background[game.level % MAX_LANDS].crosroad, false, position.x, position.y, 0xFF, 0, position.angle, MIRROR_BLANK);
+                abi_CMD_G2D_ADD_SPRITE(background[game.level % MAX_LANDS].turn, false, position.x, position.y, 0xFF, 0, position.angle, MIRROR_BLANK);
             }
             case STRAIGHT_ROAD:  {
                 position.x = 120;
@@ -1117,7 +1117,7 @@ GetPlacesPosition() {
     }
 }
 GetFruitsPositions(l_position[LANDSCAPE_TYPE], l_figure[ROADS]) {
-    if (l_figure.road_type == CROSROAD) {
+    if (l_figure.road_type == TURN) {
         switch (l_figure.angle) {
             case 0 :  {
                 l_position.x = 138;
@@ -1154,7 +1154,7 @@ GetLandPosiotions(l_position[LANDSCAPE_TYPE], l_figure[ROADS], l_place_x, l_plac
         }
     }
     switch (l_figure.road_type) {
-        case CROSROAD:  {
+        case TURN:  {
             switch (l_figure.angle) {
                 case 0 :  {
                     if ((l_place_x == 0) && (l_place_y == 0))
@@ -1371,7 +1371,7 @@ SerializyCar() {
     );
     return data;
 }
-DeSerializyCar(const data[]) {
+DeSerializeCar(const data[]) {
 
 
     if (((data[2] >> 20) & 0xFF) != game.level_trying) return;

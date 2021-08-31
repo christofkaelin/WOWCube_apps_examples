@@ -37,9 +37,9 @@ new bool:useG2D = false;
 #define PIC_POISON          21
 #define PIC_PLATE           25
 #define PIC_LADYBUG         26
-#define PIC_CROSROAD        34
-#define PIC_STRAIGHT_ROAD   PIC_CROSROAD + 1
-#define PIC_END_OF_ROAD     PIC_CROSROAD + 2
+#define PIC_TURN        34
+#define PIC_STRAIGHT_ROAD   PIC_TURN + 1
+#define PIC_END_OF_ROAD     PIC_TURN + 2
 #define PIC_TURNING         58
 
 #define ENUM_ITEMS_MAX     4
@@ -63,7 +63,7 @@ new bool:useG2D = false;
 #define MINIROAD_SIZE       60
 
 #define STRAIGHT_ROAD       0
-#define CROSROAD            1
+#define TURN            1
 #define END_OF_ROAD         2
 #define ROADS_MAX           END_OF_ROAD + 1
 
@@ -93,7 +93,7 @@ new bool:useG2D = false;
 
 #define SOUND_VOLUME        95
 
-#define SLIPPAGE_TICKS      30
+#define SLIPPAGE_TICKS      10
 
 #define MIGRATION_NONE      0
 #define MIGRATION_TOP       1
@@ -110,7 +110,7 @@ new bool:useG2D = false;
 #define GAME_COMPLETE   2
 
 #define BITS_FOR_SERIALIZE      5
-#define PIC_CROSROADS   34
+#define PIC_TURNS   34
 #define PIC_LANDSCAPE   37
 
 #define POISON          0
@@ -151,50 +151,50 @@ new cr[LADYBUG_POSITIONS];
 new roadway[CUBES_MAX][.road_cube, .road_face[FACES_MAX], .item[FACES_MAX]];
 
 //presets for leveling and models of roads
-new background[][.color, .red, .green, .blue, .crosroad, .straight_road, .end_of_road, .turning, .item_pic, .landscape_pic] = [
-    [0xFF21A800, 19, 48, 8, PIC_CROSROADS + 12, PIC_CROSROADS + 1 + 12, PIC_CROSROADS + 2 + 12, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE + 12], //0xFFFF9933
-   // [0xFFFF9933, 31, 38, 6, PIC_CROSROADS, PIC_CROSROADS + 1, PIC_CROSROADS + 2, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE] //0xFF9EC547
+new background[][.color, .red, .green, .blue, .turn, .straight_road, .end_of_road, .turning, .item_pic, .landscape_pic] = [
+    [0xFF21A800, 19, 48, 8, PIC_TURNS + 12, PIC_TURNS + 1 + 12, PIC_TURNS + 2 + 12, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE + 12], //0xFFFF9933
+   // [0xFFFF9933, 31, 38, 6, PIC_TURNS, PIC_TURNS + 1, PIC_TURNS + 2, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE] //0xFF9EC547
 ];
 
 new models_of_roads[CUBES_MAX][FACES_MAX][ROADS] = [
     [
         [END_OF_ROAD, ANGLE_270],
-        [CROSROAD, ANGLE_90],
-        [CROSROAD, ANGLE_270]
+        [TURN, ANGLE_90],
+        [TURN, ANGLE_270]
     ],
     [
-        [CROSROAD, ANGLE_0],
+        [TURN, ANGLE_0],
         [STRAIGHT_ROAD, ANGLE_180],
         [STRAIGHT_ROAD, ANGLE_270]
     ],
     [
-        [CROSROAD, ANGLE_180],
+        [TURN, ANGLE_180],
         [STRAIGHT_ROAD, ANGLE_270],
         [STRAIGHT_ROAD, ANGLE_180]
     ],
     [
-        [CROSROAD, ANGLE_180],
-        [CROSROAD, ANGLE_90],
-        [CROSROAD, ANGLE_270]
+        [TURN, ANGLE_180],
+        [TURN, ANGLE_90],
+        [TURN, ANGLE_270]
     ],
     [
-        [CROSROAD, ANGLE_180],
-        [CROSROAD, ANGLE_180],
-        [CROSROAD, ANGLE_180]
+        [TURN, ANGLE_180],
+        [TURN, ANGLE_180],
+        [TURN, ANGLE_180]
     ],
     [
-        [CROSROAD, ANGLE_270],
-        [CROSROAD, ANGLE_90],
-        [CROSROAD, ANGLE_0]
+        [TURN, ANGLE_270],
+        [TURN, ANGLE_90],
+        [TURN, ANGLE_0]
     ],
     [
-        [CROSROAD, ANGLE_90],
+        [TURN, ANGLE_90],
         [STRAIGHT_ROAD, ANGLE_180],
-        [CROSROAD, ANGLE_180]
+        [TURN, ANGLE_180]
     ],
     [
-        [CROSROAD, ANGLE_270],
+        [TURN, ANGLE_270],
         [STRAIGHT_ROAD, ANGLE_90],
-        [CROSROAD, ANGLE_0]
+        [TURN, ANGLE_0]
     ]
 ]

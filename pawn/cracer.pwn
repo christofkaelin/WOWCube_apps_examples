@@ -129,7 +129,7 @@ ON_CMD_NET_RX(const pkt[]) {
             DeSerializeGameInfo(pkt);
         }
         case CMD_SEND_LADYBUG:  {
-            DeSerializyCar(pkt);
+            DeSerializeCar(pkt);
         }
         case CMD_SEND_TO_MASTER:  {
             DeSerializeToMaster(pkt);
