@@ -239,28 +239,13 @@ class examplecubeface(pawn_base.PawnModule):
         self.SoundPath = 'examplecubeface'
         self.SoundList = []
 
-
-class Menu(pawn_base.PawnModule):
-    def __init__(self):
-        super(Menu, self).__init__()
-        self.name = 'MENU'
-        self.scriptId = 0
-        self.InternalFlashStartAddr = 0x0
-        self.ScriptResourceList = [
-            self.FILE_TEMPLATE_PNG % ii for ii in range(0, 40)
-        ] + [
-            'font200x200.png'
-        ]
-        self.ScriptResourcePath = 'menu'
-        self.SoundPath = ''
-
 class Cracer(pawn_base.PawnModule):
     def __init__(self):
         super(Cracer, self).__init__()
         self.name = 'Cracer'
         self.scriptId = 13
         self.ScriptResourceList = [
-            self.FILE_TEMPLATE_PNG % ii for ii in range(0, 59)
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 59)
         ]
         self.ScriptResourcePath = 'cracer'
         self.ScriptFileName = 'cracer.amx'

@@ -569,7 +569,7 @@ RotateAngle(const c_angle, & c_current_angle) {
     if (c_current_angle >= 360) c_current_angle -= 360;
     else if (c_current_angle < 0) c_current_angle += 360;
 }
-CheckEating(curr_pos[POINT], prev_pos[POINT]) { /*
+CheckEating(curr_pos[POINT], prev_pos[POINT]) { 
 
     new l_figure[LANDSCAPE_TYPE];
     l_figure = landscapes[cr.face][PLACE_FRUIT];
@@ -595,13 +595,13 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) { /*
             default:  {
                 game.score++;
                 #ifdef SOUND
-                abi_CMD_PLAYSND(SOUND_BERRY_EAT, SOUND_VOLUME);
+                //abi_CMD_PLAYSND(SOUND_BERRY_EAT, SOUND_VOLUME);
                 #endif
             }
         }
         landscapes[cr.face][PLACE_FRUIT].object = ENUM_FRUITS_MAX;
         roadway[cr.cube].fruit[cr.face] = landscapes[cr.face][PLACE_FRUIT].object;
-    } */
+    }
 }
 CalcCountDown() {
     if ((!game.is_generated) || (abi_cubeN != 0)) return;
