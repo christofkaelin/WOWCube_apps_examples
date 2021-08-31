@@ -569,7 +569,7 @@ RotateAngle(const c_angle, & c_current_angle) {
     if (c_current_angle >= 360) c_current_angle -= 360;
     else if (c_current_angle < 0) c_current_angle += 360;
 }
-CheckEating(curr_pos[POINT], prev_pos[POINT]) { 
+CheckEating(curr_pos[POINT], prev_pos[POINT]) {
 
     new l_figure[LANDSCAPE_TYPE];
     l_figure = landscapes[cr.face][PLACE_ITEM];
@@ -648,8 +648,10 @@ DrawBackgroundBitmap(l_face) {
 
     position.angle = l_figure.angle * 90;
 
-    abi_CMD_FILL(background[game.level % MAX_LANDS].red, background[game.level % MAX_LANDS].green, background[game.level % MAX_LANDS].blue);
-
+    //abi_CMD_FILL(background[game.level % MAX_LANDS].red, background[game.level % MAX_LANDS].green, background[game.level % MAX_LANDS].blue);
+    
+    //Grass Background as Sprite
+    abi_CMD_G2D_ADD_SPRITE(PIC_BACKGROUND, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
     switch (l_figure.road_type) {
         case TURN:  {
             switch (position.angle) {
@@ -704,7 +706,10 @@ RememberBackGroundG2D() {
         position.angle = l_figure.angle * 90;
 
         abi_CMD_G2D_BEGIN_BITMAP(face, DISPLAY_WIDTH, DISPLAY_HEIGHT, true);
-        abi_CMD_G2D_ADD_RECTANGLE(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, background[game.level % MAX_LANDS].color);
+        //abi_CMD_G2D_ADD_RECTANGLE(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, background[game.level % MAX_LANDS].color);
+        
+        //Grass Background as Sprite
+        abi_CMD_G2D_ADD_SPRITE(PIC_BACKGROUND, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
 
         switch (l_figure.road_type) {
             case TURN:  {
@@ -782,7 +787,7 @@ DrawLandScape(l_face) {
         }
     }
 }
-DrawItems(l_face) { 
+DrawItems(l_face) {
     #ifdef G2D
     if (!game.is_set_back) return;
     #endif
@@ -814,7 +819,7 @@ DrawItems(l_face) {
 
         if (newAngles[l_face] == current_angle[l_face]) {
             #ifdef G2D
-            abi_CMD_G2D_ADD_SPRITE(PIC_SHADOWS_BIG + friuts_shadows[game.local_ticks % ITEM_ANIMATION_MAX],
+            abi_CMD_G2D_ADD_SPRITE(PIC_SHADOWS_BIG + items_shadows[game.local_ticks % ITEM_ANIMATION_MAX],
                 false,
                 landscapes[l_face][PLACE_ITEM].x + ((current_angle[l_face] == 90) ? -40 : (current_angle[l_face] == 270) ? 40 : 0),
                 landscapes[l_face][PLACE_ITEM].y + ((current_angle[l_face] == 0) ? 40 : (current_angle[l_face] == 180) ? -40 : 0),
@@ -823,7 +828,7 @@ DrawItems(l_face) {
                 current_angle[l_face],
                 landscapes[l_face][PLACE_ITEM].mirror);
             #else
-            abi_CMD_BITMAP(PIC_SHADOWS_BIG + friuts_shadows[game.local_ticks % ITEM_ANIMATION_MAX],
+            abi_CMD_BITMAP(PIC_SHADOWS_BIG + items_shadows[game.local_ticks % ITEM_ANIMATION_MAX],
                 landscapes[l_face][PLACE_ITEM].x + ((current_angle[l_face] == 90) ? -40 : (current_angle[l_face] == 270) ? 40 : 0),
                 landscapes[l_face][PLACE_ITEM].y + ((current_angle[l_face] == 0) ? 40 : (current_angle[l_face] == 180) ? -40 : 0),
                 current_angle[l_face],

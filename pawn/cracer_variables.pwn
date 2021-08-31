@@ -21,7 +21,7 @@ new bool:useG2D = false;
 #define CMD_PAWN 150
 
 #define CMD_SEND_GAME_INFO      CMD_PAWN
-#define CMD_SEND_CAR        CMD_PAWN + 1
+#define CMD_SEND_CAR            CMD_PAWN + 1
 #define CMD_SEND_TO_MASTER      CMD_PAWN + 2
 
 #define HUD_SHAKE           26
@@ -34,15 +34,16 @@ new bool:useG2D = false;
 #define HUD_HEALTH_FULL     16
 #define HUD_HEALTH          17
 #define PIC_SHADOWS_BIG     18
-#define PIC_BOMB          21
+#define PIC_BACKGROUND      59
+#define PIC_BOMB            21
 #define PIC_PLATE           25
-#define PIC_CAR         26
-#define PIC_TURN        34
+#define PIC_CAR             26
+#define PIC_TURN            34
 #define PIC_STRAIGHT_ROAD   PIC_TURN + 1
 #define PIC_END_OF_ROAD     PIC_TURN + 2
 #define PIC_TURNING         58
 
-#define ENUM_ITEMS_MAX     4
+#define ENUM_ITEMS_MAX      4
 
 #define INIT_HEALTH         4
 
@@ -58,12 +59,12 @@ new bool:useG2D = false;
 
 #define SPEED               7
 
-#define CAR_SIZE        100
+#define CAR_SIZE            100
 
 #define MINIROAD_SIZE       60
 
 #define STRAIGHT_ROAD       0
-#define TURN            1
+#define TURN                1
 #define END_OF_ROAD         2
 #define ROADS_MAX           END_OF_ROAD + 1
 
@@ -76,7 +77,7 @@ new bool:useG2D = false;
 #define PLACES_X            3
 #define PLACES_Y            3
 #define PLACES_MAX          PLACES_X * PLACES_Y
-#define PLACE_ITEM         4
+#define PLACE_ITEM          4
 
 #define PIC_COUNTDOWN       0
 #define COUNTDOWN_PLAY      4
@@ -105,13 +106,13 @@ new bool:useG2D = false;
 
 #define MULTIPLIER_PKT      2
 
-#define GAME_PLAY       0
-#define GAME_OVER       1
-#define GAME_COMPLETE   2
+#define GAME_PLAY           0
+#define GAME_OVER           1
+#define GAME_COMPLETE       2
 
-#define BITS_FOR_SERIALIZE      5
-#define PIC_TURNS   34
-#define PIC_LANDSCAPE   37
+#define BITS_FOR_SERIALIZE  5
+#define PIC_TURNS           34
+#define PIC_LANDSCAPE       37
 
 #define BOMB          0
 
@@ -128,7 +129,7 @@ new current_angle[FACES_MAX] = [180, 180, 180];
 
 new items_animation[ITEM_ANIMATION_MAX] = [8, 6, 5, 4, 3, 2, 0, 2, 3, 4, 5, 6];
 
-new friuts_shadows[ITEM_ANIMATION_MAX] = [2, 2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 2];
+new items_shadows[ITEM_ANIMATION_MAX] = [2, 2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 2];
 
 new game[.local_ticks,
     .level,
@@ -152,7 +153,7 @@ new roadway[CUBES_MAX][.road_cube, .road_face[FACES_MAX], .item[FACES_MAX]];
 
 //presets for leveling and models of roads
 new background[][.color, .red, .green, .blue, .turn, .straight_road, .end_of_road, .turning, .item_pic, .landscape_pic] = [
-    [0xFF21A800, 19, 48, 8, PIC_TURNS + 12, PIC_TURNS + 1 + 12, PIC_TURNS + 2 + 12, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE + 12], //0xFFFF9933
+    [0xFF21A800, 0, 0, 0, PIC_TURNS + 12, PIC_TURNS + 1 + 12, PIC_TURNS + 2 + 12, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE + 12], //0xFFFF9933
    // [0xFFFF9933, 31, 38, 6, PIC_TURNS, PIC_TURNS + 1, PIC_TURNS + 2, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE] //0xFF9EC547
 ];
 
