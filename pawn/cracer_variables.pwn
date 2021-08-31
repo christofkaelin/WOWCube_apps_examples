@@ -90,8 +90,6 @@ new bool:useG2D = false;
 
 #define SOUND_STARTING      0
 #define SOUND_GAMEOVER      1
-#define SOUND_POISON        2
-#define SOUND_BERRY_EAT     3
 
 #define SOUND_VOLUME        95
 

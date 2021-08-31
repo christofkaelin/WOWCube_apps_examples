@@ -588,7 +588,7 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) {
                     #endif
                 } else if (game.health >= 0) {
                     #ifdef SOUND
-                    abi_CMD_PLAYSND(SOUND_POISON, SOUND_VOLUME);
+                    //abi_CMD_PLAYSND(SOUND_POISON, SOUND_VOLUME);
                     #endif
                 }
             }
