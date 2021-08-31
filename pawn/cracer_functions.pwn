@@ -7,7 +7,7 @@ InitVariables() {
     game.time_bonus = 500;
     game.health = INIT_HEALTH;
     game.score = 0;
-    game.is_set_titres = false;
+    game.is_set_title = false;
     game.status = GAME_PLAY;
 
     cr.cube = CUBES_MAX;
@@ -36,12 +36,12 @@ InitVariables() {
 
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
-            roadway[cube].fruit[face] = ENUM_FRUITS_MAX;
+            roadway[cube].item[face] = ENUM_ITEMS_MAX;
         }
     }
     for (new counter = 0; counter < FACES_ON_PLANE; counter++) {
-        game.titres_cube[counter] = CUBES_MAX;
-        game.titres_face[counter] = FACES_MAX;
+        game.title_cube[counter] = CUBES_MAX;
+        game.title_face[counter] = FACES_MAX;
     }
 }
 GenerateLevel() {
@@ -124,7 +124,7 @@ GenerateLandscape() {
 
                 l_place = place_x + place_y * PLACES_X;
 
-                if (l_place == PLACE_FRUIT) continue; //center of face
+                if (l_place == PLACE_ITEM) continue; //center of face
                 landscapes[face][l_place].object = LANDSCAPES_MAX;
                 switch (l_figure.road_type) {
                     case STRAIGHT_ROAD:  {
@@ -159,7 +159,7 @@ GenerateLandscape() {
     }
 }
 GenerateFruits() {
-    new fruit;
+    new item;
 
     for (new counter = 0; counter < game.level + 1; counter++) {
         cube = CUBES_MAX;
@@ -169,26 +169,26 @@ GenerateFruits() {
             cube = Random(0, CUBES_MAX - 1);
             face = Random(0, FACES_MAX - 1);
 
-            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].fruit[face] == POISON)) {
+            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == POISON)) {
                 cube = CUBES_MAX;
                 face = FACES_MAX;
             } else {
-                roadway[cube].fruit[face] = POISON;
+                roadway[cube].item[face] = POISON;
             }
         }
     }
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
 
-            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].fruit[face] == POISON)) continue;
+            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == POISON)) continue;
 
-            fruit = Random(1, ENUM_FRUITS_MAX);
+            item = Random(1, ENUM_ITEMS_MAX);
 
-            roadway[cube].fruit[face] = fruit;
+            roadway[cube].item[face] = item;
         }
     }
     for (face = 0; face < FACES_MAX; face++) {
-        landscapes[face][PLACE_FRUIT].object = roadway[abi_cubeN].fruit[face];
+        landscapes[face][PLACE_ITEM].object = roadway[abi_cubeN].item[face];
     }
 }
 CalculateAngle() {
@@ -324,7 +324,7 @@ CheckMigration() {
     }
 }
 CalcGameLogic() {
-    game.local_ticks = ((game.local_ticks + 1) % (FRUIT_ANIMATION_MAX * 100));
+    game.local_ticks = ((game.local_ticks + 1) % (ITEM_ANIMATION_MAX * 100));
 
     if (abi_cubeN == 0) {
         game.time_bonus = ((game.time_bonus == 0 || game.status != GAME_PLAY || game.local_ticks % 10 != 0 || game.countdown != COUNTDOWN_PLAY) ? game.time_bonus : game.time_bonus - 1);
@@ -572,8 +572,8 @@ RotateAngle(const c_angle, & c_current_angle) {
 CheckEating(curr_pos[POINT], prev_pos[POINT]) { 
 
     new l_figure[LANDSCAPE_TYPE];
-    l_figure = landscapes[cr.face][PLACE_FRUIT];
-    if (l_figure.object == ENUM_FRUITS_MAX) return;
+    l_figure = landscapes[cr.face][PLACE_ITEM];
+    if (l_figure.object == ENUM_ITEMS_MAX) return;
 
     if ((Min(curr_pos.x, prev_pos.x) <= l_figure.x) && (Max(curr_pos.x, prev_pos.x) >= l_figure.x) &&
         (Min(curr_pos.y, prev_pos.y) <= l_figure.y) && (Max(curr_pos.y, prev_pos.y) >= l_figure.y)) {
@@ -599,8 +599,8 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) {
                 #endif
             }
         }
-        landscapes[cr.face][PLACE_FRUIT].object = ENUM_FRUITS_MAX;
-        roadway[cr.cube].fruit[cr.face] = landscapes[cr.face][PLACE_FRUIT].object;
+        landscapes[cr.face][PLACE_ITEM].object = ENUM_ITEMS_MAX;
+        roadway[cr.cube].item[cr.face] = landscapes[cr.face][PLACE_ITEM].object;
     }
 }
 CalcCountDown() {
@@ -620,22 +620,22 @@ GetLeftNeighbor( & l_cube, & l_face) {
     l_cube = neighbor_cube;
     l_face = neighbor_face;
 }
-SetTitresPositions() {
+SetTitlePositions() {
     if (abi_cubeN != 0) return;
     if (!game.is_generated) return;
     if (game.status == GAME_PLAY) return;
-    if (game.is_set_titres) return;
+    if (game.is_set_title) return;
 
-    game.titres_cube[0] = cr.cube;
-    game.titres_face[0] = cr.face;
+    game.title_cube[0] = cr.cube;
+    game.title_face[0] = cr.face;
     for (new counter = 1; counter < FACES_ON_PLANE; counter++) {
-        game.titres_cube[counter] = game.titres_cube[counter - 1];
-        game.titres_face[counter] = game.titres_face[counter - 1];
-        GetLeftNeighbor(game.titres_cube[counter], game.titres_face[counter]);
-        if ((game.titres_cube[counter] >= CUBES_MAX) || (game.titres_face[counter] >= FACES_MAX))
+        game.title_cube[counter] = game.title_cube[counter - 1];
+        game.title_face[counter] = game.title_face[counter - 1];
+        GetLeftNeighbor(game.title_cube[counter], game.title_face[counter]);
+        if ((game.title_cube[counter] >= CUBES_MAX) || (game.title_face[counter] >= FACES_MAX))
             return;
     }
-    game.is_set_titres = true;
+    game.is_set_title = true;
 }
 //----------------Drawing functions-----------------
 DrawBackgroundBitmap(l_face) {
@@ -759,7 +759,7 @@ DrawLandScape(l_face) {
         for (place_y = 0; place_y < PLACES_Y; place_y++) {
             l_place = place_x + place_y * PLACES_X;
 
-            if (l_place == PLACE_FRUIT) continue;
+            if (l_place == PLACE_ITEM) continue;
 
             if (landscapes[l_face][l_place].object < LANDSCAPES_MAX) {
                 #ifdef G2D
@@ -788,46 +788,46 @@ DrawFruits(l_face) {
     #endif
     if (!game.is_generated) return;
 
-    new l_figure = landscapes[l_face][PLACE_FRUIT].object;
+    new l_figure = landscapes[l_face][PLACE_ITEM].object;
 
     new l_road[ROADS];
     l_road = models_of_roads[roadway[abi_cubeN].road_cube][roadway[abi_cubeN].road_face[l_face]];
 
-    if (l_figure < ENUM_FRUITS_MAX) {
+    if (l_figure < ENUM_ITEMS_MAX) {
 
         #ifdef G2D
-        abi_CMD_G2D_ADD_SPRITE(background[game.level % MAX_LANDS].fruit_pic + l_figure,
+        abi_CMD_G2D_ADD_SPRITE(background[game.level % MAX_LANDS].item_pic + l_figure,
             false,
-            landscapes[l_face][PLACE_FRUIT].x + ((current_angle[l_face] == 90) ? (-(fruits_animation[game.local_ticks % FRUIT_ANIMATION_MAX] - 4)) : (current_angle[l_face] == 270) ? (fruits_animation[game.local_ticks % FRUIT_ANIMATION_MAX] - 4) : 0),
-            landscapes[l_face][PLACE_FRUIT].y + ((current_angle[l_face] == 0) ? (-(fruits_animation[game.local_ticks % FRUIT_ANIMATION_MAX] - 4)) : (current_angle[l_face] == 180) ? (fruits_animation[game.local_ticks % FRUIT_ANIMATION_MAX] - 4) : 0),
+            landscapes[l_face][PLACE_ITEM].x + ((current_angle[l_face] == 90) ? (-(items_animation[game.local_ticks % ITEM_ANIMATION_MAX] - 4)) : (current_angle[l_face] == 270) ? (items_animation[game.local_ticks % ITEM_ANIMATION_MAX] - 4) : 0),
+            landscapes[l_face][PLACE_ITEM].y + ((current_angle[l_face] == 0) ? (-(items_animation[game.local_ticks % ITEM_ANIMATION_MAX] - 4)) : (current_angle[l_face] == 180) ? (items_animation[game.local_ticks % ITEM_ANIMATION_MAX] - 4) : 0),
             0xFF,
             0,
             current_angle[l_face],
-            landscapes[l_face][PLACE_FRUIT].mirror);
+            landscapes[l_face][PLACE_ITEM].mirror);
         #else
-        abi_CMD_BITMAP(background[game.level % MAX_LANDS].fruit_pic + l_figure,
-            landscapes[l_face][PLACE_FRUIT].x + ((current_angle[l_face] == 90) ? (-(fruits_animation[game.local_ticks % FRUIT_ANIMATION_MAX] - 4)) : (current_angle[l_face] == 270) ? (fruits_animation[game.local_ticks % FRUIT_ANIMATION_MAX] - 4) : 0),
-            landscapes[l_face][PLACE_FRUIT].y + ((current_angle[l_face] == 0) ? (-(fruits_animation[game.local_ticks % FRUIT_ANIMATION_MAX] - 4)) : (current_angle[l_face] == 180) ? (fruits_animation[game.local_ticks % FRUIT_ANIMATION_MAX] - 4) : 0),
+        abi_CMD_BITMAP(background[game.level % MAX_LANDS].item_pic + l_figure,
+            landscapes[l_face][PLACE_ITEM].x + ((current_angle[l_face] == 90) ? (-(items_animation[game.local_ticks % ITEM_ANIMATION_MAX] - 4)) : (current_angle[l_face] == 270) ? (items_animation[game.local_ticks % ITEM_ANIMATION_MAX] - 4) : 0),
+            landscapes[l_face][PLACE_ITEM].y + ((current_angle[l_face] == 0) ? (-(items_animation[game.local_ticks % ITEM_ANIMATION_MAX] - 4)) : (current_angle[l_face] == 180) ? (items_animation[game.local_ticks % ITEM_ANIMATION_MAX] - 4) : 0),
             current_angle[l_face],
-            landscapes[l_face][PLACE_FRUIT].mirror);
+            landscapes[l_face][PLACE_ITEM].mirror);
         #endif
 
         if (newAngles[l_face] == current_angle[l_face]) {
             #ifdef G2D
-            abi_CMD_G2D_ADD_SPRITE(PIC_SHADOWS_BIG + friuts_shadows[game.local_ticks % FRUIT_ANIMATION_MAX],
+            abi_CMD_G2D_ADD_SPRITE(PIC_SHADOWS_BIG + friuts_shadows[game.local_ticks % ITEM_ANIMATION_MAX],
                 false,
-                landscapes[l_face][PLACE_FRUIT].x + ((current_angle[l_face] == 90) ? -40 : (current_angle[l_face] == 270) ? 40 : 0),
-                landscapes[l_face][PLACE_FRUIT].y + ((current_angle[l_face] == 0) ? 40 : (current_angle[l_face] == 180) ? -40 : 0),
+                landscapes[l_face][PLACE_ITEM].x + ((current_angle[l_face] == 90) ? -40 : (current_angle[l_face] == 270) ? 40 : 0),
+                landscapes[l_face][PLACE_ITEM].y + ((current_angle[l_face] == 0) ? 40 : (current_angle[l_face] == 180) ? -40 : 0),
                 0xA0,
                 0,
                 current_angle[l_face],
-                landscapes[l_face][PLACE_FRUIT].mirror);
+                landscapes[l_face][PLACE_ITEM].mirror);
             #else
-            abi_CMD_BITMAP(PIC_SHADOWS_BIG + friuts_shadows[game.local_ticks % FRUIT_ANIMATION_MAX],
-                landscapes[l_face][PLACE_FRUIT].x + ((current_angle[l_face] == 90) ? -40 : (current_angle[l_face] == 270) ? 40 : 0),
-                landscapes[l_face][PLACE_FRUIT].y + ((current_angle[l_face] == 0) ? 40 : (current_angle[l_face] == 180) ? -40 : 0),
+            abi_CMD_BITMAP(PIC_SHADOWS_BIG + friuts_shadows[game.local_ticks % ITEM_ANIMATION_MAX],
+                landscapes[l_face][PLACE_ITEM].x + ((current_angle[l_face] == 90) ? -40 : (current_angle[l_face] == 270) ? 40 : 0),
+                landscapes[l_face][PLACE_ITEM].y + ((current_angle[l_face] == 0) ? 40 : (current_angle[l_face] == 180) ? -40 : 0),
                 current_angle[l_face],
-                landscapes[l_face][PLACE_FRUIT].mirror);
+                landscapes[l_face][PLACE_ITEM].mirror);
             #endif
         }
 
@@ -870,13 +870,13 @@ DrawHud(l_face) {
         }
     }
 }
-DrawTitres(l_face) {
+DrawTitle(l_face) {
     if (!(game.status == GAME_OVER || game.status == GAME_COMPLETE)) return;
-    if (!game.is_set_titres) return;
+    if (!game.is_set_title) return;
 
     new bool:is_draw = true;
     for (new counter = 0; counter < FACES_ON_PLANE; counter++) {
-        if ((game.titres_cube[counter] == abi_cubeN) && (game.titres_face[counter] == l_face)) {
+        if ((game.title_cube[counter] == abi_cubeN) && (game.title_face[counter] == l_face)) {
             is_draw = true;
             break;
         }
@@ -1107,7 +1107,7 @@ GetPlacesPosition() {
                 landscapes[face][l_place].angle = 0;
                 landscapes[face][l_place].mirror = MIRROR_BLANK;
 
-                if (l_place == PLACE_FRUIT) {
+                if (l_place == PLACE_ITEM) {
                     GetFruitsPositions(landscapes[face][l_place], l_road);
                 } else
                     GetLandPosiotions(landscapes[face][l_place], l_road, place_x, place_y)
@@ -1278,24 +1278,24 @@ SerializeGameInfo(to_cube) {
         ((roadway[to_cube].road_face[0] & 0x3) << 3) |
         ((roadway[to_cube].road_face[1] & 0x3) << 5) |
         ((roadway[to_cube].road_face[2] & 0x3) << 7) |
-        ((roadway[to_cube].fruit[0] & 0x7) << 9) |
-        ((roadway[to_cube].fruit[1] & 0x7) << 12) |
-        ((roadway[to_cube].fruit[2] & 0x7) << 15) |
+        ((roadway[to_cube].item[0] & 0x7) << 9) |
+        ((roadway[to_cube].item[1] & 0x7) << 12) |
+        ((roadway[to_cube].item[2] & 0x7) << 15) |
         ((game.countdown & 0x7) << 18));
 
     data[2] = ((game.time_bonus & 0x1FF) |
         ((game.score & 0x1F) << 9) |
         ((game.health & 0x7) << 14) |
-        ((((game.is_set_titres) ? 1 : 0) & 0x1) << 17));
+        ((((game.is_set_title) ? 1 : 0) & 0x1) << 17));
 
-    data[3] = (((game.titres_cube[0] & 0x7)) |
-        ((game.titres_cube[1] & 0x7) << 3) |
-        ((game.titres_cube[2] & 0x7) << 6) |
-        ((game.titres_cube[3] & 0x7) << 9) |
-        ((game.titres_face[0] & 0x3) << 12) |
-        ((game.titres_face[1] & 0x3) << 14) |
-        ((game.titres_face[2] & 0x3) << 16) |
-        ((game.titres_face[3] & 0x3) << 18)
+    data[3] = (((game.title_cube[0] & 0x7)) |
+        ((game.title_cube[1] & 0x7) << 3) |
+        ((game.title_cube[2] & 0x7) << 6) |
+        ((game.title_cube[3] & 0x7) << 9) |
+        ((game.title_face[0] & 0x3) << 12) |
+        ((game.title_face[1] & 0x3) << 14) |
+        ((game.title_face[2] & 0x3) << 16) |
+        ((game.title_face[3] & 0x3) << 18)
     );
     return data;
 }
@@ -1319,19 +1319,19 @@ DeSerializeGameInfo(const data[]) {
     //if (!((abi_cubeN == cr.cube) && ((game.status == GAME_OVER) || (game.status == GAME_COMPLETE))))
     game.status = ((data[1] >> 27) & 0x3);
 
-    game.is_set_titres = (((data[3] >> 17) & 0x1 == 1) ? true : false);
+    game.is_set_title = (((data[3] >> 17) & 0x1 == 1) ? true : false);
 
     //game.is_generated = ((((game.status == GAME_OVER || game.status == GAME_COMPLETE)) && (game.level_trying == ((data[1] >> 16) & 0xFF))) ? false : true);
 
-    game.titres_cube[0] = data[4] & 0x7;
-    game.titres_cube[1] = (data[4] >> 3) & 0x7;
-    game.titres_cube[2] = (data[4] >> 6) & 0x7;
-    game.titres_cube[3] = (data[4] >> 9) & 0x7;
+    game.title_cube[0] = data[4] & 0x7;
+    game.title_cube[1] = (data[4] >> 3) & 0x7;
+    game.title_cube[2] = (data[4] >> 6) & 0x7;
+    game.title_cube[3] = (data[4] >> 9) & 0x7;
 
-    game.titres_face[0] = (data[4] >> 12) & 0x3;
-    game.titres_face[1] = (data[4] >> 14) & 0x3;
-    game.titres_face[2] = (data[4] >> 16) & 0x3;
-    game.titres_face[3] = (data[4] >> 18) & 0x3;
+    game.title_face[0] = (data[4] >> 12) & 0x3;
+    game.title_face[1] = (data[4] >> 14) & 0x3;
+    game.title_face[2] = (data[4] >> 16) & 0x3;
+    game.title_face[3] = (data[4] >> 18) & 0x3;
 
     if (game.level_trying == ((data[1] >> 16) & 0xFF)) return;
 
@@ -1343,9 +1343,9 @@ DeSerializeGameInfo(const data[]) {
     game.is_generated = true;
     game.is_set_back = false;
 
-    landscapes[0][PLACE_FRUIT].object = (data[2] >> 9) & 0x7;
-    landscapes[1][PLACE_FRUIT].object = (data[2] >> 12) & 0x7;
-    landscapes[2][PLACE_FRUIT].object = (data[2] >> 15) & 0x7;
+    landscapes[0][PLACE_ITEM].object = (data[2] >> 9) & 0x7;
+    landscapes[1][PLACE_ITEM].object = (data[2] >> 12) & 0x7;
+    landscapes[2][PLACE_ITEM].object = (data[2] >> 15) & 0x7;
 
     GenerateLandscape();
     GetPlacesPosition();
@@ -1400,9 +1400,9 @@ SerializeToMaster() {
     new data[4];
     data[0] = ((CMD_SEND_TO_MASTER & 0xFF) |
         ((abi_cubeN & 0x7) << 8) |
-        ((landscapes[0][PLACE_FRUIT].object & 0x7) << 11) |
-        ((landscapes[1][PLACE_FRUIT].object & 0x7) << 14) |
-        ((landscapes[2][PLACE_FRUIT].object & 0x7) << 17) |
+        ((landscapes[0][PLACE_ITEM].object & 0x7) << 11) |
+        ((landscapes[1][PLACE_ITEM].object & 0x7) << 14) |
+        ((landscapes[2][PLACE_ITEM].object & 0x7) << 17) |
         ((cr.slippage & 0x1F) << 20)
     );
     data[1] = ((game.level_trying & 0xFF) |
@@ -1417,9 +1417,9 @@ DeSerializeToMaster(const data[]) {
 
     new l_cube = (data[1] >> 8) & 0x7;
 
-    roadway[l_cube].fruit[0] = (data[1] >> 11) & 0x7;
-    roadway[l_cube].fruit[1] = (data[1] >> 14) & 0x7;
-    roadway[l_cube].fruit[2] = (data[1] >> 17) & 0x7;
+    roadway[l_cube].item[0] = (data[1] >> 11) & 0x7;
+    roadway[l_cube].item[1] = (data[1] >> 14) & 0x7;
+    roadway[l_cube].item[2] = (data[1] >> 17) & 0x7;
 
 
 
@@ -1437,9 +1437,9 @@ CalculateGameStatus() {
 
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
-            if (roadway[cube].fruit[face] == POISON) {
+            if (roadway[cube].item[face] == POISON) {
                 game.health++;
-            } else if (roadway[cube].fruit[face] < ENUM_FRUITS_MAX) {
+            } else if (roadway[cube].item[face] < ENUM_ITEMS_MAX) {
                 game.score--;
             }
         }

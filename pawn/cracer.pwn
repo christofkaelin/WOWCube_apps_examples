@@ -24,7 +24,7 @@ ON_PHYSICS_TICK() {
     }
     CalcCountDown();
     CalcGameLogic();
-    SetTitresPositions();
+    SetTitlePositions();
     SendToMaster();
     CalculateGameStatus();
 }
@@ -53,7 +53,7 @@ RENDER() {
 
         DrawCountDown(face);
 
-        DrawTitres(face);
+        DrawTitle(face);
         /*
                 //abi_CMD_TEXT_ITOA(game.level, 0, 40, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
                 //abi_CMD_TEXT_ITOA(game.level_trying, 0, 40, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);

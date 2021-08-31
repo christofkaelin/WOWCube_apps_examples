@@ -42,7 +42,7 @@ new bool:useG2D = false;
 #define PIC_END_OF_ROAD     PIC_CROSROAD + 2
 #define PIC_TURNING         58
 
-#define ENUM_FRUITS_MAX     4
+#define ENUM_ITEMS_MAX     4
 
 #define INIT_HEALTH         4
 
@@ -76,7 +76,7 @@ new bool:useG2D = false;
 #define PLACES_X            3
 #define PLACES_Y            3
 #define PLACES_MAX          PLACES_X * PLACES_Y
-#define PLACE_FRUIT         4
+#define PLACE_ITEM         4
 
 #define PIC_COUNTDOWN       0
 #define COUNTDOWN_PLAY      4
@@ -86,7 +86,7 @@ new bool:useG2D = false;
 #define LANDSCAPE_OBJECT_TYPE_MAX   3
 #define LANDSCAPES_MAX      9
 
-#define FRUIT_ANIMATION_MAX 12
+#define ITEM_ANIMATION_MAX 12
 
 #define SOUND_STARTING      0
 #define SOUND_GAMEOVER      1
@@ -126,9 +126,9 @@ new place_x, place_y;
 new newAngles[FACES_MAX] = [180, 180, 180];
 new current_angle[FACES_MAX] = [180, 180, 180];
 
-new fruits_animation[FRUIT_ANIMATION_MAX] = [8, 6, 5, 4, 3, 2, 0, 2, 3, 4, 5, 6];
+new items_animation[ITEM_ANIMATION_MAX] = [8, 6, 5, 4, 3, 2, 0, 2, 3, 4, 5, 6];
 
-new friuts_shadows[FRUIT_ANIMATION_MAX] = [2, 2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 2];
+new friuts_shadows[ITEM_ANIMATION_MAX] = [2, 2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 2];
 
 new game[.local_ticks,
     .level,
@@ -140,18 +140,18 @@ new game[.local_ticks,
     .level_trying,
     bool: .is_set_back[FACES_MAX],
     bool: .is_generated,
-    .titres_cube[FACES_ON_PLANE],
-    .titres_face[FACES_ON_PLANE],
-    bool:.is_set_titres
+    .title_cube[FACES_ON_PLANE],
+    .title_face[FACES_ON_PLANE],
+    bool:.is_set_title
 ];
 
 new landscapes[FACES_MAX][PLACES_MAX][LANDSCAPE_TYPE];
 new cr[LADYBUG_POSITIONS];
 
-new roadway[CUBES_MAX][.road_cube, .road_face[FACES_MAX], .fruit[FACES_MAX]];
+new roadway[CUBES_MAX][.road_cube, .road_face[FACES_MAX], .item[FACES_MAX]];
 
 //presets for leveling and models of roads
-new background[][.color, .red, .green, .blue, .crosroad, .straight_road, .end_of_road, .turning, .fruit_pic, .landscape_pic] = [
+new background[][.color, .red, .green, .blue, .crosroad, .straight_road, .end_of_road, .turning, .item_pic, .landscape_pic] = [
     [0xFF21A800, 19, 48, 8, PIC_CROSROADS + 12, PIC_CROSROADS + 1 + 12, PIC_CROSROADS + 2 + 12, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE + 12], //0xFFFF9933
    // [0xFFFF9933, 31, 38, 6, PIC_CROSROADS, PIC_CROSROADS + 1, PIC_CROSROADS + 2, PIC_TURNING, PIC_POISON, PIC_LANDSCAPE] //0xFF9EC547
 ];
