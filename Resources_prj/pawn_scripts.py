@@ -147,9 +147,7 @@ class fourelements(pawn_base.PawnModule):
         ]
         self.MenuIcon = 'icon.png'
         self.SoundPath = 'fourelements'
-        self.SoundList = [
-            'fire.wav', 'water.wav'
-        ]
+        self.SoundList = []
 
 
 class worldclock(pawn_base.PawnModule):
