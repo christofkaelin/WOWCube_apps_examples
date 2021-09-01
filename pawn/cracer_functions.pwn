@@ -169,18 +169,18 @@ GenerateItems() {
             cube = Random(0, CUBES_MAX - 1);
             face = Random(0, FACES_MAX - 1);
 
-            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == BOMB)) {
+            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == ITEM)) {
                 cube = CUBES_MAX;
                 face = FACES_MAX;
             } else {
-                roadway[cube].item[face] = BOMB;
+                roadway[cube].item[face] = ITEM;
             }
         }
     }
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
 
-            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == BOMB)) continue;
+            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == ITEM)) continue;
 
             item = Random(1, ENUM_ITEMS_MAX);
 
@@ -574,14 +574,11 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) {
     new l_figure[LANDSCAPE_TYPE];
     l_figure = landscapes[cr.face][PLACE_ITEM];
     if (l_figure.object == ENUM_ITEMS_MAX) return;
+    if (l_figure.object == 0) return;
 
     if ((Min(curr_pos.x, prev_pos.x) <= l_figure.x) && (Max(curr_pos.x, prev_pos.x) >= l_figure.x) &&
         (Min(curr_pos.y, prev_pos.y) <= l_figure.y) && (Max(curr_pos.y, prev_pos.y) >= l_figure.y)) {
         switch (l_figure.object) {
-            //Guardian
-            case 0 :  {
-                abi_CMD_PLAYSND(SOUND_GUARDIAN, SOUND_VOLUME);
-            }
             //Bomb
             case 1 :  {
                 //game.status = GAME_OVER;
@@ -589,13 +586,12 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) {
             }
             //Boost
             case 2 :  {
-                abi_CMD_PLAYSND(SOUND_STARTING, SOUND_VOLUME);
+                abi_CMD_PLAYSND(SOUND_BOOST, SOUND_VOLUME);
             }
-            //Spare Item
+            //Guardian
             case 3 :  {
-                //abi_CMD_PLAYSND(SOUND_STARTING, SOUND_VOLUME);
+                abi_CMD_PLAYSND(SOUND_GUARDIAN, SOUND_VOLUME);
             }
-
         }
         landscapes[cr.face][PLACE_ITEM].object = ENUM_ITEMS_MAX;
         roadway[cr.cube].item[cr.face] = landscapes[cr.face][PLACE_ITEM].object;
@@ -1444,7 +1440,7 @@ CalculateGameStatus() {
 
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
-            if (roadway[cube].item[face] == BOMB) {
+            if (roadway[cube].item[face] == ITEM) {
                 game.health++;
             } else if (roadway[cube].item[face] < ENUM_ITEMS_MAX) {
                 game.score--;

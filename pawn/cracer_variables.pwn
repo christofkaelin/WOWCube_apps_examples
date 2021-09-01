@@ -47,7 +47,7 @@ new bool:useG2D = false;
 
 #define ENUM_ITEMS_MAX      4
 
-#define INIT_HEALTH         2
+#define INIT_HEALTH         1
 
 #define TURN_NULL           0
 #define TURN_LEFT           -90
@@ -95,7 +95,7 @@ new bool:useG2D = false;
 #define SOUND_GAMEOVER      1
 #define SOUND_BOMB          2
 #define SOUND_GUARDIAN      3
-#define SOUND_BOOST      
+#define SOUND_BOOST         4
 
 
 #define SOUND_VOLUME        95
@@ -120,7 +120,7 @@ new bool:useG2D = false;
 #define PIC_TURNS           34
 #define PIC_LANDSCAPE       37
 
-#define BOMB          0
+#define ITEM          0
 
 new cube, face;
 
