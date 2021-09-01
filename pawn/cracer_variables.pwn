@@ -36,6 +36,8 @@ new bool:useG2D = false;
 #define PIC_SHADOWS_BIG     18
 #define PIC_BACKGROUND      59
 #define PIC_BOMB            21
+#define PIC_GUARDIAN        22
+#define PIC_BOOST           23
 #define PIC_PLATE           25
 #define PIC_CAR             26
 #define PIC_TURN            34
@@ -45,7 +47,7 @@ new bool:useG2D = false;
 
 #define ENUM_ITEMS_MAX      4
 
-#define INIT_HEALTH         4
+#define INIT_HEALTH         2
 
 #define TURN_NULL           0
 #define TURN_LEFT           -90
@@ -57,9 +59,9 @@ new bool:useG2D = false;
 #define MOVE_TO_LEFT        3
 #define MOVE_NONE           4
 
-#define SPEED               7
+#define SPEED               5
 
-#define CAR_SIZE            100
+#define CAR_SIZE            150
 
 #define MINIROAD_SIZE       60
 
@@ -91,6 +93,10 @@ new bool:useG2D = false;
 
 #define SOUND_STARTING      0
 #define SOUND_GAMEOVER      1
+#define SOUND_BOMB          2
+#define SOUND_GUARDIAN      3
+#define SOUND_BOOST      
+
 
 #define SOUND_VOLUME        95
 

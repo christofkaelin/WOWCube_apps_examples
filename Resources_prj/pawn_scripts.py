@@ -253,5 +253,7 @@ class Cracer(pawn_base.PawnModule):
         self.SoundList = [
             'start.wav',
             'crash.wav',
+            'bomb.wav',
+            'guardian.wav',
         ]
         self.SoundPath = 'cracer'

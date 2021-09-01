@@ -578,26 +578,24 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) {
     if ((Min(curr_pos.x, prev_pos.x) <= l_figure.x) && (Max(curr_pos.x, prev_pos.x) >= l_figure.x) &&
         (Min(curr_pos.y, prev_pos.y) <= l_figure.y) && (Max(curr_pos.y, prev_pos.y) >= l_figure.y)) {
         switch (l_figure.object) {
+            //Guardian
             case 0 :  {
-                game.health--;
-                if (game.health < 0) {
-                    //game.status = GAME_OVER;
-                    game.health = 0;
-                    #ifdef SOUND
-                    abi_CMD_PLAYSND(SOUND_GAMEOVER, 95);
-                    #endif
-                } else if (game.health >= 0) {
-                    #ifdef SOUND
-                    //abi_CMD_PLAYSND(SOUND_BOMB, SOUND_VOLUME);
-                    #endif
-                }
+                abi_CMD_PLAYSND(SOUND_GUARDIAN, SOUND_VOLUME);
             }
-            default:  {
-                game.score++;
-                #ifdef SOUND
-                //abi_CMD_PLAYSND(SOUND_BERRY_EAT, SOUND_VOLUME);
-                #endif
+            //Bomb
+            case 1 :  {
+                //game.status = GAME_OVER;
+                abi_CMD_PLAYSND(SOUND_BOMB, SOUND_VOLUME);
             }
+            //Boost
+            case 2 :  {
+                abi_CMD_PLAYSND(SOUND_STARTING, SOUND_VOLUME);
+            }
+            //Spare Item
+            case 3 :  {
+                //abi_CMD_PLAYSND(SOUND_STARTING, SOUND_VOLUME);
+            }
+
         }
         landscapes[cr.face][PLACE_ITEM].object = ENUM_ITEMS_MAX;
         roadway[cr.cube].item[cr.face] = landscapes[cr.face][PLACE_ITEM].object;
@@ -648,11 +646,12 @@ DrawBackgroundBitmap(l_face) {
 
     position.angle = l_figure.angle * 90;
 
+    //Background as static color
     //abi_CMD_FILL(background[game.level % MAX_LANDS].red, background[game.level % MAX_LANDS].green, background[game.level % MAX_LANDS].blue);
-    
-    //Grass Background as Sprite
+
+    //Background picture as Sprite
     abi_CMD_G2D_ADD_SPRITE(PIC_BACKGROUND, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
-        
+
     switch (l_figure.road_type) {
         case TURN:  {
             switch (position.angle) {
@@ -707,9 +706,11 @@ RememberBackGroundG2D() {
         position.angle = l_figure.angle * 90;
 
         abi_CMD_G2D_BEGIN_BITMAP(face, DISPLAY_WIDTH, DISPLAY_HEIGHT, true);
+
+        //Background as static color
         //abi_CMD_G2D_ADD_RECTANGLE(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, background[game.level % MAX_LANDS].color);
-        
-        //Grass Background as Sprite
+
+        //Background picture as Sprite
         abi_CMD_G2D_ADD_SPRITE(PIC_BACKGROUND, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
 
         switch (l_figure.road_type) {
@@ -893,30 +894,30 @@ DrawTitle(l_face) {
         abi_CMD_G2D_ADD_SPRITE(PIC_PLATE, false, 120, 120, 0xFF, 0, newAngles[l_face], MIRROR_BLANK);
         switch (newAngles[l_face]) {
             case 0 :  {
-                abi_CMD_TEXT("SHAKE", 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT("TO", 0, 120, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT("EXIT", 0, 120, 150, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("SHAKE", 0, 120, 90, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("TO", 0, 120, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("EXIT", 0, 120, 150, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 90 :  {
-                abi_CMD_TEXT("TIME", 0, 160, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT("BONUS", 0, 120, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT_ITOA(game.time_bonus, 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("TIME", 0, 160, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("BONUS", 0, 120, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT_ITOA(game.time_bonus, 0, 90, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 180 :  {
-                abi_CMD_TEXT("SCORE", 0, 120, 140, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT_ITOA(game.score * 100, 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("SCORE", 0, 120, 140, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT_ITOA(game.score * 100, 0, 120, 90, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 270 :  {
                 if (game.status == GAME_OVER) {
-                    abi_CMD_TEXT("GAME", 0, 60, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("OVER", 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("PLAY AGAIN", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("GAME", 0, 60, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("OVER", 0, 90, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 9, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("PLAY AGAIN", 0, 160, 120, 9, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
                 } else {
-                    abi_CMD_TEXT("LEVEL", 0, 60, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("COMPLETE", 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("NEXT LEVEL", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("LEVEL", 0, 60, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("COMPLETE", 0, 90, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 9, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("NEXT LEVEL", 0, 160, 120, 9, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
                 }
             }
         }
@@ -924,30 +925,30 @@ DrawTitle(l_face) {
         abi_CMD_BITMAP(PIC_PLATE, 120, 120, newAngles[l_face], MIRROR_BLANK);
         switch (newAngles[l_face]) {
             case 0 :  {
-                abi_CMD_TEXT("SHAKE", 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT("TO", 0, 120, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT("EXIT", 0, 120, 150, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("SHAKE", 0, 120, 90, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("TO", 0, 120, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("EXIT", 0, 120, 150, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 90 :  {
-                abi_CMD_TEXT("TIME", 0, 160, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT("BONUS", 0, 130, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT_ITOA(game.time_bonus, 0, 90, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("TIME", 0, 160, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("BONUS", 0, 130, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT_ITOA(game.time_bonus, 0, 90, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 180 :  {
                 abi_CMD_TEXT("SCORE", 0, 120, 140, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT_ITOA(game.score * 100, 0, 120, 90, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT_ITOA(game.score * 100, 0, 120, 90, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 270 :  {
                 if (game.status == GAME_OVER) {
-                    abi_CMD_TEXT("GAME", 0, 70, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("OVER", 0, 100, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("PLAY AGAIN", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("GAME", 0, 70, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("OVER", 0, 100, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 9, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("PLAY AGAIN", 0, 160, 120, 9, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
                 } else {
-                    abi_CMD_TEXT("LEVEL ", 0, 70, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("COMPLETE", 0, 100, 120, 10, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                    abi_CMD_TEXT("LEVEL UP", 0, 160, 120, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("LEVEL ", 0, 70, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("COMPLETE", 0, 100, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("TWIST TO", 0, 140, 120, 9, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT("LEVEL UP", 0, 160, 120, 9, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
                 }
             }
         }
