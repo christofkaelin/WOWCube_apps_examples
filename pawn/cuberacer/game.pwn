@@ -1,4 +1,5 @@
-#define CMD_SEND_CAR P2P_CMD_BASE_SCRIPT_1 + 2
+#define CMD_SEND_ROAD P2P_CMD_BASE_SCRIPT_1 + 2
+#define CMD_SEND_CAR P2P_CMD_BASE_SCRIPT_1 + 3
 #define CAR_LENGTH 140
 
 new roads[8][3][3];
@@ -25,18 +26,18 @@ new car_neighbour_screen = FACES_MAX;*/
 //assigns element type according to custom probabilities (see documentation: https://wow-cube.atlassian.net/wiki/spaces/WOWCUBE/pages/17760267/CubeRacer)
 draw_road() {
     new rand = random(100);
-    return 0;
-    // TODO: Uncomment this, when crossroad logic is implemented
+    //return 0;
     //Crossroads
-    /*if (rand <= 40) {
+    if (rand <= 40) {
         return 0;
     }
     //Straight
-    else if (rand > 40 && rand <= 70) {
+    //else if (rand > 40 && rand <= 70) {
+    else {
         return 1;
     }
     //Turn
-    else if (rand > 70 && rand <= 100) {
+    /*else if (rand > 70 && rand <= 100) {
         return 2;
     }*/
 }
@@ -58,32 +59,15 @@ draw_item() {
 
 generate_road(module, face) {
     roads[module][face][0] = draw_road();
-    roads[module][face][1] = random(3);
+    roads[module][face][1] = random(4);
     roads[module][face][2] = draw_item();
+    printf("INFO - Generated Road(%d/%d/%d) on (%d/%d)\n", roads[module][face][0], roads[module][face][1], roads[module][face][2], module, face);
+    // Broadcast generated road to all other processors
+    send_road(module, face);
 }
 
 getDirectionAngle(direction) {
     return direction * 90;
-}
-
-game_init() {
-    for (new screenI = 0; screenI < FACES_MAX; screenI++) {
-        // First field will always be crossroads
-        if (!((abi_cubeN == 0) && (screenI == 0))) {
-            generate_road(abi_cubeN, screenI);
-        }
-    }
-    currentCar[0] = 0;
-    currentCar[1] = 0;
-    currentCar[2] = 240;
-    currentCar[3] = 120;
-    currentCar[4] = 2;
-
-    shadowCar[0] = 0;
-    shadowCar[1] = 2;
-    shadowCar[2] = 120;
-    shadowCar[3] = 240;
-    shadowCar[4] = 1;
 }
 
 //broadcast information to CPU
@@ -98,6 +82,17 @@ game_init() {
     abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=2
 }*/
 
+send_road(module, face) {
+    new data[4];
+    data[0] = (CMD_SEND_ROAD & 0xFF);
+    data[1] = ((module & 0xFF) | ((face & 0xFF) << 8));
+    data[2] = ((roads[module][face][0] & 0xFF) | ((roads[module][face][1] & 0xFF) << 8) | ((roads[module][face][2] & 0xFF) << 16))
+
+    abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=0
+    abi_CMD_NET_TX(1, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=1
+    abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data); // broadcast to UART=2
+}
+
 move_car(car[]) {
     switch (car[4]) {
         case 0:
@@ -111,11 +106,32 @@ move_car(car[]) {
     }
 }
 
+game_init() {
+    for (new screenI = 0; screenI < FACES_MAX; screenI++) {
+        // First field will always be crossroads
+        if (!((abi_cubeN == 0) && (screenI == 0))) {
+            generate_road(abi_cubeN, screenI);
+        }
+    }
+    currentCar[0] = 0; //0
+    currentCar[1] = 0;
+    currentCar[2] = 240; //240
+    currentCar[3] = 120; //120
+    currentCar[4] = 2; //2
+
+    shadowCar[0] = 0;
+    shadowCar[1] = 2;
+    shadowCar[2] = 120;
+    shadowCar[3] = 240;
+    shadowCar[4] = 1;
+}
+
 game_run(car_skin, map_skin) {
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         // Tapping the screen rotates the displayed element by 90 degrees clockwise.
         if ((((screenI == abi_MTD_GetTapFace() && (abi_MTD_GetTapsCount() >= 1)))) && (!((abi_cubeN == currentCar[0]) && (screenI == currentCar[1])))) {
             roads[abi_cubeN][screenI][1] = (roads[abi_cubeN][screenI][1] + abi_MTD_GetTapsCount()) % 4;
+            send_road(abi_cubeN, screenI);
         }
 
         // Render roads and items
@@ -139,7 +155,12 @@ game_run(car_skin, map_skin) {
         //printf("INFO - shadowCar(5)[\"%d\", \"%d\", \"%d\", \"%d\", \"%d\"]\n\n", shadowCar[0], shadowCar[1], shadowCar[2], shadowCar[3], shadowCar[4]);
         switch (currentCar[4]) {
             case 1 :  {
-                if (currentCar[3] == (240 - CAR_LENGTH)) {
+                // Car is at the edge
+                if (currentCar[3] == 220) {
+                    // Crash logic straight road
+                    if(roads[abi_bottomCubeN(currentCar[0], currentCar[1])][abi_bottomFaceN(currentCar[0], currentCar[1])][0] == 1 && (roads[abi_bottomCubeN(currentCar[0], currentCar[1])][abi_bottomFaceN(currentCar[0], currentCar[1])][1] == 1 || roads[abi_bottomCubeN(currentCar[0], currentCar[1])][abi_bottomFaceN(currentCar[0], currentCar[1])][1] == 3)) {
+                        abi_exit();
+                    }
                     shadowCar[0] = currentCar[0];
                     shadowCar[1] = currentCar[1];
                     shadowCar[2] = currentCar[2];
@@ -147,13 +168,18 @@ game_run(car_skin, map_skin) {
                     shadowCar[4] = currentCar[4];
                     currentCar[0] = abi_bottomCubeN(shadowCar[0], shadowCar[1]);
                     currentCar[1] = abi_bottomFaceN(shadowCar[0], shadowCar[1]);
-                    currentCar[2] = 240 + CAR_LENGTH;
+                    currentCar[2] = 260;
                     currentCar[3] = 120;
                     currentCar[4] = 2;
                 }
             }
             case 2 :  {
-                if (currentCar[2] == (CAR_LENGTH / 2)) {
+                // Car is at the edge
+                if (currentCar[2] == 20) {
+                    // Crash logic straight road
+                    if(roads[abi_leftCubeN(currentCar[0], currentCar[1])][abi_leftFaceN(currentCar[0], currentCar[1])][0] == 1 && (roads[abi_leftCubeN(currentCar[0], currentCar[1])][abi_leftFaceN(currentCar[0], currentCar[1])][1] == 0 || roads[abi_leftCubeN(currentCar[0], currentCar[1])][abi_leftFaceN(currentCar[0], currentCar[1])][1] == 2)) {
+                        abi_exit();
+                    }
                     shadowCar[0] = currentCar[0];
                     shadowCar[1] = currentCar[1];
                     shadowCar[2] = currentCar[2];
@@ -162,7 +188,7 @@ game_run(car_skin, map_skin) {
                     currentCar[0] = abi_leftCubeN(shadowCar[0], shadowCar[1]);
                     currentCar[1] = abi_leftFaceN(shadowCar[0], shadowCar[1]);
                     currentCar[2] = 120;
-                    currentCar[3] = 0 - (CAR_LENGTH / 2);
+                    currentCar[3] = -20;
                     currentCar[4] = 1;
                 }
             }

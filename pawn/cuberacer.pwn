@@ -105,13 +105,16 @@ ON_CMD_NET_RX(const pkt[]) {
         }*/
 
         case CMD_SEND_SETTINGS:  {
-            if (abi_ByteN(pkt, 5) == 0) {
-                printf("INFO - Received CMD_SEND_SETTINGS{game_running: %d, car (settings[0]): %d, map (settings[1]): %d}\n", abi_ByteN(pkt, 8), abi_ByteN(pkt, 9), abi_ByteN(pkt, 10));
-                game_running = abi_ByteN(pkt, 8);
-                settings[0] = abi_ByteN(pkt, 9);
-                settings[1] = abi_ByteN(pkt, 10);
-            }
-
+            printf("INFO - Received CMD_SEND_SETTINGS{game_running: %d, car (settings[0]): %d, map (settings[1]): %d}\n", abi_ByteN(pkt, 8), abi_ByteN(pkt, 9), abi_ByteN(pkt, 10));
+            game_running = abi_ByteN(pkt, 8);
+            settings[0] = abi_ByteN(pkt, 9);
+            settings[1] = abi_ByteN(pkt, 10);
+        }
+        case CMD_SEND_ROAD: {
+            printf("INFO - Received Road(%d/%d/%d) on (%d/%d)\n", abi_ByteN(pkt, 12), abi_ByteN(pkt, 13), abi_ByteN(pkt, 14), abi_ByteN(pkt, 8), abi_ByteN(pkt, 9));
+            roads[abi_ByteN(pkt, 8)][abi_ByteN(pkt, 9)][0] = abi_ByteN(pkt, 12);
+            roads[abi_ByteN(pkt, 8)][abi_ByteN(pkt, 9)][1] = abi_ByteN(pkt, 13);
+            roads[abi_ByteN(pkt, 8)][abi_ByteN(pkt, 9)][2] = abi_ByteN(pkt, 14);
         }
     }
 }
