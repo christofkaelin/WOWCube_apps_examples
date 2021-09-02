@@ -60,6 +60,7 @@ new bool:useG2D = false;
 #define MOVE_NONE           4
 
 #define SPEED               5
+#define SPEED_BOOST         SPEED * 2
 
 #define CAR_SIZE            150
 
@@ -136,6 +137,8 @@ new current_angle[FACES_MAX] = [180, 180, 180];
 new items_animation[ITEM_ANIMATION_MAX] = [8, 6, 5, 4, 3, 2, 0, 2, 3, 4, 5, 6];
 
 new items_shadows[ITEM_ANIMATION_MAX] = [2, 2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 2];
+
+new delay;
 
 new game[.local_ticks,
     .level,

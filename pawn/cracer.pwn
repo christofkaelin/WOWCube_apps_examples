@@ -147,7 +147,7 @@ ON_CHECK_ROTATE() {
 }
 
 #ifdef CUBIOS_EMULATOR
-l_main() {
+cr_main() {
     new opt { 100 }
     argindex(0, opt);
     abi_cubeN = strval(opt);

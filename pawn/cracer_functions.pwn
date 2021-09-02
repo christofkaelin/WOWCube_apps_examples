@@ -1,5 +1,6 @@
 InitVariables() {
 
+    delay = 0;
     game.is_set_back = false;
     game.is_generated = false;
     game.local_ticks = 0;
@@ -581,12 +582,13 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) {
         switch (l_figure.object) {
             //Bomb
             case 1 :  {
-                //game.status = GAME_OVER;
                 abi_CMD_PLAYSND(SOUND_BOMB, SOUND_VOLUME);
+                //game.status = GAME_OVER;
             }
             //Boost
             case 2 :  {
                 abi_CMD_PLAYSND(SOUND_BOOST, SOUND_VOLUME);
+                //SPEED = SPEED_BOOST;
             }
             //Guardian
             case 3 :  {
@@ -868,8 +870,8 @@ DrawHud(l_face) {
             #endif
         }
         case 270 :  {
-            abi_CMD_TEXT("TIME BONUS", 0, 230, 160, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-            abi_CMD_TEXT_ITOA(game.time_bonus, 0, 230, 60, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT("TIME REMAINING", 0, 230, 150, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(game.time_bonus, 0, 230, 30, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
     }
 }
@@ -896,7 +898,7 @@ DrawTitle(l_face) {
             }
             case 90 :  {
                 abi_CMD_TEXT("TIME", 0, 160, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT("BONUS", 0, 120, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("REMAINING", 0, 120, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
                 abi_CMD_TEXT_ITOA(game.time_bonus, 0, 90, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 180 :  {
@@ -927,7 +929,7 @@ DrawTitle(l_face) {
             }
             case 90 :  {
                 abi_CMD_TEXT("TIME", 0, 160, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
-                abi_CMD_TEXT("BONUS", 0, 130, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
+                abi_CMD_TEXT("REMAINING", 0, 130, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
                 abi_CMD_TEXT_ITOA(game.time_bonus, 0, 90, 120, 12, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             }
             case 180 :  {
@@ -1434,19 +1436,35 @@ DeSerializeToMaster(const data[]) {
 CalculateGameStatus() {
     if (abi_cubeN != 0) return;
     if (game.countdown != COUNTDOWN_PLAY) return;
+    if (game.status == GAME_OVER) return;
 
     game.health = INIT_HEALTH - (game.level + 1);
-    game.score = CUBES_MAX * FACES_MAX - 1 - (game.level + 1);
+  
+    delay++;
+    if((delay % 40) == 0){
+    game.score++; // = CUBES_MAX * FACES_MAX - 1 - (game.level + 1);
+    }
 
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
             if (roadway[cube].item[face] == ITEM) {
                 game.health++;
             } else if (roadway[cube].item[face] < ENUM_ITEMS_MAX) {
-                game.score--;
+                //game.score--;
             }
         }
     }
+
+    if (cr.slippage == SLIPPAGE_TICKS) {
+        game.status = GAME_OVER;
+        cr.count_transition++;
+    }
+    /*if (game.health < 1) {
+        game.status = GAME_OVER;
+        cr.count_transition++;
+    
+    }
+    /*
     if (game.score == CUBES_MAX * FACES_MAX - 1 - (game.level + 1)) {
         game.status = GAME_COMPLETE;
         cr.count_transition++;
@@ -1456,5 +1474,5 @@ CalculateGameStatus() {
     } else if (cr.slippage == SLIPPAGE_TICKS) {
         game.status = GAME_OVER;
         cr.count_transition++;
-    }
+    }*/
 }
