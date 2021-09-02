@@ -139,8 +139,9 @@ ON_CMD_NET_RX(const pkt[]) {
 ON_CHECK_ROTATE() {
 
     if ( /*(abi_cubeN == 0) && */ ((game.status == GAME_OVER || game.status == GAME_COMPLETE))) {
-        if (game.status == GAME_OVER)
+        if (game.status == GAME_OVER) {
             game.level--;
+        }
         InitVariables();
     }
     pause = false;

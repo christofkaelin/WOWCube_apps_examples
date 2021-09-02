@@ -180,12 +180,12 @@ GenerateItems() {
     }
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
-
-            if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == ITEM)) continue;
-
-            item = Random(1, ENUM_ITEMS_MAX);
-
-            roadway[cube].item[face] = item;
+            new rand = random(100);
+            if (rand < 15) {
+                if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == ITEM)) continue;
+                item = Random(0, ENUM_ITEMS_MAX);
+                roadway[cube].item[face] = item;
+            }
         }
     }
     for (face = 0; face < FACES_MAX; face++) {
@@ -583,16 +583,20 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) {
             //Bomb
             case 1 :  {
                 abi_CMD_PLAYSND(SOUND_BOMB, SOUND_VOLUME);
-                //game.status = GAME_OVER;
+                game.status = GAME_OVER;
             }
             //Boost
             case 2 :  {
                 abi_CMD_PLAYSND(SOUND_BOOST, SOUND_VOLUME);
-                //SPEED = SPEED_BOOST;
+                // TODO: Create new move_car function with SPEED_BOOST as offset, implement counter and revert to originial 
+                //move_car function once the counter reaches 600 counter         
             }
             //Guardian
             case 3 :  {
                 abi_CMD_PLAYSND(SOUND_GUARDIAN, SOUND_VOLUME);
+                /*does not work yet
+                guardian_is_active = true;
+                ResetGuardian();*/
             }
         }
         landscapes[cr.face][PLACE_ITEM].object = ENUM_ITEMS_MAX;
@@ -1426,8 +1430,6 @@ DeSerializeToMaster(const data[]) {
     roadway[l_cube].item[1] = (data[1] >> 14) & 0x7;
     roadway[l_cube].item[2] = (data[1] >> 17) & 0x7;
 
-
-
     //game.status = (data[1] >> 20) & 0x3;
     if (l_cube == cr.cube)
         cr.slippage = (data[1] >> 20) & 0x1F;
@@ -1437,12 +1439,13 @@ CalculateGameStatus() {
     if (abi_cubeN != 0) return;
     if (game.countdown != COUNTDOWN_PLAY) return;
     if (game.status == GAME_OVER) return;
+    if (guardian_is_active) return;
 
     game.health = INIT_HEALTH - (game.level + 1);
-  
+
     delay++;
-    if((delay % 40) == 0){
-    game.score++; // = CUBES_MAX * FACES_MAX - 1 - (game.level + 1);
+    if ((delay % 40) == 0) {
+        game.score++;
     }
 
     for (cube = 0; cube < CUBES_MAX; cube++) {
@@ -1454,25 +1457,18 @@ CalculateGameStatus() {
             }
         }
     }
-
     if (cr.slippage == SLIPPAGE_TICKS) {
         game.status = GAME_OVER;
         cr.count_transition++;
     }
-    /*if (game.health < 1) {
-        game.status = GAME_OVER;
-        cr.count_transition++;
-    
+}
+ResetGuardian(){
+    if(guardian_is_active){
+        new delay = 0;
+        delay++;
+        if((delay % 600) == 0){
+            guardian_is_active = false;
+            abi_CMD_PLAYSND(SOUND_GUARDIAN_DROP, SOUND_VOLUME);
+        }
     }
-    /*
-    if (game.score == CUBES_MAX * FACES_MAX - 1 - (game.level + 1)) {
-        game.status = GAME_COMPLETE;
-        cr.count_transition++;
-    } else if (game.health < 1) {
-        game.status = GAME_OVER;
-        cr.count_transition++;
-    } else if (cr.slippage == SLIPPAGE_TICKS) {
-        game.status = GAME_OVER;
-        cr.count_transition++;
-    }*/
 }

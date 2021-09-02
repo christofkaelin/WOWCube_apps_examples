@@ -96,7 +96,8 @@ new bool:useG2D = false;
 #define SOUND_GAMEOVER      1
 #define SOUND_BOMB          2
 #define SOUND_GUARDIAN      3
-#define SOUND_BOOST         4
+#define SOUND_GUARDIAN_DROP 4
+#define SOUND_BOOST         5
 
 
 #define SOUND_VOLUME        95
@@ -139,6 +140,8 @@ new items_animation[ITEM_ANIMATION_MAX] = [8, 6, 5, 4, 3, 2, 0, 2, 3, 4, 5, 6];
 new items_shadows[ITEM_ANIMATION_MAX] = [2, 2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 2];
 
 new delay;
+
+new bool:guardian_is_active = false;
 
 new game[.local_ticks,
     .level,
