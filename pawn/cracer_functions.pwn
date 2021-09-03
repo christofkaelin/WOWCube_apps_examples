@@ -842,7 +842,7 @@ DrawHud(l_face) {
     if (!game.is_generated) return;
     if (game.status != GAME_PLAY) return;
 
-    switch (newAngles[l_face]) {
+    /*switch (newAngles[l_face]) {
         case 0 :  {
             abi_CMD_TEXT("SHAKE TO EXIT", 0, 120, 230, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
@@ -869,7 +869,7 @@ DrawHud(l_face) {
             abi_CMD_TEXT("TIME REMAINING", 0, 230, 150, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
             abi_CMD_TEXT_ITOA(game.time_bonus, 0, 230, 30, 6, newAngles[l_face], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
-    }
+    }*/
 }
 DrawTitle(l_face) {
     if (!(game.status == GAME_OVER || game.status == GAME_COMPLETE)) return;

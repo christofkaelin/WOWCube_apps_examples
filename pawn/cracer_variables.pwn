@@ -62,7 +62,7 @@ new bool:useG2D = false;
 #define SPEED               5
 #define SPEED_BOOST         SPEED * 2
 
-#define CAR_SIZE            150
+#define CAR_SIZE            100
 
 #define MINIROAD_SIZE       60
 
