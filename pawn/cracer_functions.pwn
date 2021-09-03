@@ -104,9 +104,7 @@ GenerateLevel() {
     game.level_trying %= 0xFF;
 
     GenerateLandscape();
-
     GenerateItems();
-
     GetPlacesPosition();
 
     game.is_generated = true;
@@ -153,7 +151,6 @@ GenerateLandscape() {
                         if (((l_figure.angle == 1) || (l_figure.angle == 3)) && ((l_place == 1) || (l_place == 7))) continue;
                     }
                 }
-
                 landscapes[face][l_place].object = Random(0, LANDSCAPES_MAX - 1);
             }
         }
@@ -408,7 +405,6 @@ MoveCar() {
                 step -= cr.y - 180;
                 cr.y = 180;
             }
-
             switch (l_figure.angle) {
                 case 0 :  {
                     center.x = 180;
@@ -431,7 +427,6 @@ MoveCar() {
                     center.angle = ((cr.target_angle == 360) ? 180 : 0);
                 }
             }
-
             if (ABS(cr.angle - cr.target_angle) < step) {
                 step = ABS(cr.angle - cr.target_angle);
                 cr.angle = cr.target_angle;
@@ -468,10 +463,8 @@ MoveCar() {
                         cr.speed_y = -SPEED;
                     }
                 }
-
                 cr.x += ((cr.speed_x != 0) ? GetSign(cr.speed_x) * step : 0) + GetSign(cr.speed_x) * cr.multiplier * MULTIPLIER_PKT;
                 cr.y += ((cr.speed_y != 0) ? GetSign(cr.speed_y) * step : 0) + GetSign(cr.speed_y) * cr.multiplier * MULTIPLIER_PKT;
-
             }
             new_positions.x = cr.x;
             new_positions.y = cr.y;
@@ -584,6 +577,7 @@ CheckEating(curr_pos[POINT], prev_pos[POINT]) {
             case 1 :  {
                 abi_CMD_PLAYSND(SOUND_BOMB, SOUND_VOLUME);
                 game.status = GAME_OVER;
+                //game.is_set_back = true;
             }
             //Boost
             case 2 :  {
@@ -839,9 +833,7 @@ DrawItems(l_face) {
                 landscapes[l_face][PLACE_ITEM].mirror);
             #endif
         }
-
     }
-
 }
 DrawHud(l_face) {
     #ifdef G2D
@@ -890,7 +882,6 @@ DrawTitle(l_face) {
             break;
         }
     }
-
     if (is_draw) {
         #ifdef G2D
         abi_CMD_G2D_ADD_SPRITE(PIC_PLATE, false, 120, 120, 0xFF, 0, newAngles[l_face], MIRROR_BLANK);
@@ -1118,9 +1109,9 @@ GetPlacesPosition() {
 
                 if (l_place == PLACE_ITEM) {
                     GetItemsPositions(landscapes[face][l_place], l_road);
-                } else
+                } else {
                     GetLandPosiotions(landscapes[face][l_place], l_road, place_x, place_y)
-
+                }
             }
         }
     }
@@ -1447,11 +1438,10 @@ CalculateGameStatus() {
     if ((delay % 40) == 0) {
         game.score++;
     }
-
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
             if (roadway[cube].item[face] == ITEM) {
-                game.health++;
+                //game.health++;
             } else if (roadway[cube].item[face] < ENUM_ITEMS_MAX) {
                 //game.score--;
             }
@@ -1459,14 +1449,14 @@ CalculateGameStatus() {
     }
     if (cr.slippage == SLIPPAGE_TICKS) {
         game.status = GAME_OVER;
-        cr.count_transition++;
+        //cr.count_transition++;
     }
 }
-ResetGuardian(){
-    if(guardian_is_active){
+ResetGuardian() {
+    if (guardian_is_active) {
         new delay = 0;
         delay++;
-        if((delay % 600) == 0){
+        if ((delay % 600) == 0) {
             guardian_is_active = false;
             abi_CMD_PLAYSND(SOUND_GUARDIAN_DROP, SOUND_VOLUME);
         }

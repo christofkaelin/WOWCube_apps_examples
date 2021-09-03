@@ -54,41 +54,6 @@ RENDER() {
         DrawCountDown(face);
 
         DrawTitle(face);
-        /*
-                //abi_CMD_TEXT_ITOA(game.level, 0, 40, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                //abi_CMD_TEXT_ITOA(game.level_trying, 0, 40, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                //abi_CMD_TEXT_ITOA(game.is_generated, 0, 80, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr.is_departing, 0, 20, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr.count_transition, 0, 20, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(CUBES_MAX * FACES_MAX - 1 - (game.level + 1), 0, 20, 60, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr.slippage, 0, 20, 80, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(game.countdown, 0, 20, 100, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(game.status, 0, 20, 120, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(test, 0, 20, 140, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-        */
-
-        //abi_CMD_TEXT_ITOA(roadway[abi_cubeN].road_cube, 0, 180, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-        //abi_CMD_TEXT_ITOA(roadway[abi_cubeN].road_face[face], 0, 200, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-        /*
-                abi_CMD_TEXT_ITOA(cr.cube, 0, 180, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr.face, 0, 200, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-
-                abi_CMD_TEXT_ITOA(abi_cubeN, 0, 20, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(face, 0, 40, 200, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-
-                abi_CMD_TEXT_ITOA(cr.x, 0, 200, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr.y, 0, 200, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr.speed_x, 0, 200, 60, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr.speed_y, 0, 200, 80, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr.angle, 0, 200, 100, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-        */
-        /*
-                abi_CMD_TEXT_ITOA(cr_debug.x, 0, 120, 20, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr_debug.y, 0, 120, 40, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr_debug.target_angle, 0, 120, 60, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-                abi_CMD_TEXT_ITOA(cr_debug.angle, 0, 120, 80, 10, 0, TEXT_ALIGN_CENTER, 255, 255, 255, .useG2D = useG2D);
-        */
-
 
         #ifdef G2D
         abi_CMD_G2D_END();
@@ -109,7 +74,7 @@ ONTICK() {
     SendGameInfo();
     SendCar();
 
-    //check the shake to exit the menu
+    //check for shake to exit the menu
     if (0 == abi_cubeN) {
         abi_checkShake();
     }
@@ -138,7 +103,7 @@ ON_CMD_NET_RX(const pkt[]) {
 }
 ON_CHECK_ROTATE() {
 
-    if ( /*(abi_cubeN == 0) && */ ((game.status == GAME_OVER || game.status == GAME_COMPLETE))) {
+    if (((game.status == GAME_OVER || game.status == GAME_COMPLETE))) {
         if (game.status == GAME_OVER) {
             game.level--;
         }
