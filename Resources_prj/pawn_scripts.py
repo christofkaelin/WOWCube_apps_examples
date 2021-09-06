@@ -243,7 +243,7 @@ class Cracer(pawn_base.PawnModule):
         self.name = 'Cracer'
         self.scriptId = 13
         self.ScriptResourceList = [
-            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 60)
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 62)
         ]
         self.ScriptResourcePath = 'cracer'
         self.ScriptFileName = 'cracer.amx'

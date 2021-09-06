@@ -34,7 +34,7 @@ new bool:useG2D = false;
 #define HUD_HEALTH_FULL     16
 #define HUD_HEALTH          17
 #define PIC_SHADOWS_BIG     18
-#define PIC_BACKGROUND      59
+#define PIC_BACKGROUND      60
 #define PIC_BOMB            21
 #define PIC_GUARDIAN        22
 #define PIC_BOOST           23
@@ -141,7 +141,7 @@ new items_shadows[ITEM_ANIMATION_MAX] = [2, 2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 2];
 
 new delay;
 
-new bool:guardian_is_active = false;
+new bool:guardian_is_active;
 
 new game[.local_ticks,
     .level,
@@ -165,8 +165,8 @@ new roadway[CUBES_MAX][.road_cube, .road_face[FACES_MAX], .item[FACES_MAX]];
 
 //presets for leveling and models of roads
 new background[][.color, .red, .green, .blue, .turn, .straight_road, .end_of_road, .turning, .item_pic, .landscape_pic] = [
-    [0xFF21A800, 0, 0, 0, PIC_TURNS + 12, PIC_TURNS + 1 + 12, PIC_TURNS + 2 + 12, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE + 12], //0xFFFF9933
-   // [0xFFFF9933, 31, 38, 6, PIC_TURNS, PIC_TURNS + 1, PIC_TURNS + 2, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE] //0xFF9EC547
+    [0xFF21A800, 0, 0, 0, PIC_TURNS + 12, PIC_TURNS + 1 + 12, PIC_TURNS + 2 + 12, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE + 12], //Grass(Default)
+    [0xFFFF9933, 0, 0, 0, PIC_TURNS, PIC_TURNS + 1, PIC_TURNS + 2, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE] //Candyland
 ];
 
 new models_of_roads[CUBES_MAX][FACES_MAX][ROADS] = [

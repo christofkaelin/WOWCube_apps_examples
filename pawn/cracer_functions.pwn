@@ -3,6 +3,7 @@ InitVariables() {
     delay = 0;
     game.is_set_back = false;
     game.is_generated = false;
+    guardian_is_active = false;
     game.local_ticks = 0;
     game.countdown = 3;
     game.time_bonus = 500;
@@ -1454,8 +1455,6 @@ CalculateGameStatus() {
 }
 ResetGuardian() {
     if (guardian_is_active) {
-        new delay = 0;
-        delay++;
         if ((delay % 600) == 0) {
             guardian_is_active = false;
             abi_CMD_PLAYSND(SOUND_GUARDIAN_DROP, SOUND_VOLUME);
