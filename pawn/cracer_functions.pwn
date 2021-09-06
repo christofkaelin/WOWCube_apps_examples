@@ -643,9 +643,6 @@ DrawBackgroundBitmap(l_face) {
 
     position.angle = l_figure.angle * 90;
 
-    //Background as static color
-    //abi_CMD_FILL(background[game.level % MAX_LANDS].red, background[game.level % MAX_LANDS].green, background[game.level % MAX_LANDS].blue);
-
     //Background picture as Sprite
     abi_CMD_G2D_ADD_SPRITE(background[game.level % MAX_LANDS].background_pic, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
 
@@ -703,9 +700,6 @@ RememberBackGroundG2D() {
         position.angle = l_figure.angle * 90;
 
         abi_CMD_G2D_BEGIN_BITMAP(face, DISPLAY_WIDTH, DISPLAY_HEIGHT, true);
-
-        //Background as static color
-        //abi_CMD_G2D_ADD_RECTANGLE(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, background[game.level % MAX_LANDS].color);
 
         //Background picture as Sprite
          abi_CMD_G2D_ADD_SPRITE(background[game.level % MAX_LANDS].background_pic, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
