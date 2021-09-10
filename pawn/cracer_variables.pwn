@@ -163,7 +163,7 @@ new cr[CAR_POSITIONS];
 
 new roadway[CUBES_MAX][.road_cube, .road_face[FACES_MAX], .item[FACES_MAX]];
 
-//presets for leveling and models of roads
+//presets for levelling and models of roads
 new background[][.background_pic, .red, .green, .blue, .turn, .straight_road, .end_of_road, .turning, .item_pic, .landscape_pic] = [
     [PIC_BACKGROUND + 1, 0, 0, 0, PIC_TURNS + 12, PIC_TURNS + 1 + 12, PIC_TURNS + 2 + 12, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE + 12], //Grass(Default)
     [PIC_BACKGROUND, 0, 0, 0, PIC_TURNS, PIC_TURNS + 1, PIC_TURNS + 2, PIC_TURNING, PIC_BOMB, PIC_LANDSCAPE], //Candyland
