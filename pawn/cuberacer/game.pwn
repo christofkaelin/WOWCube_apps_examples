@@ -1,10 +1,10 @@
 #define CMD_SEND_ROAD P2P_CMD_BASE_SCRIPT_1 + 2
 #define CMD_SEND_CAR P2P_CMD_BASE_SCRIPT_1 + 3
-#define CAR_LENGTH 140
 
 new roads[8][3][3];
 new currentCar[5];
 new shadowCar[5];
+new car_offset;
 
 // TODO: Remove this in case we deem it as completely obsolete
 /*new car_current_angles = 180;
@@ -61,7 +61,7 @@ generate_road(module, face) {
     roads[module][face][0] = draw_road();
     roads[module][face][1] = random(4);
     roads[module][face][2] = draw_item();
-    printf("INFO - Generated Road(%d/%d/%d) on (%d/%d)\n", roads[module][face][0], roads[module][face][1], roads[module][face][2], module, face);
+    //printf("INFO - Generated Road(%d/%d/%d) on (%d/%d)\n", roads[module][face][0], roads[module][face][1], roads[module][face][2], module, face);
     // Broadcast generated road to all other processors
     send_road(module, face);
 }
@@ -113,20 +113,35 @@ game_init() {
             generate_road(abi_cubeN, screenI);
         }
     }
-    currentCar[0] = 0; //0
+    // Horizontal start
+    /*currentCar[0] = 0;
     currentCar[1] = 0;
-    currentCar[2] = 240; //240
-    currentCar[3] = 120; //120
-    currentCar[4] = 2; //2
+    currentCar[2] = 240;
+    currentCar[3] = 120;
+    currentCar[4] = 2;
 
     shadowCar[0] = 0;
     shadowCar[1] = 2;
     shadowCar[2] = 120;
     shadowCar[3] = 240;
-    shadowCar[4] = 1;
+    shadowCar[4] = 1;*/
+
+    // Vertical start
+    currentCar[0] = 0;
+    currentCar[1] = 0;
+    currentCar[2] = 120;
+    currentCar[3] = 240;
+    currentCar[4] = 3;
+
+    shadowCar[0] = 0;
+    shadowCar[1] = 1;
+    shadowCar[2] = 240;
+    shadowCar[3] = 120;
+    shadowCar[4] = 0;
 }
 
-game_run(car_skin, map_skin) {
+game_run(car_skin, map_skin, car_length) {
+    car_offset = car_length - 120;
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         // Tapping the screen rotates the displayed element by 90 degrees clockwise.
         if ((((screenI == abi_MTD_GetTapFace() && (abi_MTD_GetTapsCount() >= 1)))) && (!((abi_cubeN == currentCar[0]) && (screenI == currentCar[1])))) {
@@ -154,9 +169,28 @@ game_run(car_skin, map_skin) {
         //printf("INFO - currentCar(5)[\"%d\", \"%d\", \"%d\", \"%d\", \"%d\"]\n", currentCar[0], currentCar[1], currentCar[2], currentCar[3], currentCar[4]);
         //printf("INFO - shadowCar(5)[\"%d\", \"%d\", \"%d\", \"%d\", \"%d\"]\n\n", shadowCar[0], shadowCar[1], shadowCar[2], shadowCar[3], shadowCar[4]);
         switch (currentCar[4]) {
+            case 0 :  {
+                // Car is at the edge
+                if (currentCar[2] == 240 - car_offset) {
+                    // Crash logic straight road
+                    if(roads[abi_rightCubeN(currentCar[0], currentCar[1])][abi_rightFaceN(currentCar[0], currentCar[1])][0] == 1 && (roads[abi_rightCubeN(currentCar[0], currentCar[1])][abi_rightFaceN(currentCar[0], currentCar[1])][1] == 0 || roads[abi_rightCubeN(currentCar[0], currentCar[1])][abi_rightFaceN(currentCar[0], currentCar[1])][1] == 2)) {
+                        abi_exit();
+                    }
+                    shadowCar[0] = currentCar[0];
+                    shadowCar[1] = currentCar[1];
+                    shadowCar[2] = currentCar[2];
+                    shadowCar[3] = currentCar[3];
+                    shadowCar[4] = currentCar[4];
+                    currentCar[0] = abi_rightCubeN(shadowCar[0], shadowCar[1]);
+                    currentCar[1] = abi_rightFaceN(shadowCar[0], shadowCar[1]);
+                    currentCar[2] = 120;
+                    currentCar[3] = 240 + car_offset;
+                    currentCar[4] = 3;
+                }
+            }
             case 1 :  {
                 // Car is at the edge
-                if (currentCar[3] == 220) {
+                if (currentCar[3] == 240 - car_offset) {
                     // Crash logic straight road
                     if(roads[abi_bottomCubeN(currentCar[0], currentCar[1])][abi_bottomFaceN(currentCar[0], currentCar[1])][0] == 1 && (roads[abi_bottomCubeN(currentCar[0], currentCar[1])][abi_bottomFaceN(currentCar[0], currentCar[1])][1] == 1 || roads[abi_bottomCubeN(currentCar[0], currentCar[1])][abi_bottomFaceN(currentCar[0], currentCar[1])][1] == 3)) {
                         abi_exit();
@@ -168,14 +202,14 @@ game_run(car_skin, map_skin) {
                     shadowCar[4] = currentCar[4];
                     currentCar[0] = abi_bottomCubeN(shadowCar[0], shadowCar[1]);
                     currentCar[1] = abi_bottomFaceN(shadowCar[0], shadowCar[1]);
-                    currentCar[2] = 260;
+                    currentCar[2] = 240 + car_offset;
                     currentCar[3] = 120;
                     currentCar[4] = 2;
                 }
             }
             case 2 :  {
                 // Car is at the edge
-                if (currentCar[2] == 20) {
+                if (currentCar[2] == car_offset) {
                     // Crash logic straight road
                     if(roads[abi_leftCubeN(currentCar[0], currentCar[1])][abi_leftFaceN(currentCar[0], currentCar[1])][0] == 1 && (roads[abi_leftCubeN(currentCar[0], currentCar[1])][abi_leftFaceN(currentCar[0], currentCar[1])][1] == 0 || roads[abi_leftCubeN(currentCar[0], currentCar[1])][abi_leftFaceN(currentCar[0], currentCar[1])][1] == 2)) {
                         abi_exit();
@@ -188,8 +222,27 @@ game_run(car_skin, map_skin) {
                     currentCar[0] = abi_leftCubeN(shadowCar[0], shadowCar[1]);
                     currentCar[1] = abi_leftFaceN(shadowCar[0], shadowCar[1]);
                     currentCar[2] = 120;
-                    currentCar[3] = -20;
+                    currentCar[3] = -car_offset;
                     currentCar[4] = 1;
+                }
+            }
+            case 3 :  {
+                // Car is at the edge
+                if (currentCar[3] == car_offset) {
+                    // Crash logic straight road
+                    if(roads[abi_topCubeN(currentCar[0], currentCar[1])][abi_topFaceN(currentCar[0], currentCar[1])][0] == 1 && (roads[abi_topCubeN(currentCar[0], currentCar[1])][abi_topFaceN(currentCar[0], currentCar[1])][1] == 1 || roads[abi_topCubeN(currentCar[0], currentCar[1])][abi_topFaceN(currentCar[0], currentCar[1])][1] == 3)) {
+                        abi_exit();
+                    }
+                    shadowCar[0] = currentCar[0];
+                    shadowCar[1] = currentCar[1];
+                    shadowCar[2] = currentCar[2];
+                    shadowCar[3] = currentCar[3];
+                    shadowCar[4] = currentCar[4];
+                    currentCar[0] = abi_topCubeN(shadowCar[0], shadowCar[1]);
+                    currentCar[1] = abi_topFaceN(shadowCar[0], shadowCar[1]);
+                    currentCar[2] = -car_offset;
+                    currentCar[3] = 120;
+                    currentCar[4] = 0;
                 }
             }
         }
