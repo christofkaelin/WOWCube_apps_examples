@@ -237,6 +237,7 @@ class examplecubeface(pawn_base.PawnModule):
         self.SoundPath = 'examplecubeface'
         self.SoundList = []
 
+
 class Cracer(pawn_base.PawnModule):
     def __init__(self):
         super(Cracer, self).__init__()
@@ -257,3 +258,19 @@ class Cracer(pawn_base.PawnModule):
             'boost.wav',
         ]
         self.SoundPath = 'cracer'
+
+
+class jigsaw(pawn_base.PawnModule):
+    def __init__(self):
+        super(jigsaw, self).__init__()
+        self.name = 'jigsaw'
+        self.scriptId = 13
+        self.ScriptResourceList = [
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 85)
+        ]
+        self.ScriptResourcePath = 'jigsaw'
+        self.ScriptFileName = 'jigsaw.amx'
+        self.MenuIcon = 'icon.png'
+        self.SoundList = [
+        ]
+        self.SoundPath = 'jigsaw'
