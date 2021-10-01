@@ -274,3 +274,16 @@ class jigsaw(pawn_base.PawnModule):
         self.SoundList = [
         ]
         self.SoundPath = 'jigsaw'
+
+
+class crazyfarm(pawn_base.PawnModule):
+    def __init__(self):
+        super(crazyfarm, self).__init__()
+        self.name = 'crazyfarm'
+        self.scriptId = 14
+        self.ScriptResourceList = []
+        self.ScriptResourcePath = 'crazyfarm'
+        self.ScriptFileName = 'crazyfarm.amx'
+        self.MenuIcon = 'icon.png'
+        self.SoundList = []
+        self.SoundPath = 'crazyfarm'

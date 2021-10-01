@@ -18,7 +18,8 @@ script_list = [
     pawn_scripts.example7_2(),
     pawn_scripts.examplecubeface(),
     pawn_scripts.Cracer(),
-    pawn_scripts.jigsaw()
+    pawn_scripts.jigsaw(),
+    pawn_scripts.crazyfarm()
 ]
 
 
