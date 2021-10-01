@@ -10,7 +10,7 @@
 
 new picture;
 new figures[24][24][6];
-new index[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+new index[24] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
 
 //TODO:
 // 1. Implement multidimensional array to save figures.
@@ -33,7 +33,7 @@ ONTICK() {
 
         //draw bitmap at screen on the frame buffer
         // Bitmap for backgrounds.
-        abi_CMD_BITMAP(PICTURE, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI], MIRROR_BLANK);
+        abi_CMD_BITMAP(picture, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, newAngles[screenI], MIRROR_BLANK);
         //push buffer at screen
         abi_CMD_REDRAW(screenI);
 
@@ -53,16 +53,19 @@ ON_CHECK_ROTATE() {}
 
 //Returns 0 - 23 in random order.
 draw_picture() {
-    new n = sizeof(index) / sizeof(index[0]);
+    /* @Vinz: sizeof ist keine Funktion und sizeof von einem Value geht nicht.
+    Meinst du sowas? */
+    new n = sizeof index / index[0];
     
-    randomize (arr, n);
+    // @Vinz: Welche Array willst du hier randomizen ("arr" ist nicht defined)? Ich gehe mal von "index" aus
+    randomize(index, n);
 
     for (new i = 0; i < n; i++) {
-        new int indx = index[i];
-        figures[24][indx][6];
+        new indx;
+        indx = index[i];
+        //figures[24][indx][6]; @Vinz: Diese Zeile macht nichts
+        printf("%2d - %s\n", i+1, index[indx]); 
     }
-
-    printf("%2d - %s\n", i+1, index[indx]);
 }
 
 assign_group(picture) {
@@ -83,23 +86,25 @@ assign_group(picture) {
 }
 
 draw_map() {
+    new group;
     for (new i = 0; i < 24; i++) {
+        // @Vinz: bei draw_picture() braucht es irgendeinen return-Value, sonst wird hier 0 assigned.
         picture = draw_picture();
         group = assign_group(picture);
-        pictures[i][picture][group];
+        figures[i][picture][group]; // @Vinz: Wir haben keinen pictures-array. Denke du meinst figures?
     }
 }
 
-swap(int a, int b) {
-    int temp = a;
+swap(a, b) {
+    new temp = a;
     a = b;
     b = temp;
 }
 
 randomize(arr[], n) {
-    srand(time(NULL));
+    //srand(time(NULL)); @Vinz: srand gibt es in Pawn nicht
     for (new i = n - 1; i > 0; i--) {
-        int j = random(256) % (i + 1);
+        new j = random(256) % (i + 1);
         swap(arr[i], arr[j]);
     }
 }
