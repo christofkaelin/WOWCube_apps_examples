@@ -2,7 +2,6 @@
 #include "trbl.pwn"
 #include "math.pwn"
 #include "run.pwn"
-#include "angles.pwn"
 
 #define DISPLAY_WIDTH   240
 #define DISPLAY_HEIGHT  240
@@ -11,131 +10,139 @@
 #define DOG 1
 #define MOUSE 2
 #define PIG 3
-#define HEN 4
-#define RABBIT 5
+#define CHICKEN 4
+#define BUNNY 5
 #define COW 6
-#define UNICORN 7
-#define FISH 8
-#define CHICKEN 9
-#define STEAK 10
-#define CHEESE 11
-#define MILK 12
-#define SAUSAGE 13
-#define WORM 14
-#define APPLE 15
-#define SUGAR 16
+#define HORSE 7
+#define HAY 8
+#define SEEDS 9
+#define SUGAR 10
+#define MUSHROOM 11
+#define FISH 12
+#define WORM 13
+#define STEAK 14
+#define ROTTEN_STEAK 15
+#define LETTUCE 16
 #define CARROT 17
-#define SALAD 18
-#define SEEDS 19
-#define GRASS 20
-#define HAY 21
-#define ENERGYDRINK 22
-#define TRASH 23
-#define SPIDERNET 24
-#define ROTTENMEAT 25
-#define ROTTENSALAD 26
-// Placeholders 27–29
+#define APPLE 18
+#define ROTTEN_LETTUCE 19
+#define MILK 20
+#define CHEESE 21
+#define BONE 22
+#define ANIMAL_EXCREMENTS 23
+#define RAINBOW 24
+#define ARROW 29
 #define HEALTH_FULL 30
 #define HEALTH_HIGH 31
 #define HEALTH_LOW 32
 #define HEALTH_CRITICAL 33
 
-#define TEXT_SIZE       8
+#define TEXT_SIZE 8
 
+new string[4];
+
+new score = 0;
+new highscore = 10000;
+new items[3];
 new lives[8] = [HEALTH_CRITICAL, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH];
 
-new dairy_meats[7] = [FISH, CHICKEN, STEAK, CHEESE, MILK, SAUSAGE, WORM];
-
-new veggies[7] = [APPLE, SUGAR, CARROT, SALAD, SEEDS, GRASS, HAY];
-
-new bad_stuff[5] = [ENERGYDRINK, TRASH, SPIDERNET, ROTTENMEAT, ROTTENSALAD];
-
-new foods[8];
+new highscore_location[2] = [0, 1]
+new score_location[2];
+new mute_location[2];
+new exit_location[2];
+new cat_location[2] = [0, 0];
+new dog_location[2];
+new mouse_location[2];
+new pig_location[2];
+new chicken_location[2];
+new bunny_location[2];
+new cow_location[2];
+new horse_location[2];
 
 ONTICK() {
-    // Set anchors
-    new anchorTopCube = abi_bottomCubeN(0, 0);
-    new anchorTopFace = abi_bottomFaceN(0, 0);
-    new anchorRightCube = abi_bottomCubeN(abi_leftCubeN(0, 0), abi_leftFaceN(0, 0));
-    new anchorRightFace = abi_bottomFaceN(abi_leftCubeN(0, 0), abi_leftFaceN(0, 0));
-    new anchorLeftCube = abi_topCubeN(abi_rightCubeN(0, 0), abi_rightFaceN(0, 0));
-    new anchorLeftFace = abi_topFaceN(abi_rightCubeN(0, 0), abi_rightFaceN(0, 0));
-    new anchorOppositeCube = abi_bottomCubeN(abi_leftCubeN(anchorRightCube, anchorRightFace), abi_leftFaceN(anchorRightCube, anchorRightFace));
-    new anchorOppositeFace = abi_bottomFaceN(abi_leftCubeN(anchorRightCube, anchorRightFace), abi_leftFaceN(anchorRightCube, anchorRightFace));
-    
-    CheckAngles();
-
+    // Animal locations
+    score_location[0] = abi_leftCubeN(highscore_location[0], highscore_location[1]);
+    score_location[1] = abi_leftFaceN(highscore_location[0], highscore_location[1]);
+    mute_location[0] = abi_leftCubeN(score_location[0], score_location[1]);
+    mute_location[1] = abi_leftFaceN(score_location[0], score_location[1]);
+    exit_location[0] = abi_topCubeN(highscore_location[0], highscore_location[1]);
+    exit_location[1] = abi_topFaceN(highscore_location[0], highscore_location[1]);
+    dog_location[0] = abi_leftCubeN(cat_location[0], cat_location[1]);
+    dog_location[1] = abi_leftFaceN(cat_location[0], cat_location[1]);
+    mouse_location[0] = abi_bottomCubeN(dog_location[0], dog_location[1]);
+    mouse_location[1] = abi_bottomFaceN(dog_location[0], dog_location[1]);
+    pig_location[0] = abi_leftCubeN(mouse_location[0], mouse_location[1]);
+    pig_location[1] = abi_leftFaceN(mouse_location[0], mouse_location[1]);
+    chicken_location[0] = abi_bottomCubeN(pig_location[0], pig_location[1]);
+    chicken_location[1] = abi_bottomFaceN(pig_location[0], pig_location[1]);
+    bunny_location[0] = abi_leftCubeN(chicken_location[0], chicken_location[1]);
+    bunny_location[1] = abi_leftFaceN(chicken_location[0], chicken_location[1]);
+    cow_location[0] = abi_bottomCubeN(bunny_location[0], bunny_location[1]);
+    cow_location[1] = abi_bottomFaceN(bunny_location[0], bunny_location[1]);
+    horse_location[0] = abi_leftCubeN(cow_location[0], cow_location[1]);
+    horse_location[1] = abi_leftFaceN(cow_location[0], cow_location[1]);
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
-        printf("%d", lives[CAT]);
-        // TODO: This if/else is a disgrace, but I don't know a better solution :D
-        // Render animals and food
         abi_CMD_FILL(0, 0, 0);
-        if ((abi_cubeN == 0) && (screenI == 0)) {
+        if ((abi_cubeN == highscore_location[0]) && (screenI == highscore_location[1])) {
+            strformat(string, sizeof(string), true, "Best: %d", highscore);
+            abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 0, TEXT_ALIGN_CENTER, 255, 255, 255);
+        } else if ((abi_cubeN == score_location[0]) && (screenI == score_location[1])) {
+            strformat(string, sizeof(string), true, "Score: %d", score);
+            abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 270, TEXT_ALIGN_CENTER, 255, 255, 255);
+        } else if ((abi_cubeN == mute_location[0]) && (screenI == mute_location[1])) {
+            strformat(string, sizeof(string), true, "Mute");
+            abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 180, TEXT_ALIGN_CENTER, 255, 255, 255);
+        } else if ((abi_cubeN == exit_location[0]) && (screenI == exit_location[1])) {
+            strformat(string, sizeof(string), true, "Exit");
+            abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 90, TEXT_ALIGN_CENTER, 255, 255, 255);
+            if ((screenI == abi_MTD_GetTapFace()) && (abi_MTD_GetTapsCount() >= 1)) {
+                abi_exit();
+            }
+        } else if ((abi_cubeN == cat_location[0]) && (screenI == cat_location[1])) {
             abi_CMD_FILL(7, 54, 14);
-            abi_CMD_BITMAP(CAT, 120, 120, 0, MIRROR_Y);
-            abi_CMD_BITMAP(lives[CAT], 222, 78, 0, MIRROR_Y);
-        } else if (abi_cubeN == abi_leftCubeN(0, 0) && screenI == abi_leftFaceN(0, 0)) {
+            abi_CMD_BITMAP(CAT, 120, 120, 180, MIRROR_BLANK);
+            abi_CMD_BITMAP(lives[CAT], 120, 120, 180, MIRROR_BLANK);
+        } else if (abi_cubeN == dog_location[0] && screenI == dog_location[1]) {
             abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(DOG, 120, 120, 90, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[DOG], 78, 18, 90, MIRROR_BLANK);
-        } else if ((abi_cubeN == anchorRightCube) && (screenI == anchorRightFace)) {
+            abi_CMD_BITMAP(lives[DOG], 120, 120, 90, MIRROR_BLANK);
+        } else if (abi_cubeN == mouse_location[0] && screenI == mouse_location[1]) {
             abi_CMD_FILL(7, 54, 14);
-            abi_CMD_BITMAP(MOUSE, 120, 120, 0, MIRROR_Y);
-            abi_CMD_BITMAP(lives[MOUSE], 222, 78, 0, MIRROR_Y);
-        } else if (abi_cubeN == abi_leftCubeN(anchorRightCube, anchorRightFace) && screenI == abi_leftFaceN(anchorRightCube, anchorRightFace)) {
+            abi_CMD_BITMAP(MOUSE, 120, 120, 180, MIRROR_BLANK);
+            abi_CMD_BITMAP(lives[MOUSE], 120, 120, 180, MIRROR_BLANK);
+        } else if (abi_cubeN == pig_location[0] && screenI == pig_location[1]) {
             abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(PIG, 120, 120, 90, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[PIG], 78, 18, 90, MIRROR_BLANK);
-        } else if ((abi_cubeN == anchorOppositeCube) && (screenI == anchorOppositeFace)) {
+            abi_CMD_BITMAP(lives[PIG], 120, 120, 90, MIRROR_BLANK);
+        } else if (abi_cubeN == chicken_location[0] && screenI == chicken_location[1]) {
             abi_CMD_FILL(7, 54, 14);
-            abi_CMD_BITMAP(HEN, 120, 120, 0, MIRROR_Y);
-            abi_CMD_BITMAP(lives[HEN], 222, 78, 0, MIRROR_Y);
-        } else if (abi_cubeN == abi_leftCubeN(anchorOppositeCube, anchorOppositeFace) && screenI == abi_leftFaceN(anchorOppositeCube, anchorOppositeFace)) {
+            abi_CMD_BITMAP(CHICKEN, 120, 120, 180, MIRROR_BLANK);
+            abi_CMD_BITMAP(lives[CHICKEN], 120, 120, 180, MIRROR_BLANK);
+        } else if (abi_cubeN == bunny_location[0] && screenI == bunny_location[1]) {
             abi_CMD_FILL(7, 54, 14);
-            abi_CMD_BITMAP(RABBIT, 120, 120, 90, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[RABBIT], 78, 18, 90, MIRROR_BLANK);
-        } else if ((abi_cubeN == anchorLeftCube) && (screenI == anchorLeftFace)) {
+            abi_CMD_BITMAP(BUNNY, 120, 120, 90, MIRROR_BLANK);
+            abi_CMD_BITMAP(lives[BUNNY], 120, 120, 90, MIRROR_BLANK);
+        } else if (abi_cubeN == cow_location[0] && screenI == cow_location[1]) {
             abi_CMD_FILL(7, 54, 14);
-            abi_CMD_BITMAP(COW, 120, 120, 0, MIRROR_Y);
-            abi_CMD_BITMAP(lives[COW], 222, 78, 0, MIRROR_Y);
-        } else if (abi_cubeN == abi_leftCubeN(anchorLeftCube, anchorLeftFace) && screenI == abi_leftFaceN(anchorLeftCube, anchorLeftFace)) {
+            abi_CMD_BITMAP(COW, 120, 120, 180, MIRROR_BLANK);
+            abi_CMD_BITMAP(lives[COW], 120, 120, 180, MIRROR_BLANK);
+        } else if (abi_cubeN == horse_location[0] && screenI == horse_location[1]) {
             abi_CMD_FILL(7, 54, 14);
-            abi_CMD_BITMAP(UNICORN, 120, 120, 90, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[UNICORN], 78, 18, 90, MIRROR_BLANK);
-        } else if (abi_cubeN == abi_topCubeN(0, 0) && screenI == abi_topFaceN(0, 0)) {
-            abi_CMD_FILL(16, 17, 0);
-            abi_CMD_BITMAP(foods[0], 120, 120, newAngles[screenI], MIRROR_BLANK);
-            // TODO: Broadcast feed
-            if ((screenI == abi_MTD_GetTapFace()) && (abi_MTD_GetTapsCount() >= 1)) {
-                foods[0] = 29;
-                if ((abi_leftCubeN(abi_cubeN, screenI) == 0) && (abi_leftFaceN(abi_cubeN, screenI) == 0)) {
-                    printf("true");
-                    lives[CAT] = HEALTH_FULL;
+            abi_CMD_BITMAP(HORSE, 120, 120, 90, MIRROR_BLANK);
+            abi_CMD_BITMAP(lives[HORSE], 120, 120, 90, MIRROR_BLANK);
+        } else {
+            abi_CMD_BITMAP(items[screenI], 120, 120, get_item_angle(abi_cubeN, screenI), MIRROR_BLANK);
+            abi_CMD_BITMAP(ARROW, 120, 120, 270, MIRROR_BLANK);
+            if (screenI == abi_MTD_GetTapFace() && abi_MTD_GetTapsCount() >= 1) {
+                if (abi_MTD_GetTapsCount() == 1) {
+                    feed_animal();
+                } else if (abi_MTD_GetTapsCount() == 2) {
+                    move_items();
+                } else {
+                    //TODO: Implement freeze for this cube when player draws new items
+                    draw_items(random(100));
                 }
             }
-        } else if (abi_cubeN == abi_leftCubeN(abi_leftCubeN(0, 0), abi_leftFaceN(0, 0)) && screenI == abi_leftFaceN(abi_leftCubeN(0, 0), abi_leftFaceN(0, 0))) {
-            abi_CMD_FILL(16, 17, 0);
-            abi_CMD_BITMAP(foods[1], 120, 120, newAngles[screenI], MIRROR_BLANK);
-        } else if (abi_cubeN == abi_topCubeN(anchorRightCube, anchorRightFace) && screenI == abi_topFaceN(anchorRightCube, anchorRightFace)) {
-            abi_CMD_FILL(16, 17, 0);
-            abi_CMD_BITMAP(foods[2], 120, 120, newAngles[screenI] + 180, MIRROR_BLANK);
-        } else if (abi_cubeN == abi_leftCubeN(abi_leftCubeN(anchorRightCube, anchorRightFace), abi_leftFaceN(anchorRightCube, anchorRightFace)) && screenI == abi_leftFaceN(abi_leftCubeN(anchorRightCube, anchorRightFace), abi_leftFaceN(anchorRightCube, anchorRightFace))) {
-            abi_CMD_FILL(16, 17, 0);
-            abi_CMD_BITMAP(foods[3], 120, 120, newAngles[screenI] + 180, MIRROR_BLANK);
-        } else if (abi_cubeN == abi_topCubeN(anchorOppositeCube, anchorOppositeFace) && screenI == abi_topFaceN(anchorOppositeCube, anchorOppositeFace)) {
-            abi_CMD_FILL(16, 17, 0);
-            abi_CMD_BITMAP(foods[4], 120, 120, newAngles[screenI] + 90, MIRROR_BLANK);
-        } else if (abi_cubeN == abi_leftCubeN(abi_leftCubeN(anchorOppositeCube, anchorOppositeFace), abi_leftFaceN(anchorOppositeCube, anchorOppositeFace)) && screenI == abi_leftFaceN(abi_leftCubeN(anchorOppositeCube, anchorOppositeFace), abi_leftFaceN(anchorOppositeCube, anchorOppositeFace))) {
-            abi_CMD_FILL(16, 17, 0);
-            abi_CMD_BITMAP(foods[5], 120, 120, newAngles[screenI] + 90, MIRROR_BLANK);
-        } else if (abi_cubeN == abi_topCubeN(anchorLeftCube, anchorLeftFace) && screenI == abi_topFaceN(anchorLeftCube, anchorLeftFace)) {
-            abi_CMD_FILL(16, 17, 0);
-            abi_CMD_BITMAP(foods[6], 120, 120, newAngles[screenI] + 270, MIRROR_BLANK);
-        } else if (abi_cubeN == abi_leftCubeN(abi_leftCubeN(anchorLeftCube, anchorLeftFace), abi_leftFaceN(anchorLeftCube, anchorLeftFace)) && screenI == abi_leftFaceN(abi_leftCubeN(anchorLeftCube, anchorLeftFace), abi_leftFaceN(anchorLeftCube, anchorLeftFace))) {
-            abi_CMD_FILL(16, 17, 0);
-            abi_CMD_BITMAP(foods[7], 120, 120, newAngles[screenI] + 270, MIRROR_BLANK);
-        } else {
-            abi_CMD_FILL(0, 0, 0);
         }
         abi_CMD_REDRAW(screenI);
     }
@@ -148,18 +155,51 @@ RENDER() {}
 ON_CMD_NET_RX(const pkt[]) {}
 ON_LOAD_GAME_DATA() {}
 ON_INIT() {
-    draw_foods();
+    draw_items(abi_cubeN % 4);
 }
 ON_CHECK_ROTATE() {}
 
-draw_foods() {
-    for (new i = 0; i <= 7; i++) {
-        if (i == 7) {
-            foods[i] = bad_stuff[random(5)];
-        } else if ((i % 2) == 0) {
-            foods[i] = veggies[random(7)];
-        } else if ((i % 2) != 0) {
-            foods[i] = dairy_meats[random(7)];
-        }
+draw_items(category) {
+    if (category != 0 || category != 4) {
+        category = category % 4;
+        new droppedItem = random(4);
+        items[0] = ((droppedItem + 1) % 4) + 8 + (category * 4);
+        items[1] = ((droppedItem + 2) % 4) + 8 + (category * 4);
+        items[2] = ((droppedItem + 3) % 4) + 8 + (category * 4);
+    } else {
+        items[0] = 24;
+        items[1] = 24;
+        items[2] = 24;
     }
+}
+
+get_item_angle(cube, face) {
+    if (
+        ((abi_leftCubeN(cube, face) == cat_location[0]) && (abi_leftFaceN(cube, face) == cat_location[1])) ||        
+        ((abi_leftCubeN(cube, face) == mouse_location[0]) && (abi_leftFaceN(cube, face) == mouse_location[1])) ||        
+        ((abi_leftCubeN(cube, face) == chicken_location[0]) && (abi_leftFaceN(cube, face) == chicken_location[1])) ||        
+        ((abi_leftCubeN(cube, face) == cow_location[0]) && (abi_leftFaceN(cube, face) == cow_location[1]))
+    ) {
+        return 270;
+    } else if (
+        ((abi_topCubeN(cube, face) == dog_location[0]) && (abi_topFaceN(cube, face) == dog_location[1])) ||        
+        ((abi_topCubeN(cube, face) == pig_location[0]) && (abi_topFaceN(cube, face) == pig_location[1])) ||        
+        ((abi_topCubeN(cube, face) == bunny_location[0]) && (abi_topFaceN(cube, face) == bunny_location[1])) ||        
+        ((abi_topCubeN(cube, face) == horse_location[0]) && (abi_topFaceN(cube, face) == horse_location[1]))
+    ) {
+        return 0;
+    } else {
+        return 135;
+    }
+}
+
+move_items() {
+    new overflow = items[2];
+    items[2] = items[1];
+    items[1] = items[0];
+    items[0] = overflow;
+}
+
+feed_animal() {
+    //TODO: Implement animal feed logic.
 }
