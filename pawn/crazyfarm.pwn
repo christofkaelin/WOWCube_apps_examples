@@ -32,19 +32,21 @@
 #define ANIMAL_EXCREMENTS 23
 #define RAINBOW 24
 #define ARROW 29
-#define HEALTH_FULL 30
-#define HEALTH_HIGH 31
-#define HEALTH_LOW 32
-#define HEALTH_CRITICAL 33
+#define HEALTH_CRITICAL 30
+#define HEALTH_LOW 31
+#define HEALTH_HIGH 32
+#define HEALTH_FULL 33
 
 #define TEXT_SIZE 8
+
+#define CMD_SEND_ITEM P2P_CMD_BASE_SCRIPT_1 + 1
 
 new string[4];
 
 new score = 0;
 new highscore = 10000;
 new items[3];
-new lives[8] = [HEALTH_CRITICAL, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH];
+new lives[8] = [HEALTH_LOW, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH];
 
 new highscore_location[2] = [0, 1]
 new score_location[2];
@@ -131,11 +133,13 @@ ONTICK() {
             abi_CMD_BITMAP(HORSE, 120, 120, 90, MIRROR_BLANK);
             abi_CMD_BITMAP(lives[HORSE], 120, 120, 90, MIRROR_BLANK);
         } else {
-            abi_CMD_BITMAP(items[screenI], 120, 120, get_item_angle(abi_cubeN, screenI), MIRROR_BLANK);
+            if (items[screenI] != 0) {
+                abi_CMD_BITMAP(items[screenI], 120, 120, get_item_angle(screenI), MIRROR_BLANK);
+            }
             abi_CMD_BITMAP(ARROW, 120, 120, 270, MIRROR_BLANK);
             if (screenI == abi_MTD_GetTapFace() && abi_MTD_GetTapsCount() >= 1) {
                 if (abi_MTD_GetTapsCount() == 1) {
-                    feed_animal();
+                    use_item(screenI);
                 } else if (abi_MTD_GetTapsCount() == 2) {
                     move_items();
                 } else {
@@ -152,7 +156,14 @@ ONTICK() {
 }
 ON_PHYSICS_TICK() {}
 RENDER() {}
-ON_CMD_NET_RX(const pkt[]) {}
+ON_CMD_NET_RX(const pkt[]) {
+    switch (abi_ByteN(pkt, 4)) {
+        case CMD_SEND_ITEM:  {
+            lives[abi_ByteN(pkt, 8)] = abi_ByteN(pkt, 9);
+            score = abi_ByteN(pkt, 10);
+        }
+    }
+}
 ON_LOAD_GAME_DATA() {}
 ON_INIT() {
     draw_items(abi_cubeN % 4);
@@ -173,19 +184,19 @@ draw_items(category) {
     }
 }
 
-get_item_angle(cube, face) {
+get_item_angle(face) {
     if (
-        ((abi_leftCubeN(cube, face) == cat_location[0]) && (abi_leftFaceN(cube, face) == cat_location[1])) ||        
-        ((abi_leftCubeN(cube, face) == mouse_location[0]) && (abi_leftFaceN(cube, face) == mouse_location[1])) ||        
-        ((abi_leftCubeN(cube, face) == chicken_location[0]) && (abi_leftFaceN(cube, face) == chicken_location[1])) ||        
-        ((abi_leftCubeN(cube, face) == cow_location[0]) && (abi_leftFaceN(cube, face) == cow_location[1]))
+        ((abi_leftCubeN(abi_cubeN, face) == cat_location[0]) && (abi_leftFaceN(abi_cubeN, face) == cat_location[1])) ||
+        ((abi_leftCubeN(abi_cubeN, face) == mouse_location[0]) && (abi_leftFaceN(abi_cubeN, face) == mouse_location[1])) ||
+        ((abi_leftCubeN(abi_cubeN, face) == chicken_location[0]) && (abi_leftFaceN(abi_cubeN, face) == chicken_location[1])) ||
+        ((abi_leftCubeN(abi_cubeN, face) == cow_location[0]) && (abi_leftFaceN(abi_cubeN, face) == cow_location[1]))
     ) {
         return 270;
     } else if (
-        ((abi_topCubeN(cube, face) == dog_location[0]) && (abi_topFaceN(cube, face) == dog_location[1])) ||        
-        ((abi_topCubeN(cube, face) == pig_location[0]) && (abi_topFaceN(cube, face) == pig_location[1])) ||        
-        ((abi_topCubeN(cube, face) == bunny_location[0]) && (abi_topFaceN(cube, face) == bunny_location[1])) ||        
-        ((abi_topCubeN(cube, face) == horse_location[0]) && (abi_topFaceN(cube, face) == horse_location[1]))
+        ((abi_topCubeN(abi_cubeN, face) == dog_location[0]) && (abi_topFaceN(abi_cubeN, face) == dog_location[1])) ||
+        ((abi_topCubeN(abi_cubeN, face) == pig_location[0]) && (abi_topFaceN(abi_cubeN, face) == pig_location[1])) ||
+        ((abi_topCubeN(abi_cubeN, face) == bunny_location[0]) && (abi_topFaceN(abi_cubeN, face) == bunny_location[1])) ||
+        ((abi_topCubeN(abi_cubeN, face) == horse_location[0]) && (abi_topFaceN(abi_cubeN, face) == horse_location[1]))
     ) {
         return 0;
     } else {
@@ -200,6 +211,43 @@ move_items() {
     items[0] = overflow;
 }
 
-feed_animal() {
-    //TODO: Implement animal feed logic.
+send_item(animal, health, score) {
+    new data[2];
+    data[0] = ((CMD_SEND_ITEM & 0xFF));
+    data[1] = ((animal & 0xFF) | ((health & 0xFF) << 8) | ((score & 0xFF) << 16));
+
+    abi_CMD_NET_TX(0, NET_BROADCAST_TTL_MAX, data);
+    abi_CMD_NET_TX(1, NET_BROADCAST_TTL_MAX, data);
+    abi_CMD_NET_TX(2, NET_BROADCAST_TTL_MAX, data);
+}
+
+feed_animal(animal, healthpoints, points) {
+    lives[animal] = lives[animal] + healthpoints;
+    if (lives[animal] < HEALTH_CRITICAL) {
+        lives[animal] = HEALTH_CRITICAL;
+    } else if (lives[animal] > HEALTH_FULL) {
+        lives[animal] = HEALTH_FULL;
+    }
+    score = score + points;
+    if (score < 0) {
+        score = 0;
+    }
+    send_item(animal, lives[animal], score);
+}
+
+use_item(face) {
+    new item = items[face];
+    // TODO: Implement feed logic for other animal
+    if ((abi_leftCubeN(abi_cubeN, face) == cat_location[0]) && (abi_leftFaceN(abi_cubeN, face) == cat_location[1])) {
+        if (item == FISH) {
+            feed_animal(CAT, 1, 20);
+        } else if (item == MILK) {
+            feed_animal(CAT, 1, 10);
+        } else {
+            feed_animal(CAT, -1, -10);
+        }
+    }
+
+    // Remove item from inventory
+    items[face] = 0;
 }
