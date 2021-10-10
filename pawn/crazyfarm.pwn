@@ -31,11 +31,17 @@
 #define BONE 22
 #define ANIMAL_EXCREMENTS 23
 #define RAINBOW 24
-#define ARROW 29
-#define HEALTH_CRITICAL 30
-#define HEALTH_LOW 31
-#define HEALTH_HIGH 32
-#define HEALTH_FULL 33
+#define HIGHSCORE_GOLD 25
+#define HIGHSCORE_SILVER 26
+#define HIGHSCORE_BRONZE 27
+#define EXIT 28
+#define MUTE 29
+#define UNMUTE 30
+#define HEALTH_CRITICAL 31
+#define HEALTH_LOW 32
+#define HEALTH_HIGH 33
+#define HEALTH_FULL 34
+#define ARROW 35
 
 #define TEXT_SIZE 8
 
@@ -46,7 +52,7 @@ new string[4];
 new score = 0;
 new highscore = 10000;
 new items[3];
-new lives[8] = [HEALTH_LOW, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH, HEALTH_HIGH];
+new health[8] = [HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW];
 
 new highscore_location[2] = [0, 1]
 new score_location[2];
@@ -103,35 +109,35 @@ ONTICK() {
         } else if ((abi_cubeN == cat_location[0]) && (screenI == cat_location[1])) {
             abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(CAT, 120, 120, 180, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[CAT], 120, 120, 180, MIRROR_BLANK);
+            abi_CMD_BITMAP(health[CAT], 120, 120, 180, MIRROR_BLANK);
         } else if (abi_cubeN == dog_location[0] && screenI == dog_location[1]) {
             abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(DOG, 120, 120, 90, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[DOG], 120, 120, 90, MIRROR_BLANK);
+            abi_CMD_BITMAP(health[DOG], 120, 120, 90, MIRROR_BLANK);
         } else if (abi_cubeN == mouse_location[0] && screenI == mouse_location[1]) {
             abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(MOUSE, 120, 120, 180, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[MOUSE], 120, 120, 180, MIRROR_BLANK);
+            abi_CMD_BITMAP(health[MOUSE], 120, 120, 180, MIRROR_BLANK);
         } else if (abi_cubeN == pig_location[0] && screenI == pig_location[1]) {
             abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(PIG, 120, 120, 90, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[PIG], 120, 120, 90, MIRROR_BLANK);
+            abi_CMD_BITMAP(health[PIG], 120, 120, 90, MIRROR_BLANK);
         } else if (abi_cubeN == chicken_location[0] && screenI == chicken_location[1]) {
             abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(CHICKEN, 120, 120, 180, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[CHICKEN], 120, 120, 180, MIRROR_BLANK);
+            abi_CMD_BITMAP(health[CHICKEN], 120, 120, 180, MIRROR_BLANK);
         } else if (abi_cubeN == bunny_location[0] && screenI == bunny_location[1]) {
             abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(BUNNY, 120, 120, 90, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[BUNNY], 120, 120, 90, MIRROR_BLANK);
+            abi_CMD_BITMAP(health[BUNNY], 120, 120, 90, MIRROR_BLANK);
         } else if (abi_cubeN == cow_location[0] && screenI == cow_location[1]) {
             abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(COW, 120, 120, 180, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[COW], 120, 120, 180, MIRROR_BLANK);
+            abi_CMD_BITMAP(health[COW], 120, 120, 180, MIRROR_BLANK);
         } else if (abi_cubeN == horse_location[0] && screenI == horse_location[1]) {
             abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(HORSE, 120, 120, 90, MIRROR_BLANK);
-            abi_CMD_BITMAP(lives[HORSE], 120, 120, 90, MIRROR_BLANK);
+            abi_CMD_BITMAP(health[HORSE], 120, 120, 90, MIRROR_BLANK);
         } else {
             if (items[screenI] != 0) {
                 abi_CMD_BITMAP(items[screenI], 120, 120, get_item_angle(screenI), MIRROR_BLANK);
@@ -159,7 +165,7 @@ RENDER() {}
 ON_CMD_NET_RX(const pkt[]) {
     switch (abi_ByteN(pkt, 4)) {
         case CMD_SEND_ITEM:  {
-            lives[abi_ByteN(pkt, 8)] = abi_ByteN(pkt, 9);
+            health[abi_ByteN(pkt, 8)] = abi_ByteN(pkt, 9);
             score = abi_ByteN(pkt, 10);
         }
     }
@@ -222,26 +228,26 @@ send_item(animal, health, score) {
 }
 
 feed_animal(animal, healthpoints, points) {
-    lives[animal] = lives[animal] + healthpoints;
-    if (lives[animal] < HEALTH_CRITICAL) {
-        lives[animal] = HEALTH_CRITICAL;
-    } else if (lives[animal] > HEALTH_FULL) {
-        lives[animal] = HEALTH_FULL;
+    health[animal] = health[animal] + healthpoints;
+    if (health[animal] < HEALTH_CRITICAL) {
+        health[animal] = HEALTH_CRITICAL;
+    } else if (health[animal] > HEALTH_FULL) {
+        health[animal] = HEALTH_FULL;
     }
     score = score + points;
     if (score < 0) {
         score = 0;
     }
-    send_item(animal, lives[animal], score);
+    send_item(animal, health[animal], score);
 }
 
 use_item(face) {
-    new item = items[face];
-    // TODO: Implement feed logic for other animal
+    new selected_item = items[face];
+    // TODO: Implement feed logic for other animals
     if ((abi_leftCubeN(abi_cubeN, face) == cat_location[0]) && (abi_leftFaceN(abi_cubeN, face) == cat_location[1])) {
-        if (item == FISH) {
+        if (selected_item == FISH) {
             feed_animal(CAT, 1, 20);
-        } else if (item == MILK) {
+        } else if (selected_item == MILK) {
             feed_animal(CAT, 1, 10);
         } else {
             feed_animal(CAT, -1, -10);
