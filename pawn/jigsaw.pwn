@@ -37,10 +37,11 @@ ON_PHYSICS_TICK() {}
 RENDER() {
 
     anchor_background();
-
-    for (new screen = 0; screen < FACES_MAX; screen++) {   
-        abi_CMD_G2D_BEGIN_DISPLAY(screen, true);       
-        draw_background();      
+    CheckAngles();
+    for (new screen = 0; screen < 3; screen++) {
+        abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+        draw_background(screen);
+        draw_pictures(screen);
         abi_CMD_G2D_END();
     }
 }
@@ -49,23 +50,24 @@ ON_LOAD_GAME_DATA() {}
 ON_INIT() {}
 ON_CHECK_ROTATE() {}
 
-draw_background() {
-    abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
+draw_background(screen) {
+    abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
 }
 
 anchor_background() {
     #ifndef G2D
     return;
     #endif
-    for (new screen = 0; screen < FACES_MAX; screen++) {
+    CheckAngles();
+    for (new screen = 0; screen < 3; screen++) {
         abi_CMD_G2D_BEGIN_BITMAP(screen, DISPLAY_WIDTH, DISPLAY_HEIGHT, true);
-        abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
+        abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         abi_CMD_G2D_END();
     }
 }
-//Returns 0 - 23 in random order.
-draw_pictures() {
 
+draw_pictures(screen) {
+    abi_CMD_G2D_ADD_SPRITE(screen, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
 }
 
 assign_group(picture) {
