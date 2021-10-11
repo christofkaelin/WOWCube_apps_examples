@@ -10,8 +10,8 @@
 
 
 new background = 24;
-new figures[24][24][6];
-new pictures[24] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+new figures[24];
+new group [24];
 
 //TODO:
 // 1. Implement multidimensional array to save figures.
@@ -35,7 +35,6 @@ ONTICK() {
 }
 ON_PHYSICS_TICK() {}
 RENDER() {
-
     anchor_background();
     CheckAngles();
     for (new screen = 0; screen < 3; screen++) {
@@ -47,8 +46,17 @@ RENDER() {
 }
 ON_CMD_NET_RX(const pkt[]) {}
 ON_LOAD_GAME_DATA() {}
-ON_INIT() {}
+ON_INIT() {
+    init_variables();
+}
 ON_CHECK_ROTATE() {}
+
+init_variables() {
+    for (new n; n < 24; n++) {
+        figures[n] = random(24);
+        group[n] = assign_group(figures[n])
+    }
+}
 
 draw_background(screen) {
     abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
@@ -66,8 +74,9 @@ anchor_background() {
     }
 }
 
-draw_pictures(screen) {
-    abi_CMD_G2D_ADD_SPRITE(screen, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
+draw_pictures(screen) {    
+    abi_CMD_G2D_ADD_SPRITE(figures[screen], false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
+   
 }
 
 assign_group(picture) {
