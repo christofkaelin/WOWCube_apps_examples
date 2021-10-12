@@ -11,7 +11,7 @@
 
 new background = 24;
 new figures[24];
-new group [24];
+new group[24];
 
 //TODO:
 // 1. Implement multidimensional array to save figures.
@@ -22,25 +22,22 @@ new group [24];
 //    3.3 Arrangement
 
 ONTICK() {
-    //recalculate angle based on trbl
-    CheckAngles();
-
-    for (new screenI = 0; screenI < FACES_MAX; screenI++) {
-        //abi_CMD_G2D_BEGIN_DISPLAY(screenI, true);
-    }
-
+    // CheckAngles();
+    // for (new screenI = 0; screenI < FACES_MAX; screenI++) {
+    // }
     if (0 == abi_cubeN) {
         abi_checkShake();
     }
 }
 ON_PHYSICS_TICK() {}
+
 RENDER() {
     anchor_background();
     CheckAngles();
     for (new screen = 0; screen < 3; screen++) {
         abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
         draw_background(screen);
-        draw_pictures(screen);
+        draw_figures(screen);
         abi_CMD_G2D_END();
     }
 }
@@ -74,9 +71,8 @@ anchor_background() {
     }
 }
 
-draw_pictures(screen) {    
+draw_figures(screen) {
     abi_CMD_G2D_ADD_SPRITE(figures[screen], false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
-   
 }
 
 assign_group(picture) {
@@ -93,5 +89,14 @@ assign_group(picture) {
         return 4;
     } else if (picture > 19 && picture <= 23) {
         return 5;
+    }
+}
+
+shuffle_array(array[]) {
+    for (new i = (sizeof(array) - 1); i > 0; i--) {
+        new j = random(1000) % (i + 1);
+        new temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 }
