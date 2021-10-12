@@ -154,7 +154,7 @@ ONTICK() {
                 } else {
                     abi_CMD_BITMAP(ARROW_STRAIGHT, 120, 120, get_item_angle(screenI), MIRROR_BLANK);
                 }
-                if (screenI == abi_MTD_GetTapFace() && abi_MTD_GetTapsCount() >= 1) {
+                if (screenI == abi_MTD_GetTapFace() && abi_MTD_GetTapsCount() == 1) {
                     use_item(screenI);
                 }
             }
@@ -272,7 +272,7 @@ use_item(face) {
             feed_animal(CAT, 1, 20);
         } else if (selected_item == MILK) {
             feed_animal(CAT, 1, 10);
-        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+        } else if (selected_item == MUSHROOM || selected_item == ROTTEN_STEAK || selected_item == ROTTEN_LETTUCE || selected_item == ANIMAL_EXCREMENTS) {
             feed_animal(CAT, -1, -10);
         }
     } else if ((abi_topCubeN(abi_cubeN, face) == dog_location[0]) && (abi_topFaceN(abi_cubeN, face) == dog_location[1])) {
@@ -280,7 +280,7 @@ use_item(face) {
             feed_animal(DOG, 1, 20);
         } else if (selected_item == STEAK) {
             feed_animal(DOG, 1, 10);
-        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+        } else if (selected_item == MUSHROOM || selected_item == ROTTEN_STEAK || selected_item == ROTTEN_LETTUCE || selected_item == ANIMAL_EXCREMENTS) {
             feed_animal(DOG, -1, -10);
         }
     } else if ((abi_leftCubeN(abi_cubeN, face) == mouse_location[0]) && (abi_leftFaceN(abi_cubeN, face) == mouse_location[1])) {
@@ -288,7 +288,7 @@ use_item(face) {
             feed_animal(MOUSE, 1, 20);
         } else if (selected_item == SEEDS) {
             feed_animal(MOUSE, 1, 10);
-        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+        } else if (selected_item == MUSHROOM || selected_item == ROTTEN_STEAK || selected_item == ROTTEN_LETTUCE || selected_item == ANIMAL_EXCREMENTS) {
             feed_animal(MOUSE, -1, -10);
         }
     } else if ((abi_topCubeN(abi_cubeN, face) == pig_location[0]) && (abi_topFaceN(abi_cubeN, face) == pig_location[1])) {
@@ -302,7 +302,7 @@ use_item(face) {
             feed_animal(CHICKEN, 1, 20);
         } else if (selected_item == SEEDS) {
             feed_animal(CHICKEN, 1, 10);
-        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+        } else if (selected_item == MUSHROOM || selected_item == ROTTEN_STEAK || selected_item == ROTTEN_LETTUCE || selected_item == ANIMAL_EXCREMENTS) {
             feed_animal(CHICKEN, -1, -10);
         }
     } else if ((abi_topCubeN(abi_cubeN, face) == bunny_location[0]) && (abi_topFaceN(abi_cubeN, face) == bunny_location[1])) {
@@ -310,7 +310,7 @@ use_item(face) {
             feed_animal(BUNNY, 1, 20);
         } else if (selected_item == HAY) {
             feed_animal(BUNNY, 1, 10);
-        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+        } else if (selected_item == MUSHROOM || selected_item == ROTTEN_STEAK || selected_item == ROTTEN_LETTUCE || selected_item == ANIMAL_EXCREMENTS) {
             feed_animal(BUNNY, -1, -10);
         }
     } else if ((abi_leftCubeN(abi_cubeN, face) == cow_location[0]) && (abi_leftFaceN(abi_cubeN, face) == cow_location[1])) {
@@ -318,7 +318,7 @@ use_item(face) {
             feed_animal(COW, 1, 20);
         } else if (selected_item == APPLE) {
             feed_animal(COW, 1, 10);
-        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+        } else if (selected_item == MUSHROOM || selected_item == ROTTEN_STEAK || selected_item == ROTTEN_LETTUCE || selected_item == ANIMAL_EXCREMENTS) {
             feed_animal(COW, -1, -10);
         }
     } else if ((abi_topCubeN(abi_cubeN, face) == horse_location[0]) && (abi_topFaceN(abi_cubeN, face) == horse_location[1])) {
@@ -326,7 +326,7 @@ use_item(face) {
             feed_animal(HORSE, 1, 20);
         } else if (selected_item == APPLE) {
             feed_animal(HORSE, 1, 10);
-        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+        } else if (selected_item == MUSHROOM || selected_item == ROTTEN_STEAK || selected_item == ROTTEN_LETTUCE || selected_item == ANIMAL_EXCREMENTS) {
             feed_animal(HORSE, -1, -10);
         }
     }
