@@ -41,7 +41,8 @@
 #define HEALTH_LOW 32
 #define HEALTH_HIGH 33
 #define HEALTH_FULL 34
-#define ARROW 35
+#define ARROW_CURVED 35
+#define ARROW_STRAIGHT 36
 
 #define TEXT_SIZE 8
 
@@ -68,7 +69,6 @@ new cow_location[2];
 new horse_location[2];
 
 ONTICK() {
-    // Animal locations
     score_location[0] = abi_leftCubeN(highscore_location[0], highscore_location[1]);
     score_location[1] = abi_leftFaceN(highscore_location[0], highscore_location[1]);
     mute_location[0] = abi_leftCubeN(score_location[0], score_location[1]);
@@ -142,15 +142,20 @@ ONTICK() {
             if (items[screenI] != 0) {
                 abi_CMD_BITMAP(items[screenI], 120, 120, get_item_angle(screenI), MIRROR_BLANK);
             }
-            abi_CMD_BITMAP(ARROW, 120, 120, 270, MIRROR_BLANK);
-            if (screenI == abi_MTD_GetTapFace() && abi_MTD_GetTapsCount() >= 1) {
-                if (abi_MTD_GetTapsCount() == 1) {
-                    use_item(screenI);
-                } else if (abi_MTD_GetTapsCount() == 2) {
-                    move_items();
+            if (screenI == abi_MTD_GetTapFace() && abi_MTD_GetTapsCount() >= 3) {
+                draw_items(random(100));
+            }
+            if (
+                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceAccelZ((screenI + 1) % 3)) &&
+                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceAccelZ((screenI + 2) % 3))
+            ) {
+                if (is_inventory_item(screenI)) {
+                    abi_CMD_BITMAP(ARROW_CURVED, 120, 120, 270, MIRROR_BLANK);
                 } else {
-                    //TODO: Implement freeze for this cube when player draws new items
-                    draw_items(random(100));
+                    abi_CMD_BITMAP(ARROW_STRAIGHT, 120, 120, get_item_angle(screenI), MIRROR_BLANK);
+                }
+                if (screenI == abi_MTD_GetTapFace() && abi_MTD_GetTapsCount() >= 1) {
+                    use_item(screenI);
                 }
             }
         }
@@ -241,19 +246,88 @@ feed_animal(animal, healthpoints, points) {
     send_item(animal, health[animal], score);
 }
 
+is_inventory_item(face) {
+    return !(
+        ((abi_leftCubeN(abi_cubeN, face) == cat_location[0]) && (abi_leftFaceN(abi_cubeN, face) == cat_location[1])) ||
+        ((abi_topCubeN(abi_cubeN, face) == dog_location[0]) && (abi_topFaceN(abi_cubeN, face) == dog_location[1])) ||
+        ((abi_leftCubeN(abi_cubeN, face) == mouse_location[0]) && (abi_leftFaceN(abi_cubeN, face) == mouse_location[1])) ||
+        ((abi_topCubeN(abi_cubeN, face) == pig_location[0]) && (abi_topFaceN(abi_cubeN, face) == pig_location[1])) ||
+        ((abi_leftCubeN(abi_cubeN, face) == chicken_location[0]) && (abi_leftFaceN(abi_cubeN, face) == chicken_location[1])) ||
+        ((abi_topCubeN(abi_cubeN, face) == bunny_location[0]) && (abi_topFaceN(abi_cubeN, face) == bunny_location[1])) ||
+        ((abi_leftCubeN(abi_cubeN, face) == cow_location[0]) && (abi_leftFaceN(abi_cubeN, face) == cow_location[1])) ||
+        ((abi_topCubeN(abi_cubeN, face) == horse_location[0]) && (abi_topFaceN(abi_cubeN, face) == horse_location[1]))
+    );
+}
+
 use_item(face) {
     new selected_item = items[face];
     // TODO: Implement feed logic for other animals
+    if (is_inventory_item(face)) {
+        move_items(face);
+    } else {
+        items[face] = 0;
+    }
     if ((abi_leftCubeN(abi_cubeN, face) == cat_location[0]) && (abi_leftFaceN(abi_cubeN, face) == cat_location[1])) {
         if (selected_item == FISH) {
             feed_animal(CAT, 1, 20);
         } else if (selected_item == MILK) {
             feed_animal(CAT, 1, 10);
-        } else {
+        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
             feed_animal(CAT, -1, -10);
         }
+    } else if ((abi_topCubeN(abi_cubeN, face) == dog_location[0]) && (abi_topFaceN(abi_cubeN, face) == dog_location[1])) {
+        if (selected_item == BONE) {
+            feed_animal(DOG, 1, 20);
+        } else if (selected_item == STEAK) {
+            feed_animal(DOG, 1, 10);
+        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+            feed_animal(DOG, -1, -10);
+        }
+    } else if ((abi_leftCubeN(abi_cubeN, face) == mouse_location[0]) && (abi_leftFaceN(abi_cubeN, face) == mouse_location[1])) {
+        if (selected_item == CHEESE) {
+            feed_animal(MOUSE, 1, 20);
+        } else if (selected_item == SEEDS) {
+            feed_animal(MOUSE, 1, 10);
+        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+            feed_animal(MOUSE, -1, -10);
+        }
+    } else if ((abi_topCubeN(abi_cubeN, face) == pig_location[0]) && (abi_topFaceN(abi_cubeN, face) == pig_location[1])) {
+        if (selected_item != MUSHROOM && selected_item != ROTTEN_STEAK && selected_item != ROTTEN_LETTUCE && selected_item != ANIMAL_EXCREMENTS) {
+            feed_animal(PIG, 1, 10);
+        } else {
+            feed_animal(PIG, -1, -10);
+        }
+    } else if ((abi_leftCubeN(abi_cubeN, face) == chicken_location[0]) && (abi_leftFaceN(abi_cubeN, face) == chicken_location[1])) {
+        if (selected_item == WORM) {
+            feed_animal(CHICKEN, 1, 20);
+        } else if (selected_item == SEEDS) {
+            feed_animal(CHICKEN, 1, 10);
+        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+            feed_animal(CHICKEN, -1, -10);
+        }
+    } else if ((abi_topCubeN(abi_cubeN, face) == bunny_location[0]) && (abi_topFaceN(abi_cubeN, face) == bunny_location[1])) {
+        if (selected_item == CARROT) {
+            feed_animal(BUNNY, 1, 20);
+        } else if (selected_item == HAY) {
+            feed_animal(BUNNY, 1, 10);
+        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+            feed_animal(BUNNY, -1, -10);
+        }
+    } else if ((abi_leftCubeN(abi_cubeN, face) == cow_location[0]) && (abi_leftFaceN(abi_cubeN, face) == cow_location[1])) {
+        if (selected_item == HAY) {
+            feed_animal(COW, 1, 20);
+        } else if (selected_item == APPLE) {
+            feed_animal(COW, 1, 10);
+        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+            feed_animal(COW, -1, -10);
+        }
+    } else if ((abi_topCubeN(abi_cubeN, face) == horse_location[0]) && (abi_topFaceN(abi_cubeN, face) == horse_location[1])) {
+        if (selected_item == SUGAR) {
+            feed_animal(HORSE, 1, 20);
+        } else if (selected_item == APPLE) {
+            feed_animal(HORSE, 1, 10);
+        } else if (selected_item == MUSHROOM && selected_item == ROTTEN_STEAK && selected_item == ROTTEN_LETTUCE && selected_item == ANIMAL_EXCREMENTS) {
+            feed_animal(HORSE, -1, -10);
+        }
     }
-
-    // Remove item from inventory
-    items[face] = 0;
 }
