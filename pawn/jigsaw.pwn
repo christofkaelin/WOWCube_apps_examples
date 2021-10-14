@@ -49,8 +49,17 @@ ON_INIT() {
 ON_CHECK_ROTATE() {}
 
 init_variables() {
-    for (new n; n < 24; n++) {
-        figures[n] = random(24);
+    //Fill array with 0-23
+    for (new n = 0; n < 24; n++) {
+        figures[n] = n;
+    }
+    //Shuffle the array
+    for (new n = 0; n < 24; n++) {
+        new rand = random(24);
+        swap_slots(figures, n, rand);
+    }
+    //Index group affiliation
+    for (new n = 0; n < 24; n++) {
         group[n] = assign_group(figures[n])
     }
 }
@@ -72,7 +81,8 @@ anchor_background() {
 }
 
 draw_figures(screen) {
-    abi_CMD_G2D_ADD_SPRITE(figures[screen], false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);
+    CheckAngles();
+    abi_CMD_G2D_ADD_SPRITE(figures[screen], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
 }
 
 assign_group(picture) {
@@ -92,11 +102,33 @@ assign_group(picture) {
     }
 }
 
-shuffle_array(array[]) {
-    for (new i = (sizeof(array) - 1); i > 0; i--) {
-        new j = random(1000) % (i + 1);
-        new temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+check_match() {
+    for (new cube = 0; cube < 8; cube++) {
+        for (new face = 0; face < 3; face++) {
+            new leftCube = abi_leftCubeN(cube, face);
+            new leftFace = abi_leftFaceN(cube, face);
+            new topCube = abi_topCubeN(cube, face);
+            new topFace = abi_topFaceN(cube, face);
+            new diagonalCube;
+            new diagonalFace;
+            if (topCube < 8) {
+                diagonalCube = abi_topCubeN(topCube, topFace);
+                if (diagonalCube < 8) {
+                    diagonalFace = abi_topFaceN(topCube, topFace);
+                }
+            }
+            if (((face == leftFace) && (leftFace == topCube) && (topCube == diagonalFace) && (diagonalFace == face)) &&
+                ((cube != leftCube) && (leftCube != topCube) && (topCube != diagonalCube) && (diagonalCube != cube))) {
+                //figures[cube] = 25;
+                //draw_figures(cube);
+                return;
+            }
+        }
     }
+}
+
+swap_slots(figures[], n, rand) {
+    new temp = figures[rand];
+    figures[rand] = figures[n];
+    figures[n] = temp;
 }
