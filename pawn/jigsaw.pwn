@@ -9,6 +9,17 @@
 #define DISPLAY_HEIGHT  240
 #define BACKGROUND 24
 
+new cubeZero[3];
+new cubeOne[3];
+new cubeTwo[3];
+new cubeThree[3];
+new cubeFour[3];
+new cubeFive[3];
+new cubeSix[3];
+new cubeSeven[3];
+
+new cubeId;
+
 new figures[24];
 new group[24];
 //position[cube][face][group]
@@ -25,6 +36,8 @@ ON_PHYSICS_TICK() {}
 RENDER() {
     anchor_background();
     CheckAngles();
+    //render_cubes();
+
     for (new screen = 0; screen < 3; screen++) {
         abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
         draw_background(screen);
@@ -54,6 +67,33 @@ init_variables() {
         group[n] = assign_group(figures[n])
     }
     track_position();
+    split_to_cubes();
+}
+split_to_cubes() {
+    cubeZero[0] = figures[0];
+    cubeZero[1] = figures[1];
+    cubeZero[2] = figures[2];
+    cubeOne[0] = figures[3];
+    cubeOne[1] = figures[4];
+    cubeOne[2] = figures[5];
+    cubeTwo[0] = figures[6];
+    cubeTwo[1] = figures[7];
+    cubeTwo[2] = figures[8];
+    cubeThree[0] = figures[9];
+    cubeThree[1] = figures[10];
+    cubeThree[2] = figures[11];
+    cubeFour[0] = figures[12];
+    cubeFour[1] = figures[13];
+    cubeFour[2] = figures[14];
+    cubeFive[0] = figures[15];
+    cubeFive[1] = figures[16];
+    cubeFive[2] = figures[17];
+    cubeSix[0] = figures[18];
+    cubeSix[1] = figures[19];
+    cubeSix[2] = figures[20];
+    cubeSeven[0] = figures[21];
+    cubeSeven[1] = figures[22];
+    cubeSeven[2] = figures[23];
 }
 
 //Change assignment to: 0-23 when draw function has been updated accordingly.
@@ -98,6 +138,74 @@ anchor_background() {
         abi_CMD_G2D_BEGIN_BITMAP(screen, DISPLAY_WIDTH, DISPLAY_HEIGHT, true);
         abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         abi_CMD_G2D_END();
+    }
+}
+render_cubes() {
+    switch (cubeId) {
+        case 0 :  {
+            for (new screen = 0; screen < 3; screen++) {
+                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+                draw_background(cubeZero[screen]);
+                draw_figures(screen);
+                abi_CMD_G2D_END();
+            }
+        }
+        case 1 :  {
+            for (new screen = 0; screen < 3; screen++) {
+                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+                draw_background(cubeOne[screen]);
+                draw_figures(screen);
+                abi_CMD_G2D_END();
+            }
+        }
+        case 2 :  {
+            for (new screen = 0; screen < 3; screen++) {
+                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+                draw_background(cubeTwo[screen]);
+                draw_figures(screen);
+                abi_CMD_G2D_END();
+            }
+        }
+        case 3 :  {
+            for (new screen = 0; screen < 3; screen++) {
+                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+                draw_background(cubeThree[screen]);
+                draw_figures(screen);
+                abi_CMD_G2D_END();
+            }
+        }
+        case 4 :  {
+            for (new screen = 0; screen < 3; screen++) {
+                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+                draw_background(cubeFour[screen]);
+                draw_figures(screen);
+                abi_CMD_G2D_END();
+            }
+        }
+        case 5 :  {
+            for (new screen = 0; screen < 3; screen++) {
+                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+                draw_background(cubeFive[screen]);
+                draw_figures(screen);
+                abi_CMD_G2D_END();
+            }
+        }
+        case 6 :  {
+            for (new screen = 0; screen < 3; screen++) {
+                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+                draw_background(cubeSix[screen]);
+                draw_figures(screen);
+                abi_CMD_G2D_END();
+            }
+        }
+        case 7 :  {
+            for (new screen = 0; screen < 3; screen++) {
+                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+                draw_background(cubeSeven[screen]);
+                draw_figures(screen);
+                abi_CMD_G2D_END();
+            }
+        }
     }
 }
 
