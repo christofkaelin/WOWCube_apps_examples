@@ -9,19 +9,7 @@
 #define DISPLAY_HEIGHT  240
 #define BACKGROUND 24
 
-new cubeZero[3];
-new cubeOne[3];
-new cubeTwo[3];
-new cubeThree[3];
-new cubeFour[3];
-new cubeFive[3];
-new cubeSix[3];
-new cubeSeven[3];
-
-new cubeId;
-
 new figures[24];
-new group[24];
 //position[cube][face][group]
 new position[8][3][6];
 
@@ -36,12 +24,88 @@ ON_PHYSICS_TICK() {}
 RENDER() {
     anchor_background();
     CheckAngles();
-    //render_cubes();
-
     for (new screen = 0; screen < 3; screen++) {
         abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-        draw_background(screen);
-        draw_figures(screen);
+        if ((abi_cubeN == 0) && (screen == 0)) {            
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[0], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);            
+        } else if ((abi_cubeN == 0) && (screen == 1)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[1], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        } else if ((abi_cubeN == 0) && (screen == 2)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[2], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        }
+        if ((abi_cubeN == 1) && (screen == 0)) {            
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[3], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);            
+        } else if ((abi_cubeN == 1) && (screen == 1)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[4], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        } else if ((abi_cubeN == 1) && (screen == 2)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[5], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        }
+        if ((abi_cubeN == 2) && (screen == 0)) {            
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[6], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);            
+        } else if ((abi_cubeN == 2) && (screen == 1)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[7], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        } else if ((abi_cubeN == 2) && (screen == 2)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[8], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        }
+        if ((abi_cubeN == 3) && (screen == 0)) {            
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[9], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);            
+        } else if ((abi_cubeN == 3) && (screen == 1)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[10], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        } else if ((abi_cubeN == 3) && (screen == 2)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[11], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        }
+        if ((abi_cubeN == 4) && (screen == 0)) {            
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[12], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);            
+        } else if ((abi_cubeN == 4) && (screen == 1)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[13], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        } else if ((abi_cubeN == 4) && (screen == 2)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[14], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        }
+        if ((abi_cubeN == 5) && (screen == 0)) {            
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[15], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);            
+        } else if ((abi_cubeN == 5) && (screen == 1)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[16], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        } else if ((abi_cubeN == 5) && (screen == 2)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[17], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        }
+        if ((abi_cubeN == 6) && (screen == 0)) {            
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[18], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);            
+        } else if ((abi_cubeN == 6) && (screen == 1)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[19], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        } else if ((abi_cubeN == 6) && (screen == 2)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[20], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        }
+        if ((abi_cubeN == 7) && (screen == 0)) {            
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[21], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);            
+        } else if ((abi_cubeN == 7) && (screen == 1)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[22], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        } else if ((abi_cubeN == 7) && (screen == 2)) {
+            draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(figures[23], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+        }
         abi_CMD_G2D_END();
     }
 }
@@ -62,67 +126,36 @@ init_variables() {
         new rand = random(24);
         swap_slots(figures, n, rand);
     }
-    //Index group affiliation
-    for (new n = 0; n < 24; n++) {
-        group[n] = assign_group(figures[n])
-    }
     track_position();
-    split_to_cubes();
-}
-split_to_cubes() {
-    cubeZero[0] = figures[0];
-    cubeZero[1] = figures[1];
-    cubeZero[2] = figures[2];
-    cubeOne[0] = figures[3];
-    cubeOne[1] = figures[4];
-    cubeOne[2] = figures[5];
-    cubeTwo[0] = figures[6];
-    cubeTwo[1] = figures[7];
-    cubeTwo[2] = figures[8];
-    cubeThree[0] = figures[9];
-    cubeThree[1] = figures[10];
-    cubeThree[2] = figures[11];
-    cubeFour[0] = figures[12];
-    cubeFour[1] = figures[13];
-    cubeFour[2] = figures[14];
-    cubeFive[0] = figures[15];
-    cubeFive[1] = figures[16];
-    cubeFive[2] = figures[17];
-    cubeSix[0] = figures[18];
-    cubeSix[1] = figures[19];
-    cubeSix[2] = figures[20];
-    cubeSeven[0] = figures[21];
-    cubeSeven[1] = figures[22];
-    cubeSeven[2] = figures[23];
 }
 
-//Change assignment to: 0-23 when draw function has been updated accordingly.
+//Tracks group affiliation of the figures on the cube coordinates.
 track_position() {
     //position[cube][face][group]
-    position[0][0][0] = group[0];
-    position[0][1][0] = group[1];
-    position[0][2][0] = group[2];
-    position[1][0][0] = group[0];
-    position[1][1][0] = group[1];
-    position[1][2][0] = group[2];
-    position[2][0][0] = group[0];
-    position[2][1][0] = group[1];
-    position[2][2][0] = group[2];
-    position[3][0][0] = group[0];
-    position[3][1][0] = group[1];
-    position[3][2][0] = group[2];
-    position[4][0][0] = group[0];
-    position[4][1][0] = group[1];
-    position[4][2][0] = group[2];
-    position[5][0][0] = group[0];
-    position[5][1][0] = group[1];
-    position[5][2][0] = group[2];
-    position[6][0][0] = group[0];
-    position[6][1][0] = group[1];
-    position[6][2][0] = group[0];
-    position[7][0][0] = group[0];
-    position[7][1][0] = group[1];
-    position[7][2][0] = group[2];
+    position[0][0][0] = assign_group(figures[0]);
+    position[0][1][0] = assign_group(figures[1]);
+    position[0][2][0] = assign_group(figures[2]);
+    position[1][0][0] = assign_group(figures[3]);
+    position[1][1][0] = assign_group(figures[4]);
+    position[1][2][0] = assign_group(figures[5]);
+    position[2][0][0] = assign_group(figures[6]);
+    position[2][1][0] = assign_group(figures[7]);
+    position[2][2][0] = assign_group(figures[8]);
+    position[3][0][0] = assign_group(figures[9]);
+    position[3][1][0] = assign_group(figures[10]);
+    position[3][2][0] = assign_group(figures[11]);
+    position[4][0][0] = assign_group(figures[12]);
+    position[4][1][0] = assign_group(figures[13]);
+    position[4][2][0] = assign_group(figures[14]);
+    position[5][0][0] = assign_group(figures[15]);
+    position[5][1][0] = assign_group(figures[16]);
+    position[5][2][0] = assign_group(figures[17]);
+    position[6][0][0] = assign_group(figures[18]);
+    position[6][1][0] = assign_group(figures[19]);
+    position[6][2][0] = assign_group(figures[20]);
+    position[7][0][0] = assign_group(figures[21]);
+    position[7][1][0] = assign_group(figures[22]);
+    position[7][2][0] = assign_group(figures[23]);
 }
 
 draw_background(screen) {
@@ -141,7 +174,7 @@ anchor_background() {
     }
 }
 render_cubes() {
-    switch (cubeId) {
+    switch (abi_cubeN) {
         case 0 :  {
             for (new screen = 0; screen < 3; screen++) {
                 abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
@@ -209,18 +242,11 @@ render_cubes() {
     }
 }
 
-draw_figures(screen) {
-    CheckAngles();
-    abi_CMD_G2D_ADD_SPRITE(figures[screen], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
-}
-redraw_figures(screen) {
-    CheckAngles();
-    abi_CMD_G2D_BEGIN_BITMAP(screen, DISPLAY_WIDTH, DISPLAY_HEIGHT, true);
-    abi_CMD_G2D_ADD_SPRITE(figures[screen], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
-    abi_CMD_G2D_END();
-    //Index group affiliation
+redraw_figures() {
     for (new n = 0; n < 24; n++) {
-        group[n] = assign_group(figures[n])
+        if (figures[n] == 25) {
+            figures[n] = random(24);
+        }
     }
     track_position();
 }
@@ -262,20 +288,19 @@ check_match() {
             new groupDiagonal = position[diagonalCube][diagonalFace][0];
             printf("Cube : %d\n", cube);
             printf("Face : %d\n", face);
-            printf("Figure : %d\n", figures[face]);
-            printf("Correct Group: %d\n", group[face]);
-            printf("Current Group: %d\n", groupCurrent);
+            // printf("Figure : %d\n", figures[face]);
+            // printf("Correct Group: %d\n", group[face]);
+            printf("Group: %d\n", groupCurrent);
             printf("\n--------------------------------------------\n");
             new tempFigure = figures[cube];
             if ((groupCurrent == groupLeft) && (groupCurrent == groupTop) && (groupCurrent == groupDiagonal)) {
                 figures[cube] = 25;
-                redraw_figures(cube);
+                redraw_figures();
                 return;
             }
         }
     }
 }
-
 swap_slots(figures[], n, rand) {
     new temp = figures[rand];
     figures[rand] = figures[n];
