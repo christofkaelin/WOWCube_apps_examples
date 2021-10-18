@@ -1,13 +1,14 @@
 #include "cubios_abi.pwn"
 #include "trbl.pwn"
-
 #include "math.pwn"
 #include "run.pwn"
 #include "angles.pwn"
+#include <time>
 
-#define TEXT_SIZE 14
 #define DISPLAY_WIDTH   240
 #define DISPLAY_HEIGHT  240
+
+#define TEXT_SIZE 28
 #define BACKGROUND 24
 
 #define SET_0_COMPLETE 25
@@ -21,8 +22,11 @@ new figures[24];
 //position[cube][face][group]
 new position[8][3][6];
 new score = 0;
+new countCompleted = 0;
+new countMoves = 0;
 
 ONTICK() {
+    CheckAngles();
     check_match();
     if (0 == abi_cubeN) {
         abi_checkShake();
@@ -119,16 +123,22 @@ RENDER() {
     }
 }
 ON_CMD_NET_RX(const pkt[]) {}
-ON_LOAD_GAME_DATA() {}
-ON_INIT() {
-    init_variables_test();
-}
-ON_CHECK_ROTATE() {}
 
-init_variables() {
-    //Fill array with 0-23
-    for (new n = 0; n < 24; n++) {
+ON_LOAD_GAME_DATA() {}
+
+ON_INIT() {
+    init_variables_3_sets();
+}
+ON_CHECK_ROTATE() {
+    countMoves++;
+}
+
+init_variables_3_sets() {
+    for (new n = 0; n < 12; n++) {
         figures[n] = n;
+    }
+    for (new n = 0; n < 12; n++) {
+        figures[n + 12] = n;
     }
     //Shuffle the array
     for (new n = 0; n < 24; n++) {
@@ -137,33 +147,42 @@ init_variables() {
     }
     track_position();
 }
-//Fake init for test purposes
-init_variables_test() {
-    figures[0] = 0;
-    figures[1] = 1;
-    figures[2] = 2;
-    figures[3] = 3;
-    figures[4] = 4;
-    figures[5] = 5;
-    figures[6] = 6;
-    figures[7] = 7;
-    figures[8] = 0;
-    figures[9] = 1;
-    figures[10] = 2;
-    figures[11] = 3;
-    figures[12] = 4;
-    figures[13] = 5;
-    figures[14] = 6;
-    figures[15] = 7;
-    figures[16] = 0;
-    figures[17] = 1;
-    figures[18] = 2;
-    figures[19] = 3;
-    figures[20] = 4;
-    figures[21] = 5;
-    figures[22] = 6;
-    figures[23] = 7;
 
+init_variables_4_sets() {
+    for (new n = 0; n < 16; n++) {
+        figures[n] = n;
+    }
+    for (new n = 0; n < 8; n++) {
+        figures[n + 16] = n;
+    }
+    //Shuffle the array
+    for (new n = 0; n < 24; n++) {
+        new rand = random(24);
+        swap_slots(figures, n, rand);
+    }
+    track_position();
+}
+
+init_variables_5_sets() {
+    for (new n = 0; n < 20; n++) {
+        figures[n] = n;
+    }
+    for (new n = 0; n < 4; n++) {
+        figures[n + 20] = n;
+    }
+    //Shuffle the array
+    for (new n = 0; n < 24; n++) {
+        new rand = random(24);
+        swap_slots(figures, n, rand);
+    }
+    track_position();
+}
+
+init_variables_6_sets() {
+    //Fill array with 0-23
+    for (new n = 0; n < 24; n++) {
+        figures[n] = n;
+    }
     //Shuffle the array
     for (new n = 0; n < 24; n++) {
         new rand = random(24);
@@ -285,15 +304,6 @@ render_cubes() {
     }
 }
 
-redraw_figures() {
-    for (new n = 0; n < 24; n++) {
-        if (figures[n] == 25) {
-            figures[n] = random(24);
-        }
-    }
-    track_position();
-}
-
 assign_group(picture) {
     if (picture <= 3) {
         return 0;
@@ -336,52 +346,40 @@ check_match() {
             printf("\n--------------------------------------------\n");*/
             new tempFigure = figures[cube];
             if ((groupCurrent == groupLeft) && (groupCurrent == groupTop) && (groupCurrent == groupDiagonal)) {
-                score = score + 100;
+                countCompleted++;
                 switch (groupCurrent) {
                     case 0 :  {
                         for (new n = 0; n < 24; n++) {
-                            if ((figures[n] == 0) || (figures[n] == 1) || (figures[n] == 2) || (figures[n] == 3)) {
-                                figures[n] = SET_0_COMPLETE;
-                            }
+                            figures[n] = SET_0_COMPLETE;
                         }
                     }
                     case 1 :  {
                         for (new n = 0; n < 24; n++) {
-                            if ((figures[n] == 4) || (figures[n] == 5) || (figures[n] == 6) || (figures[n] == 7)) {
-                                figures[n] = SET_1_COMPLETE;
-                            }
+                            figures[n] = SET_1_COMPLETE;
                         }
                     }
                     case 2 :  {
                         for (new n = 0; n < 24; n++) {
-                            if ((figures[n] == 8) || (figures[n] == 9) || (figures[n] == 10) || (figures[n] == 11)) {
-                                figures[n] = SET_2_COMPLETE;
-                            }
+                            figures[n] = SET_2_COMPLETE;
                         }
                     }
                     case 3 :  {
                         for (new n = 0; n < 24; n++) {
-                            if ((figures[n] == 12) || (figures[n] == 13) || (figures[n] == 14) || (figures[n] == 15)) {
-                                figures[n] = SET_3_COMPLETE;
-                            }
+                            figures[n] = SET_3_COMPLETE;
                         }
                     }
                     case 4 :  {
                         for (new n = 0; n < 24; n++) {
-                            if ((figures[n] == 16) || (figures[n] == 17) || (figures[n] == 18) || (figures[n] == 19)) {
-                                figures[n] = SET_4_COMPLETE;
-                            }
+                            figures[n] = SET_4_COMPLETE;
                         }
                     }
                     case 5 :  {
                         for (new n = 0; n < 24; n++) {
-                            if ((figures[n] == 20) || (figures[n] == 21) || (figures[n] == 22) || (figures[n] == 23)) {
-                                figures[n] = SET_5_COMPLETE;
-                            }
+                            figures[n] = SET_5_COMPLETE;
                         }
                     }
                 }
-                //reset();
+                reset();
                 return;
             }
         }
@@ -389,20 +387,43 @@ check_match() {
 }
 
 reset() {
-    new ref = abi_GetTime() + 3000;
-    new now = 0;
-    while (ref > now) {
-        now = abi_GetTime();
-    }
+    RENDER();
+    delay(3000);
     for (new n = 0; n < 24; n++) {
         figures[n] = BACKGROUND;
     }
+    if (countCompleted <= 2) {
+        score = score + 100;
+    } else if ((countCompleted > 2) && (countCompleted <= 5)) {
+        score = score + 200;
+    } else if ((countCompleted > 5) && (countCompleted <= 8)) {
+        score = score + 400;
+    } else if (countCompleted > 8) {
+        score = score + 1000;
+    }
+    score = score - (countMoves * 5);
+    RENDER();
     for (new screen = 0; screen < FACES_MAX; screen++) {
-        new string[4];
-        strformat(string, sizeof(string), true, "Score: %d", score);
-        abi_CMD_TEXT(string, 0, 30, 60, TEXT_SIZE, 0, TEXT_ALIGN_CENTER, 255, 255, 255);
+        abi_CMD_TEXT_ITOA(score, 0, 120, 120, TEXT_SIZE, 0, TEXT_ALIGN_CENTER, 0, 0, 0);
+        abi_CMD_REDRAW(screen);
+    }
+    delay(3000);
+
+    if (countCompleted <= 2) {
+        init_variables_3_sets();
+        score = score + 100;
+    } else if ((countCompleted > 2) && (countCompleted <= 5)) {
+        score = score + 200;
+        init_variables_4_sets();
+    } else if ((countCompleted > 5) && (countCompleted <= 8)) {
+        score = score + 600;
+        init_variables_5_sets();
+    } else if (countCompleted > 8) {
+        score = score + 1000;
+        init_variables_6_sets();
     }
 }
+
 swap_slots(figures[], n, rand) {
     new temp = figures[rand];
     figures[rand] = figures[n];
