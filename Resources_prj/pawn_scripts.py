@@ -266,11 +266,11 @@ class jigsaw(pawn_base.PawnModule):
         self.name = 'jigsaw'
         self.scriptId = 13
         self.ScriptResourceList = [
-            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 26)
+            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 31)
         ]
         self.ScriptResourcePath = 'jigsaw'
         self.ScriptFileName = 'jigsaw.amx'
-        self.MenuIcon = 'icon.png'
+        self.MenuIcon = 'icon.webp'
         self.SoundList = [
         ]
         self.SoundPath = 'jigsaw'
