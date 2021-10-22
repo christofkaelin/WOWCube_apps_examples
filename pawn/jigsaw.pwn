@@ -395,13 +395,14 @@ reset() {
     if (countCompleted <= 2) {
         score = score + 100;
     } else if ((countCompleted > 2) && (countCompleted <= 5)) {
-        score = score + 200;
+        score = score + 300;
     } else if ((countCompleted > 5) && (countCompleted <= 8)) {
-        score = score + 400;
+        score = score + 600;
     } else if (countCompleted > 8) {
         score = score + 1000;
     }
     score = score - (countMoves * 5);
+    countMoves = 0;
     RENDER();
     for (new screen = 0; screen < FACES_MAX; screen++) {
         abi_CMD_TEXT_ITOA(score, 0, 120, 120, TEXT_SIZE, 0, TEXT_ALIGN_CENTER, 0, 0, 0);
@@ -411,15 +412,11 @@ reset() {
 
     if (countCompleted <= 2) {
         init_variables_3_sets();
-        score = score + 100;
     } else if ((countCompleted > 2) && (countCompleted <= 5)) {
-        score = score + 200;
         init_variables_4_sets();
     } else if ((countCompleted > 5) && (countCompleted <= 8)) {
-        score = score + 600;
         init_variables_5_sets();
     } else if (countCompleted > 8) {
-        score = score + 1000;
         init_variables_6_sets();
     }
 }
