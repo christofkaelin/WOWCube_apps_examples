@@ -6,14 +6,6 @@
 #include <datagram>
 #else // HW
 native sendpacket(const packet[], const size);
-native getSpriteIdByName(const name[]);
-native getSoundIdByName(const name[]);
-native log_a(const format[], {Float,Fixed,_}:...);
-native log_e(const format[], {Float,Fixed,_}:...);
-native log_w(const format[], {Float,Fixed,_}:...);
-native log_i(const format[], {Float,Fixed,_}:...);
-native log_d(const format[], {Float,Fixed,_}:...);
-native log_v(const format[], {Float,Fixed,_}:...);
 #include "console.inc"
 #include "string.inc"
 #include "fixed.inc"
@@ -40,28 +32,25 @@ native log_v(const format[], {Float,Fixed,_}:...);
 // from AMX, {N} - N is number of bits
 #define CMD_GUI_BASE    		0 /* TO DISPLAY */
 #define CMD_REDRAW      		CMD_GUI_BASE+1 /* CMD_REDRAW{8},faceN{8} - copy framebuffer contents to the face specified */
-#define CMD_FILL        		CMD_GUI_BASE+2 /* CMD_FILL{8},R{8},G{8},B{8},useG2D{8} - to framebuffer*/
+#define CMD_FILL        		CMD_GUI_BASE+2 /* CMD_FILL{8},R{8},G{8},B{8} - to framebuffer, RGB565 */
 #define CMD_BITMAP      		CMD_GUI_BASE+3 /* CMD_BITMAP{8},resID{16},X{16},Y{16},angle{16},mirror{8} - to framebuffer */
-#define CMD_LINE				CMD_GUI_BASE+4 /* CMD_LINE{8},x1{16},y1{16},x2{16},y2{16},R{8},G{8},B{8},thickness{8},useG2D{8} - to framebuffer */
-#define CMD_RECT				CMD_GUI_BASE+5 /* CMD_RECT{8},x1{16},y1{16},x2{16},y2{16},R{8},G{8},B{8},useG2D{8} - to framebuffer */
+#define CMD_LINE				CMD_GUI_BASE+4 /* CMD_LINE{8},x1{16},y1{16},x2{16},y2{16},R{8},G{8},B{8} - to framebuffer, RGB565 */
+#define CMD_RECT				CMD_GUI_BASE+5 /* CMD_RECT{8},x1{16},y1{16},x2{16},y2{16},R{8},G{8},B{8} - to framebuffer, RGB565 */
 #define CMD_SLEEP				CMD_GUI_BASE+6 /* power off*/
 #define CMD_DRAW_OVERLAY		CMD_GUI_BASE+7 /* show/off overlay */
 #define CMD_TRIGGER_BLUETOOTH	CMD_GUI_BASE+8 /* enable/disable bluetooth */
-#define CMD_G2D_BAKE_SPRITE    CMD_GUI_BASE+9  /* start bake layers into custom sprite */
+#define CMD_G2D_BEGIN_BITMAP	CMD_GUI_BASE+9 /* start to add G2D layers to blend them into bitmap buffer */
 #define CMD_G2D_ADD_SPRITE		CMD_GUI_BASE+10 /* add bitmap layer */
+#define CMD_G2D_ADD_RECTANGLE	CMD_GUI_BASE+11 /* add rectangle layer */
 #define CMD_G2D_END				CMD_GUI_BASE+12 /* stop adding G2D layers and start blendind process */
 #define CMD_G2D_BEGIN_DISPLAY	CMD_GUI_BASE+14 /* start to add G2D layers to blend them into display framebuffer */
-#define CMD_TEXT            CMD_GUI_BASE+13 /* CMD_TEXT{8},fontResID{16},x{16},y{16},scale{16},angle{16},align{8},r{8},g{8},b{8},useG2D{8},text{8...} - to framebuffer */
+#define CMD_TEXT            CMD_GUI_BASE+13 /* CMD_TEXT{8},fontResID{16},x{16},y{16},scale{16},angle{16},align{8},r{8},g{8},b{8},text{8...} - to framebuffer, RGB565 */
 #define CMD_PLAYSND  					 CMD_GUI_BASE+15 /* play sound {sound_id, volume (0..100)} */
 #define CMD_TRIGGER_NIGHTLAMP  CMD_GUI_BASE+16 /* switch to night lamp mode */ 
 #define CMD_G2D_DYNAMIC_TEXTURE		CMD_GUI_BASE+17 /* draw dynamic effect */
 #define CMD_STATE_SAVE		        CMD_GUI_BASE+18 /* save state of current game */
 #define CMD_STATE_SYNC            CMD_GUI_BASE+19 /* Sync game save from master module to other modules */
-#define CMD_EXIT               (CMD_GUI_BASE + 20) /* exit to platform menu */
-#define CMD_POINT              (CMD_GUI_BASE+21) /* CMD_POINT{8},x{16},y{16},R{8},G{8},B{8},useG2D{8} - to framebuffer*/
-#define CMD_CIRCLE             (CMD_GUI_BASE+22) /* CMD_CIRCLE{8},x{16},y{16},radius{16},width{16},R{8},G{8},B{8},fill{8},useG2D{8} - to framebuffer */
-#define CMD_ARC                (CMD_GUI_BASE+23) /* CMD_ARC{8},x{16},y{16},radius{16},width{16},angle0{16},angle1{16},R{8},G{8},B{8},useG2D{8} - to framebuffer */
-#define CMD_G2D_CLEAR_CACHE    (CMD_GUI_BASE+24) /* CMD_G2D_CLEAR_CACHE */
+#define CMD_EXIT                (CMD_GUI_BASE + 20) /* exit to platform menu */
 
 #define CMD_NET_BASE				50 /* TO UARTs 0-2 */
 #define CMD_NET_TX					CMD_NET_BASE+1 /* CMD_NET_TX{8},line_tx{8},TTL{8},RESERVED{8},<4 CELLs of arbitrary data here>{128} */
@@ -198,11 +187,6 @@ abi_TRBL_Deserialize(const pkt[])
 
 #define abi_WordFirst(%0) abi_ToByte(%0)
 #define abi_WordSecond(%0) (((%0) & 0xff00) >> 8)
-
-#define abi_DWordFirst(%0) abi_ToByte(%0)
-#define abi_DWordSecond(%0) (((%0) & 0x0000ff00) >> 8)
-#define abi_DWordThird(%0) (((%0) & 0x00ff0000) >> 16)
-#define abi_DWordFourth(%0) (((%0) & 0xff000000) >> 24)
 
 #define abi_PackIn32(%0,%1) ((%0) << (((%1) % 4) * 8))
 #define abi_PackByteIn32(%0,%1) abi_PackIn32(abi_ToByte(%0), %1)
@@ -532,33 +516,30 @@ abi_trigger_bluetooth() {
 #endif
 }
 
-abi_CMD_FILL(const r, const g, const b, useG2D=false)
+abi_CMD_FILL(const R, const G, const B)
 {
-  new pkt[2] = 0;
-  pkt[0] = abi_ToByte(CMD_FILL) | abi_PackByteIn32(r, 1) | abi_PackByteIn32(g, 2) | abi_PackByteIn32(b, 3);
-  pkt[1] = abi_ToByte(useG2D);
-
+  new pkt[1] = 0;
+  pkt[0] = ((B & 0x1F) << 24) | ((G & 0x3F) << 16) | ((R & 0x1F) << 8) | (CMD_FILL & 0xFF); // RGB565, Rmax=31, Gmax=63, Bmax=31
 #if defined CUBIOS_EMULATOR
-  sendpacket(pkt, 2, GUI_ADDR);
+  sendpacket(pkt, 1, GUI_ADDR);
 #else
-  sendpacket(pkt, 2);
+  sendpacket(pkt, 1);
 #endif
 }
 
-abi_CMD_FILL_2(const rgb, useG2D=false) /* rgb is a 24-bit number (3 bytes). The most significant byte is unused, then goes red, then green, then blue. */
+abi_CMD_FILL_2(const rgb) /* rgb is a 24-bit number (3 bytes). The most significant byte is unused, then goes red, then green, then blue. */
 {
-  new pkt[2] = 0;
-  pkt[0] = abi_ToByte(CMD_FILL) | abi_PackByteIn32(abi_DWordThird(rgb), 1) | abi_PackByteIn32(abi_DWordSecond(rgb), 2) | abi_PackByteIn32(abi_DWordFirst(rgb), 3);
-  pkt[1] = abi_ToByte(useG2D);
-
+  new pkt[1] = 0;
+  /* Converting  to RGB565. Here blue should be the most significant 5 bits, then 6 bits for green, then 5 bits for red. */
+  pkt[0] = ((rgb & 0x1F) << 24) | ((rgb & 0x3F00) << 8) | ((rgb & 0x1F0000) >> 8) | (CMD_FILL & 0xFF);
 #if defined CUBIOS_EMULATOR
-  sendpacket(pkt, 2, GUI_ADDR);
+  sendpacket(pkt, 1, GUI_ADDR);
 #else
-  sendpacket(pkt, 2);
+  sendpacket(pkt, 1);
 #endif
 }
 
-abi_CMD_TEXT(const text[], const fontResID, const x, const y, const scale, const angle, const align, const r, const g, const b, useG2D=false, text_cell_size = sizeof(text)) {
+abi_CMD_TEXT(const text[], const fontResID, const x, const y, const scale, const angle, const align, const r, const g, const b, text_cell_size = sizeof(text)) {
   // to use system font: fontResID = -1
   new pkt[4 + 16] = 0; // max text length is 63 letters + null-char (zero-terminated string)
   if (text_cell_size > 16)
@@ -578,7 +559,7 @@ abi_CMD_TEXT(const text[], const fontResID, const x, const y, const scale, const
   pkt[0] = abi_ToByte(CMD_TEXT) | abi_PackWordIn32(fontResID, 1) | abi_PackIn32(abi_WordFirst(x), 3);
   pkt[1] = abi_WordSecond(x) | abi_PackWordIn32(y, 1) | abi_PackIn32(abi_WordFirst(scale), 3);
   pkt[2] = abi_WordSecond(scale) | abi_PackWordIn32(angle, 1) | abi_PackByteIn32(align, 3);
-  pkt[3] = abi_ToByte(r) | abi_PackByteIn32(g, 1) | abi_PackByteIn32(b, 2) |  abi_PackByteIn32(useG2D, 3);
+  pkt[3] = abi_ToByte(r & 0x1f) | abi_PackByteIn32(g & 0x3f, 1) | abi_PackByteIn32(b & 0x1f, 2);
 
   new j = 4;
   new sizeof_cell = 4;
@@ -602,10 +583,10 @@ abi_CMD_TEXT(const text[], const fontResID, const x, const y, const scale, const
   #endif
 }
 
-abi_CMD_TEXT_ITOA(const num, const fontResID, const x, const y, const scale, const angle, const align, const r, const g, const b, useG2D=false) {
+abi_CMD_TEXT_ITOA(const num, const fontResID, const x, const y, const scale, const angle, const align, const r, const g, const b) {
     new string[3];
     valstr(string, num, true);
-    abi_CMD_TEXT(string, fontResID, x, y, scale, angle, align, r, g, b, .useG2D = useG2D);
+    abi_CMD_TEXT(string, fontResID, x, y, scale, angle, align, r, g, b)
 }
 
 abi_CMD_BITMAP(const resID, const x, const y, const angle, const mirror, const bool:g2d = false)
@@ -632,89 +613,30 @@ abi_CMD_PLAYSND(const id, const volume)
 #endif
 }
 
-abi_CMD_POINT(const x, const y, const r, const g, const b, useG2D=false) {
+abi_CMD_LINE(const x1, const y1, const x2, const y2, const R, const G, const B, const thickness = 1)
+{
+  new pkt[4] = 0;
+  pkt[0] = ((y1 & 0xFF) << 24) | ((x1 & 0xFFFF) << 8) | (CMD_LINE & 0xFF);
+  pkt[1] = ((y2 & 0xFF) << 24) | ((x2 & 0xFFFF) << 8) | ((y1 & 0xFF00) >> 8);
+  pkt[2] = ((B & 0x1F) << 24) | ((G & 0x3F) << 16) | ((R & 0x1F) << 8) | ((y2 & 0xFF00) >> 8);
+  pkt[3] = thickness;
+#if defined CUBIOS_EMULATOR
+  sendpacket(pkt, 4, GUI_ADDR);
+#else
+  sendpacket(pkt, 4);
+#endif
+}
+
+abi_CMD_RECT(const x1, const y1, const x2, const y2, const R, const G, const B)
+{
   new pkt[3] = 0;
-
-  pkt[0] = abi_ToByte(CMD_POINT) | abi_PackWordIn32(x, 1) | abi_PackIn32(abi_WordFirst(y), 3);
-  pkt[1] = abi_WordSecond(y) | abi_PackByteIn32(r, 1) | abi_PackByteIn32(g, 2) | abi_PackByteIn32(b, 3);
-  pkt[2] = abi_ToByte(useG2D);
-
+  pkt[0] = ((y1 & 0xFF) << 24) | ((x1 & 0xFFFF) << 8) | (CMD_RECT & 0xFF);
+  pkt[1] = ((y2 & 0xFF) << 24) | ((x2 & 0xFFFF) << 8) | ((y1 & 0xFF00) >> 8);
+  pkt[2] = ((B & 0x1F) << 24) | ((G & 0x3F) << 16) | ((R & 0x1F) << 8) | ((y2 & 0xFF00) >> 8);
 #if defined CUBIOS_EMULATOR
   sendpacket(pkt, 3, GUI_ADDR);
 #else
   sendpacket(pkt, 3);
-#endif
-}
-
-abi_CMD_CIRCLE(const x, const y, const radius, const width, const r, const g, const b, const fill, useG2D=false) {
-  new pkt[4] = 0;
-
-  pkt[0] = abi_ToByte(CMD_CIRCLE) | abi_PackWordIn32(x, 1) | abi_PackIn32(abi_WordFirst(y), 3);
-  pkt[1] = abi_WordSecond(y) | abi_PackWordIn32(radius, 1) | abi_PackIn32(abi_WordFirst(width), 3);
-  pkt[2] = abi_WordSecond(width) | abi_PackByteIn32(r, 1) | abi_PackByteIn32(g, 2) | abi_PackByteIn32(b, 3);
-  pkt[3] = abi_ToByte(fill) | abi_PackByteIn32(useG2D, 1);
-
-#if defined CUBIOS_EMULATOR
-  sendpacket(pkt, 4, GUI_ADDR);
-#else
-  sendpacket(pkt, 4);
-#endif
-}
-
-abi_CMD_ARC(const x, const y, const radius, const width, const angle0, const angle1, const r, const g, const b, useG2D=false) {
-  new pkt[5] = 0;
-
-  pkt[0] = abi_ToByte(CMD_ARC) | abi_PackWordIn32(x, 1) | abi_PackIn32(abi_WordFirst(y), 3);
-  pkt[1] = abi_WordSecond(y) | abi_PackWordIn32(radius, 1) | abi_PackIn32(abi_WordFirst(width), 3);
-  pkt[2] = abi_WordSecond(width) | abi_PackWordIn32(angle0, 1) | abi_PackIn32(abi_WordFirst(angle1), 3);
-  pkt[3] = abi_WordSecond(angle1) | abi_PackByteIn32(r, 1) | abi_PackByteIn32(g, 2) | abi_PackByteIn32(b, 3);
-  pkt[4] = abi_ToByte(useG2D);
-
-#if defined CUBIOS_EMULATOR
-  sendpacket(pkt, 5, GUI_ADDR);
-#else
-  sendpacket(pkt, 5);
-#endif
-}
-
-abi_CMD_G2D_CLEAR_CACHE() {
-  new pkt[1] = 0;
-  pkt[0] = abi_ToByte(CMD_G2D_CLEAR_CACHE);
-
-#if defined CUBIOS_EMULATOR
-  sendpacket(pkt, 1, GUI_ADDR);
-#else
-  sendpacket(pkt, 1);
-#endif
-}
-
-abi_CMD_LINE(const x1, const y1, const x2, const y2, const r, const g, const b, const thickness=1, useG2D=false) {
-  new pkt[4] = 0;
-
-  pkt[0] = abi_ToByte(CMD_LINE) | abi_PackWordIn32(x1, 1) | abi_PackIn32(abi_WordFirst(y1), 3);
-  pkt[1] = abi_WordSecond(y1) | abi_PackWordIn32(x2, 1) | abi_PackIn32(abi_WordFirst(y2), 3);
-  pkt[2] = abi_WordSecond(y2) | abi_PackByteIn32(r, 1) | abi_PackByteIn32(g, 2) | abi_PackByteIn32(b, 3);
-  pkt[3] = abi_ToByte(thickness) | abi_PackByteIn32(useG2D, 1);
-
-#if defined CUBIOS_EMULATOR
-  sendpacket(pkt, 4, GUI_ADDR);
-#else
-  sendpacket(pkt, 4);
-#endif
-}
-
-abi_CMD_RECT(const x1, const y1, const x2, const y2, const r, const g, const b, useG2D=false) {
-  new pkt[4] = 0;
-
-  pkt[0] = abi_ToByte(CMD_RECT) | abi_PackWordIn32(x1, 1) | abi_PackIn32(abi_WordFirst(y1), 3);
-  pkt[1] = abi_WordSecond(y1) | abi_PackWordIn32(x2, 1) | abi_PackIn32(abi_WordFirst(y2), 3);
-  pkt[2] = abi_WordSecond(y2) | abi_PackByteIn32(r, 1) | abi_PackByteIn32(g, 2) | abi_PackByteIn32(b, 3);
-  pkt[3] = abi_ToByte(useG2D);
-
-#if defined CUBIOS_EMULATOR
-  sendpacket(pkt, 4, GUI_ADDR);
-#else
-  sendpacket(pkt, 4);
 #endif
 }
 
@@ -780,10 +702,10 @@ abi_CMD_SLEEP()
 #endif
 }
 
-abi_CMD_G2D_BAKE_SPRITE(const resID, const width, const height, const bool:replace)
+abi_CMD_G2D_BEGIN_BITMAP(const resID, const width, const height, const bool:replace)
 {
   new pkt[2] = 0;
-  pkt[0] = abi_ToByte(CMD_G2D_BAKE_SPRITE) | abi_PackWordIn32(resID, 1) | abi_PackIn32(abi_WordFirst(width), 3);
+  pkt[0] = abi_ToByte(CMD_G2D_BEGIN_BITMAP) | abi_PackWordIn32(resID, 1) | abi_PackIn32(abi_WordFirst(width), 3);
   pkt[1] = abi_WordSecond(width) | abi_PackWordIn32(height, 1) | abi_PackByteIn32(replace & 0x01, 3);
 #if defined CUBIOS_EMULATOR
   sendpacket(pkt, 2, GUI_ADDR);
@@ -817,12 +739,19 @@ abi_CMD_G2D_ADD_SPRITE(const resID, const bool:g2d, const x, const y, const alph
 #endif
 }
 
-abi_CMD_G2D_ADD_RECTANGLE(const x, const y, const width, const height, const color) {
-    new r = abi_DWordThird(color);
-    new g = abi_DWordSecond(color);
-    new b = abi_DWordFirst(color);
+abi_CMD_G2D_ADD_RECTANGLE(const x, const y, const width, const height, const color)
+{
+    new pkt[4] = 0;
+    pkt[0] = abi_ToByte(CMD_G2D_ADD_RECTANGLE) | abi_PackWordIn32(x, 1) | abi_PackByteIn32(abi_WordFirst(y), 3);
+    pkt[1] = abi_WordSecond(y) | abi_PackWordIn32(width, 1) | abi_PackByteIn32(abi_WordFirst(height), 3);
+    pkt[2] = abi_WordSecond(height) | ((color & 0x00FFFFFF) << 8);
+    pkt[3] = ((color & 0xFF000000) >> 24);
 
-    abi_CMD_RECT(x, y, x + width, y + height, r, g, b, .useG2D=true);
+#if defined CUBIOS_EMULATOR
+  sendpacket(pkt, 4, GUI_ADDR);
+#else
+  sendpacket(pkt, 4);
+#endif
 }
 
 abi_CMD_G2D_END()
