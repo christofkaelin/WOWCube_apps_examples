@@ -143,7 +143,7 @@ ONTICK() {
                 abi_CMD_BITMAP(items[screenI], 120, 120, get_item_angle(screenI), MIRROR_BLANK);
             }
             if (screenI == abi_MTD_GetTapFace() && abi_MTD_GetTapsCount() >= 3) {
-                draw_items(random(100));
+                draw_items(Random(0, 100));
             }
             if (
                 (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceAccelZ((screenI + 1) % 3)) &&
@@ -184,7 +184,7 @@ ON_CHECK_ROTATE() {}
 draw_items(category) {
     if (category != 0 || category != 4) {
         category = category % 4;
-        new droppedItem = random(4);
+        new droppedItem = Random(0, 3);
         items[0] = ((droppedItem + 1) % 4) + 8 + (category * 4);
         items[1] = ((droppedItem + 2) % 4) + 8 + (category * 4);
         items[2] = ((droppedItem + 3) % 4) + 8 + (category * 4);
