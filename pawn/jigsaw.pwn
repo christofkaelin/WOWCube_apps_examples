@@ -142,7 +142,7 @@ init_variables_3_sets() {
     }
     //Shuffle the array
     for (new n = 0; n < 24; n++) {
-        new rand = random(24);
+        new rand = Random(0, 23);
         swap_slots(figures, n, rand);
     }
     track_position();
@@ -157,7 +157,7 @@ init_variables_4_sets() {
     }
     //Shuffle the array
     for (new n = 0; n < 24; n++) {
-        new rand = random(24);
+        new rand = Random(0, 23);
         swap_slots(figures, n, rand);
     }
     track_position();
@@ -172,7 +172,7 @@ init_variables_5_sets() {
     }
     //Shuffle the array
     for (new n = 0; n < 24; n++) {
-        new rand = random(24);
+        new rand = Random(0, 23);
         swap_slots(figures, n, rand);
     }
     track_position();
@@ -185,7 +185,7 @@ init_variables_6_sets() {
     }
     //Shuffle the array
     for (new n = 0; n < 24; n++) {
-        new rand = random(24);
+        new rand = Random(0, 23);
         swap_slots(figures, n, rand);
     }
     track_position();
@@ -230,7 +230,7 @@ anchor_background() {
     #endif
     CheckAngles();
     for (new screen = 0; screen < 3; screen++) {
-        abi_CMD_G2D_BEGIN_BITMAP(screen, DISPLAY_WIDTH, DISPLAY_HEIGHT, true);
+        abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
         abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         abi_CMD_G2D_END();
     }
@@ -405,7 +405,7 @@ reset() {
     countMoves = 0;
     RENDER();
     for (new screen = 0; screen < FACES_MAX; screen++) {
-        abi_CMD_TEXT_ITOA(score, 0, 120, 120, TEXT_SIZE, 0, TEXT_ALIGN_CENTER, 0, 0, 0);
+        abi_CMD_TEXT_ITOA(score, 0, 120, 120, TEXT_SIZE, 0, TEXT_ALIGN_CENTER, 255, 255, 255);     
         abi_CMD_REDRAW(screen);
     }
     delay(3000);
