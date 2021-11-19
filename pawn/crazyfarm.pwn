@@ -146,8 +146,8 @@ ONTICK() {
                 draw_items(Random(0, 100));
             }
             if (
-                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceAccelZ((screenI + 1) % 3)) &&
-                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceAccelZ((screenI + 2) % 3))
+                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceGyroZ((screenI + 1) % 3)) &&
+                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceGyroZ((screenI + 2) % 3))
             ) {
                 if (is_inventory_item(screenI)) {
                     abi_CMD_BITMAP(ARROW_CURVED, 120, 120, 270, MIRROR_BLANK);
@@ -261,7 +261,6 @@ is_inventory_item(face) {
 
 use_item(face) {
     new selected_item = items[face];
-    // TODO: Implement feed logic for other animals
     if (is_inventory_item(face)) {
         move_items(face);
     } else {
