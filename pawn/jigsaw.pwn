@@ -126,10 +126,20 @@ ON_CMD_NET_RX(const pkt[]) {}
 ON_LOAD_GAME_DATA() {}
 
 ON_INIT() {
-    init_variables_3_sets();
+    initialize();
 }
 ON_CHECK_ROTATE() {
     countMoves++;
+}
+
+initialize(){
+  for (new n = 0; n < 12; n++) {
+        figures[n] = n;
+    }
+    for (new n = 0; n < 12; n++) {
+        figures[n + 12] = n;
+    }
+    track_position();  
 }
 
 init_variables_3_sets() {
@@ -178,7 +188,6 @@ init_variables_5_sets() {
 }
 
 init_variables_6_sets() {
-    //Fill array with 0-23
     for (new n = 0; n < 24; n++) {
         figures[n] = n;
     }
@@ -232,74 +241,6 @@ anchor_background() {
         abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
         abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         abi_CMD_G2D_END();
-    }
-}
-render_cubes() {
-    switch (abi_cubeN) {
-        case 0 :  {
-            for (new screen = 0; screen < 3; screen++) {
-                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-                draw_background(cubeZero[screen]);
-                draw_figures(screen);
-                abi_CMD_G2D_END();
-            }
-        }
-        case 1 :  {
-            for (new screen = 0; screen < 3; screen++) {
-                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-                draw_background(cubeOne[screen]);
-                draw_figures(screen);
-                abi_CMD_G2D_END();
-            }
-        }
-        case 2 :  {
-            for (new screen = 0; screen < 3; screen++) {
-                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-                draw_background(cubeTwo[screen]);
-                draw_figures(screen);
-                abi_CMD_G2D_END();
-            }
-        }
-        case 3 :  {
-            for (new screen = 0; screen < 3; screen++) {
-                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-                draw_background(cubeThree[screen]);
-                draw_figures(screen);
-                abi_CMD_G2D_END();
-            }
-        }
-        case 4 :  {
-            for (new screen = 0; screen < 3; screen++) {
-                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-                draw_background(cubeFour[screen]);
-                draw_figures(screen);
-                abi_CMD_G2D_END();
-            }
-        }
-        case 5 :  {
-            for (new screen = 0; screen < 3; screen++) {
-                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-                draw_background(cubeFive[screen]);
-                draw_figures(screen);
-                abi_CMD_G2D_END();
-            }
-        }
-        case 6 :  {
-            for (new screen = 0; screen < 3; screen++) {
-                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-                draw_background(cubeSix[screen]);
-                draw_figures(screen);
-                abi_CMD_G2D_END();
-            }
-        }
-        case 7 :  {
-            for (new screen = 0; screen < 3; screen++) {
-                abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-                draw_background(cubeSeven[screen]);
-                draw_figures(screen);
-                abi_CMD_G2D_END();
-            }
-        }
     }
 }
 
@@ -428,7 +369,7 @@ swap_slots(figures[], n, rand) {
 
 delay() {
     //This is a hopefully temporary solution that really hurts my feelings.
-    for (new n = 0; n < 90000000; n++) {
+    for (new n = 0; n < 90000; n++) {
         new x = 1 + 1;
     }
 }
