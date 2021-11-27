@@ -1,8 +1,7 @@
 import pawn_scripts
 
 script_list = [
-    pawn_scripts.example7(),
-    pawn_scripts.Cracer(),
+    pawn_scripts.example8(),
     pawn_scripts.jigsaw(),
     pawn_scripts.crazyfarm()
 ]

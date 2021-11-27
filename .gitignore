@@ -8,6 +8,8 @@
 /Resources_prj/nopython.bat
 /Resources_prj/nopython.sh
 /Resources_prj/*.pyc
+/Resources_prj/flash/*.img
+/Resources_prj/flash/0/games/*.cub
 /pawn/build_output/
 /pawn/*.c
 /pawn/*.amx
