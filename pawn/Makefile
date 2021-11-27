@@ -1,4 +1,4 @@
-GAMES_LIST = example8 jigsaw crazyfarm
+GAMES_LIST = jigsaw crazyfarm
 AMX_FILES_LIST = $(addsuffix .amx, $(GAMES_LIST))
 
 # bytes for .AMX script bytecode and its stack - must be equal to platform config
