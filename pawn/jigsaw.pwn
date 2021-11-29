@@ -402,13 +402,15 @@ reset() {
     }
     score = score - (countMoves * 5);
     countMoves = 0;
-    RENDER();
-    for (new screen = 0; screen < FACES_MAX; screen++) {
-        abi_CMD_TEXT_ITOA(score, 0, 120, 120, TEXT_SIZE, 0, TEXT_ALIGN_CENTER, 255, 255, 255);
+    CheckAngles();
+    for (new screen = 0; screen < 3; screen++) {
+        abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+        draw_background(screen);
+        abi_CMD_TEXT_ITOA(score, 0, 120, 120, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         abi_CMD_REDRAW(screen);
+        abi_CMD_G2D_END();
     }
     delay();
-
     if (countCompleted <= 2) {
         init_variables_3_sets();
     } else if ((countCompleted > 2) && (countCompleted <= 5)) {
@@ -427,7 +429,6 @@ swap_slots(figures[], n, rand) {
 }
 
 delay() {
-    //This is a hopefully temporary solution that really hurts my feelings.
     for (new n = 0; n < 90000000; n++) {
         new x = 1 + 1;
     }
