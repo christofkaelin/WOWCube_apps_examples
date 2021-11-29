@@ -31,18 +31,16 @@
 #define BONE 22
 #define ANIMAL_EXCREMENTS 23
 #define RAINBOW 24
-#define HIGHSCORE_GOLD 25
-#define HIGHSCORE_SILVER 26
-#define HIGHSCORE_BRONZE 27
-#define EXIT 28
-#define MUTE 29
-#define UNMUTE 30
+#define CURRENT_SCORE 25
+#define HIGHSCORE_GOLD 26
+#define HIGHSCORE_SILVER 27
+#define HIGHSCORE_BRONZE 28
+#define ARROW_CURVED 29
+#define ARROW_STRAIGHT 30
 #define HEALTH_CRITICAL 31
 #define HEALTH_LOW 32
 #define HEALTH_HIGH 33
 #define HEALTH_FULL 34
-#define ARROW_CURVED 35
-#define ARROW_STRAIGHT 36
 
 #define TEXT_SIZE 8
 
@@ -92,50 +90,36 @@ ONTICK() {
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         abi_CMD_FILL(0, 0, 0);
         if ((abi_cubeN == highscore_location[0]) && (screenI == highscore_location[1])) {
-            strformat(string, sizeof(string), true, "Best: %d", highscore);
-            abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 0, TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_BITMAP(HIGHSCORE_GOLD, 120, 120, 180, MIRROR_BLANK);
         } else if ((abi_cubeN == score_location[0]) && (screenI == score_location[1])) {
             strformat(string, sizeof(string), true, "Score: %d", score);
             abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 270, TEXT_ALIGN_CENTER, 255, 255, 255);
         } else if ((abi_cubeN == mute_location[0]) && (screenI == mute_location[1])) {
-            strformat(string, sizeof(string), true, "Mute");
-            abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 180, TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_BITMAP(HIGHSCORE_SILVER, 120, 120, 180, MIRROR_BLANK);
         } else if ((abi_cubeN == exit_location[0]) && (screenI == exit_location[1])) {
-            strformat(string, sizeof(string), true, "Exit");
-            abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 90, TEXT_ALIGN_CENTER, 255, 255, 255);
-            if ((screenI == abi_MTD_GetTapFace()) && (abi_MTD_GetTapsCount() >= 1)) {
-                abi_exit();
-            }
+            abi_CMD_BITMAP(HIGHSCORE_BRONZE, 120, 120, 180, MIRROR_BLANK);
         } else if ((abi_cubeN == cat_location[0]) && (screenI == cat_location[1])) {
-            abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(CAT, 120, 120, 180, MIRROR_BLANK);
             abi_CMD_BITMAP(health[CAT], 120, 120, 180, MIRROR_BLANK);
         } else if (abi_cubeN == dog_location[0] && screenI == dog_location[1]) {
-            abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(DOG, 120, 120, 90, MIRROR_BLANK);
             abi_CMD_BITMAP(health[DOG], 120, 120, 90, MIRROR_BLANK);
         } else if (abi_cubeN == mouse_location[0] && screenI == mouse_location[1]) {
-            abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(MOUSE, 120, 120, 180, MIRROR_BLANK);
             abi_CMD_BITMAP(health[MOUSE], 120, 120, 180, MIRROR_BLANK);
         } else if (abi_cubeN == pig_location[0] && screenI == pig_location[1]) {
-            abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(PIG, 120, 120, 90, MIRROR_BLANK);
             abi_CMD_BITMAP(health[PIG], 120, 120, 90, MIRROR_BLANK);
         } else if (abi_cubeN == chicken_location[0] && screenI == chicken_location[1]) {
-            abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(CHICKEN, 120, 120, 180, MIRROR_BLANK);
             abi_CMD_BITMAP(health[CHICKEN], 120, 120, 180, MIRROR_BLANK);
         } else if (abi_cubeN == bunny_location[0] && screenI == bunny_location[1]) {
-            abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(BUNNY, 120, 120, 90, MIRROR_BLANK);
             abi_CMD_BITMAP(health[BUNNY], 120, 120, 90, MIRROR_BLANK);
         } else if (abi_cubeN == cow_location[0] && screenI == cow_location[1]) {
-            abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(COW, 120, 120, 180, MIRROR_BLANK);
             abi_CMD_BITMAP(health[COW], 120, 120, 180, MIRROR_BLANK);
         } else if (abi_cubeN == horse_location[0] && screenI == horse_location[1]) {
-            abi_CMD_FILL(7, 54, 14);
             abi_CMD_BITMAP(HORSE, 120, 120, 90, MIRROR_BLANK);
             abi_CMD_BITMAP(health[HORSE], 120, 120, 90, MIRROR_BLANK);
         } else {
@@ -146,8 +130,8 @@ ONTICK() {
                 draw_items(Random(0, 100));
             }
             if (
-                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceAccelZ((screenI + 1) % 3)) &&
-                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceAccelZ((screenI + 2) % 3))
+                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceGyroZ((screenI + 1) % 3)) &&
+                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceGyroZ((screenI + 2) % 3))
             ) {
                 if (is_inventory_item(screenI)) {
                     abi_CMD_BITMAP(ARROW_CURVED, 120, 120, 270, MIRROR_BLANK);
@@ -261,7 +245,6 @@ is_inventory_item(face) {
 
 use_item(face) {
     new selected_item = items[face];
-    // TODO: Implement feed logic for other animals
     if (is_inventory_item(face)) {
         move_items(face);
     } else {

@@ -702,7 +702,7 @@ abi_CMD_SLEEP()
 #endif
 }
 
-abi_CMD_G2D_BEGIN_BITMAP(const resID, const width, const height, const bool:replace)
+abi_CMD_G2D_BAKE_SPRITE(const resID, const width, const height, const bool:replace)
 {
   new pkt[2] = 0;
   pkt[0] = abi_ToByte(CMD_G2D_BEGIN_BITMAP) | abi_PackWordIn32(resID, 1) | abi_PackIn32(abi_WordFirst(width), 3);

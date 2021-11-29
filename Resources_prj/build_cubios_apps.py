@@ -74,7 +74,7 @@ class CubResTable(object):
 
 
 class CubiosAppBuilder(object):
-    BUILD_OUTPUT_DIR = 'build_output'
+    BUILD_OUTPUT_DIR = 'flash/0/games'
     APP_PACK_VERSION = 1
     HEADER_SIZE = 12
 

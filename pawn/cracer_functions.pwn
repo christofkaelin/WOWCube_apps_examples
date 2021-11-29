@@ -178,7 +178,7 @@ GenerateItems() {
     }
     for (cube = 0; cube < CUBES_MAX; cube++) {
         for (face = 0; face < FACES_MAX; face++) {
-            new rand = random(100);
+            new rand = Random(100);
             if (rand < 15) {
                 if (((cube == cr.cube) && (face == cr.face)) || (roadway[cube].item[face] == ITEM)) continue;
                 item = Random(0, ENUM_ITEMS_MAX);
@@ -699,7 +699,7 @@ RememberBackGroundG2D() {
         l_figure = models_of_roads[roadway[abi_cubeN].road_cube][roadway[abi_cubeN].road_face[face]]; //current_roads[face] >> (abi_cubeN * 4) & 0xF;
         position.angle = l_figure.angle * 90;
 
-        abi_CMD_G2D_BEGIN_BITMAP(face, DISPLAY_WIDTH, DISPLAY_HEIGHT, true);
+        abi_CMD_G2D_BAKE_SPRITE(face, DISPLAY_WIDTH, DISPLAY_HEIGHT, true);
 
         //Background picture as Sprite
          abi_CMD_G2D_ADD_SPRITE(background[game.level % MAX_LANDS].background_pic, false, 120, 120, 0xFF, 0, 0, MIRROR_BLANK);

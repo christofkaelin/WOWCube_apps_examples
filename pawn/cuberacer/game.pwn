@@ -25,7 +25,7 @@ new car_neighbour_screen = FACES_MAX;*/
 
 //assigns element type according to custom probabilities (see documentation: https://wow-cube.atlassian.net/wiki/spaces/WOWCUBE/pages/17760267/CubeRacer)
 draw_road() {
-    new rand = random(100);
+    new rand = Random(100);
     //return 0;
     //Crossroads
     if (rand <= 40) {
@@ -43,7 +43,7 @@ draw_road() {
 }
 
 draw_item() {
-    new rand = random(100);
+    new rand = Random(100);
     if (rand <= 80) {
         return 0;
     } else if (rand > 80 && rand <= 85) {
@@ -59,7 +59,7 @@ draw_item() {
 
 generate_road(module, face) {
     roads[module][face][0] = draw_road();
-    roads[module][face][1] = random(4);
+    roads[module][face][1] = Random(4);
     roads[module][face][2] = draw_item();
     //printf("INFO - Generated Road(%d/%d/%d) on (%d/%d)\n", roads[module][face][0], roads[module][face][1], roads[module][face][2], module, face);
     // Broadcast generated road to all other processors

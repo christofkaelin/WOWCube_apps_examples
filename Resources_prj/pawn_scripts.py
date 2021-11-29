@@ -282,7 +282,7 @@ class crazyfarm(pawn_base.PawnModule):
         self.name = 'crazyfarm'
         self.scriptId = 14
         self.ScriptResourceList = [
-            self.FILE_TEMPLATE_WEBP % ii for ii in range(0, 37)
+            self.FILE_TEMPLATE_PNG % ii for ii in range(0, 35)
         ]
         self.ScriptResourcePath = 'crazyfarm'
         self.ScriptFileName = 'crazyfarm.amx'
