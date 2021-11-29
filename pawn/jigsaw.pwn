@@ -17,6 +17,8 @@
 #define SET_4_COMPLETE 29
 #define SET_5_COMPLETE 30
 
+new string[4];
+
 new figures[24];
 //position[cube][face][group]
 new position[8][3][6];
@@ -347,7 +349,8 @@ reset() {
     for (new screen = 0; screen < 3; screen++) {
         abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
         draw_background(screen);
-        abi_CMD_TEXT_ITOA(score, 0, 120, 120, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+        strformat(string, sizeof(string), true, "%d", score);
+        abi_CMD_TEXT(string, 0, 120, 120, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         abi_CMD_REDRAW(screen);
         abi_CMD_G2D_END();
     }
@@ -370,7 +373,7 @@ swap_slots(figures[], n, rand) {
 }
 
 delay() {
-    for (new n = 0; n < 90000000; n++) {
+    for (new n = 0; n < 90000; n++) {
         new x = 1 + 1;
     }
 }
