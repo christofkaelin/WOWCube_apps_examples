@@ -134,14 +134,14 @@ ON_CHECK_ROTATE() {
     countMoves++;
 }
 
-initialize(){
-  for (new n = 0; n < 12; n++) {
+initialize() {
+    for (new n = 0; n < 12; n++) {
         figures[n] = n;
     }
     for (new n = 0; n < 12; n++) {
         figures[n + 12] = n;
     }
-    track_position();  
+    track_position();
 }
 
 init_variables_3_sets() {
@@ -349,10 +349,10 @@ reset() {
     for (new screen = 0; screen < 3; screen++) {
         abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
         draw_background(screen);
+        abi_CMD_G2D_END();
         strformat(string, sizeof(string), true, "%d", score);
         abi_CMD_TEXT(string, 0, 120, 120, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         abi_CMD_REDRAW(screen);
-        abi_CMD_G2D_END();
     }
     delay();
     if (countCompleted <= 2) {
@@ -373,7 +373,7 @@ swap_slots(figures[], n, rand) {
 }
 
 delay() {
-    for (new n = 0; n < 90000; n++) {
+    for (new n = 0; n < 60000000; n++) {
         new x = 1 + 1;
     }
 }
