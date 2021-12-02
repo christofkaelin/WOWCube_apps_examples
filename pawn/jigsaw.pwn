@@ -373,7 +373,7 @@ swap_slots(figures[], n, rand) {
 }
 
 delay() {
-    for (new n = 0; n < 60000000; n++) {
+    for (new n = 0; n < 6000000; n++) {
         new x = 1 + 1;
     }
 }
