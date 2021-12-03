@@ -263,6 +263,9 @@ assign_group(picture) {
 }
 
 check_match() {
+    if(countMoves == 0){        
+        return;
+    }
     for (new cube = 0; cube < 8; cube++) {
         for (new face = 0; face < 3; face++) {
             new leftCube = abi_leftCubeN(cube, face);
