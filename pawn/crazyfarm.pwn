@@ -55,7 +55,7 @@ new health[8] = [HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEA
 
 new highscore_location[2] = [0, 1]
 new score_location[2];
-new mute_location[2];
+new instruction_location[2];
 new exit_location[2];
 new cat_location[2] = [0, 0];
 new dog_location[2];
@@ -69,8 +69,8 @@ new horse_location[2];
 ONTICK() {
     score_location[0] = abi_leftCubeN(highscore_location[0], highscore_location[1]);
     score_location[1] = abi_leftFaceN(highscore_location[0], highscore_location[1]);
-    mute_location[0] = abi_leftCubeN(score_location[0], score_location[1]);
-    mute_location[1] = abi_leftFaceN(score_location[0], score_location[1]);
+    instruction_location[0] = abi_leftCubeN(score_location[0], score_location[1]);
+    instruction_location[1] = abi_leftFaceN(score_location[0], score_location[1]);
     exit_location[0] = abi_topCubeN(highscore_location[0], highscore_location[1]);
     exit_location[1] = abi_topFaceN(highscore_location[0], highscore_location[1]);
     dog_location[0] = abi_leftCubeN(cat_location[0], cat_location[1]);
@@ -94,8 +94,15 @@ ONTICK() {
         } else if ((abi_cubeN == score_location[0]) && (screenI == score_location[1])) {
             strformat(string, sizeof(string), true, "Score: %d", score);
             abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 270, TEXT_ALIGN_CENTER, 255, 255, 255);
-        } else if ((abi_cubeN == mute_location[0]) && (screenI == mute_location[1])) {
-            abi_CMD_BITMAP(HIGHSCORE_SILVER, 120, 120, 180, MIRROR_BLANK);
+        } else if ((abi_cubeN == instruction_location[0]) && (screenI == instruction_location[1])) {
+            strformat(string, sizeof(string), true, "1x Tap: ");
+            abi_CMD_TEXT(string, 0, 230, 160, TEXT_SIZE, 180, TEXT_ALIGN_LEFT_TOP_CORNER, 255, 255, 255);
+            strformat(string, sizeof(string), true, " Feed or swap");
+            abi_CMD_TEXT(string, 0, 230, 140, TEXT_SIZE, 180, TEXT_ALIGN_LEFT_TOP_CORNER, 255, 255, 255);
+            strformat(string, sizeof(string), true, "3x Tap: ");
+            abi_CMD_TEXT(string, 0, 230, 110, TEXT_SIZE, 180, TEXT_ALIGN_LEFT_TOP_CORNER, 255, 255, 255);
+            strformat(string, sizeof(string), true, " new foods");
+            abi_CMD_TEXT(string, 0, 230, 90, TEXT_SIZE, 180, TEXT_ALIGN_LEFT_TOP_CORNER, 255, 255, 255);
         } else if ((abi_cubeN == exit_location[0]) && (screenI == exit_location[1])) {
             abi_CMD_BITMAP(HIGHSCORE_BRONZE, 120, 120, 180, MIRROR_BLANK);
         } else if ((abi_cubeN == cat_location[0]) && (screenI == cat_location[1])) {
@@ -126,7 +133,7 @@ ONTICK() {
             if (items[screenI] != 0) {
                 abi_CMD_BITMAP(items[screenI], 120, 120, get_item_angle(screenI), MIRROR_BLANK);
             }
-            if (screenI == abi_MTD_GetTapFace() && abi_MTD_GetTapsCount() >= 3) {
+            if (abi_MTD_GetTapsCount() >= 3) {
                 draw_items(Random(0, 100));
             }
             if (
@@ -138,7 +145,7 @@ ONTICK() {
                 } else {
                     abi_CMD_BITMAP(ARROW_STRAIGHT, 120, 120, get_item_angle(screenI), MIRROR_BLANK);
                 }
-                if (screenI == abi_MTD_GetTapFace() && abi_MTD_GetTapsCount() == 1) {
+                if (abi_MTD_GetTapsCount() == 1) {
                     use_item(screenI);
                 }
             }
