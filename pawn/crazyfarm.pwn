@@ -89,7 +89,7 @@ ONTICK() {
     horse_location[0] = abi_leftCubeN(cow_location[0], cow_location[1]);
     horse_location[1] = abi_leftFaceN(cow_location[0], cow_location[1]);
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
-        Topology_FindTopMostModule(1);
+        Topology_FindTopMostModule();
         abi_CMD_FILL(7, 54, 14);
         /*if ((abi_cubeN == highscore_location[0]) && (screenI == highscore_location[1])) {
             abi_CMD_BITMAP(HIGHSCORE_GOLD, 120, 120, 180, MIRROR_BLANK);
