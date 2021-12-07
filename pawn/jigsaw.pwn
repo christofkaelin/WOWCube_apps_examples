@@ -36,88 +36,112 @@ ONTICK() {
 ON_PHYSICS_TICK() {}
 
 RENDER() {
-    anchor_background();
+    //anchor_background();
     CheckAngles();
     for (new screen = 0; screen < 3; screen++) {
         abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
         if ((abi_cubeN == 0) && (screen == 0)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[0], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 0) && (screen == 1)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[1], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 0) && (screen == 2)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[2], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 1) && (screen == 0)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[3], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 1) && (screen == 1)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[4], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 1) && (screen == 2)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[5], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 2) && (screen == 0)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[6], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 2) && (screen == 1)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[7], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 2) && (screen == 2)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[8], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 3) && (screen == 0)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[9], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 3) && (screen == 1)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[10], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 3) && (screen == 2)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[11], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 4) && (screen == 0)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[12], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 4) && (screen == 1)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[13], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 4) && (screen == 2)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[14], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 5) && (screen == 0)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[15], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 5) && (screen == 1)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[16], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 5) && (screen == 2)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[17], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 6) && (screen == 0)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[18], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 6) && (screen == 1)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[19], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 6) && (screen == 2)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[20], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 7) && (screen == 0)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[21], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 7) && (screen == 1)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[22], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 7) && (screen == 2)) {
-            draw_background(screen);
+            //draw_background(screen);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[23], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         abi_CMD_G2D_END();
@@ -128,76 +152,329 @@ ON_CMD_NET_RX(const pkt[]) {}
 ON_LOAD_GAME_DATA() {}
 
 ON_INIT() {
-    initialize();
+    init_variables_3_sets_1()
 }
 ON_CHECK_ROTATE() {
     countMoves++;
 }
 
-initialize() {
-    for (new n = 0; n < 12; n++) {
-        figures[n] = n;
-    }
-    for (new n = 0; n < 12; n++) {
-        figures[n + 12] = n;
-    }
+
+init_variables_3_sets_1() {
+    figures[0] = 1;
+    figures[1] = 5;
+    figures[2] = 3;
+    figures[3] = 2;
+    figures[4] = 6;
+    figures[5] = 11;
+    figures[6] = 0;
+    figures[7] = 10;
+    figures[8] = 8;
+    figures[9] = 9;
+    figures[10] = 4;
+    figures[11] = 7;
+    figures[12] = 0;
+    figures[13] = 10;
+    figures[14] = 8;
+    figures[15] = 9;
+    figures[16] = 4;
+    figures[17] = 7;
+    figures[18] = 3;
+    figures[19] = 2;
+    figures[20] = 6;
+    figures[21] = 11;
+    figures[22] = 4;
+    figures[23] = 7;
+
     track_position();
 }
 
-init_variables_3_sets() {
-    for (new n = 0; n < 12; n++) {
-        figures[n] = n;
-    }
-    for (new n = 0; n < 12; n++) {
-        figures[n + 12] = n;
-    }
-    //Shuffle the array
-    for (new n = 0; n < 24; n++) {
-        new rand = Random(0, 23);
-        swap_slots(figures, n, rand);
-    }
+init_variables_3_sets_2() {
+    figures[0] = 3;
+    figures[1] = 10;
+    figures[2] = 11;
+    figures[3] = 6;
+    figures[4] = 2;
+    figures[5] = 1;
+    figures[6] = 8;
+    figures[7] = 7;
+    figures[8] = 0;
+    figures[9] = 9;
+    figures[10] = 5;
+    figures[11] = 4;
+    figures[12] = 7;
+    figures[13] = 0;
+    figures[14] = 9;
+    figures[15] = 10;
+    figures[16] = 11;
+    figures[17] = 6;
+    figures[18] = 2;
+    figures[19] = 7;
+    figures[20] = 0;
+    figures[21] = 9;
+    figures[22] = 5;
+    figures[23] = 4;
+
     track_position();
 }
 
-init_variables_4_sets() {
-    for (new n = 0; n < 16; n++) {
-        figures[n] = n;
-    }
-    for (new n = 0; n < 8; n++) {
-        figures[n + 16] = n;
-    }
-    //Shuffle the array
-    for (new n = 0; n < 24; n++) {
-        new rand = Random(0, 23);
-        swap_slots(figures, n, rand);
-    }
+init_variables_3_sets_3() {
+    figures[0] = 8;
+    figures[1] = 1;
+    figures[2] = 7;
+    figures[3] = 4;
+    figures[4] = 9;
+    figures[5] = 11;
+    figures[6] = 6;
+    figures[7] = 2;
+    figures[8] = 10;
+    figures[9] = 5;
+    figures[10] = 0;
+    figures[11] = 3;
+    figures[12] = 8;
+    figures[13] = 1;
+    figures[14] = 7;
+    figures[15] = 4;
+    figures[16] = 9;
+    figures[17] = 2;
+    figures[18] = 10;
+    figures[19] = 8;
+    figures[20] = 1;
+    figures[21] = 7;
+    figures[22] = 4;
+    figures[23] = 9;
+
     track_position();
 }
 
-init_variables_5_sets() {
-    for (new n = 0; n < 20; n++) {
-        figures[n] = n;
-    }
-    for (new n = 0; n < 4; n++) {
-        figures[n + 20] = n;
-    }
-    //Shuffle the array
-    for (new n = 0; n < 24; n++) {
-        new rand = Random(0, 23);
-        swap_slots(figures, n, rand);
-    }
+init_variables_4_sets_1() {
+    figures[0] = 3;
+    figures[1] = 7;
+    figures[2] = 10;
+    figures[3] = 4;
+    figures[4] = 8;
+    figures[5] = 1;
+    figures[6] = 9;
+    figures[7] = 15;
+    figures[8] = 13;
+    figures[9] = 14;
+    figures[10] = 2;
+    figures[11] = 0;
+    figures[12] = 11;
+    figures[13] = 6;
+    figures[14] = 5;
+    figures[15] = 12;
+    figures[16] = 10;
+    figures[17] = 4;
+    figures[18] = 8;
+    figures[19] = 1;
+    figures[20] = 2;
+    figures[21] = 0;
+    figures[22] = 11;
+    figures[23] = 6;
+
     track_position();
 }
 
-init_variables_6_sets() {
-    for (new n = 0; n < 24; n++) {
-        figures[n] = n;
-    }
-    //Shuffle the array
-    for (new n = 0; n < 24; n++) {
-        new rand = Random(0, 23);
-        swap_slots(figures, n, rand);
-    }
+init_variables_4_sets_2() {
+    figures[0] = 1;
+    figures[1] = 10;
+    figures[2] = 14;
+    figures[3] = 6;
+    figures[4] = 12;
+    figures[5] = 4;
+    figures[6] = 5;
+    figures[7] = 13;
+    figures[8] = 11;
+    figures[9] = 7;
+    figures[10] = 2;
+    figures[11] = 9;
+    figures[12] = 3;
+    figures[13] = 0;
+    figures[14] = 15;
+    figures[15] = 8;
+    figures[16] = 9;
+    figures[17] = 3;
+    figures[18] = 0;
+    figures[19] = 15;
+    figures[20] = 8;
+    figures[21] = 2;
+    figures[22] = 9;
+    figures[23] = 3;
+
+    track_position();
+}
+
+init_variables_4_sets_3() {
+    figures[0] = 3;
+    figures[1] = 12;
+    figures[2] = 8;
+    figures[3] = 10;
+    figures[4] = 9;
+    figures[5] = 5;
+    figures[6] = 7;
+    figures[7] = 13;
+    figures[8] = 1;
+    figures[9] = 15;
+    figures[10] = 2;
+    figures[11] = 14;
+    figures[12] = 11;
+    figures[13] = 6;
+    figures[14] = 4;
+    figures[15] = 0;
+    figures[16] = 14;
+    figures[17] = 11;
+    figures[18] = 6;
+    figures[19] = 4;
+    figures[20] = 0;
+    figures[21] = 9;
+    figures[22] = 5;
+    figures[23] = 7;
+
+    track_position();
+}
+
+init_variables_5_sets_1() {
+    figures[0] = 9;
+    figures[1] = 12;
+    figures[2] = 10;
+    figures[3] = 14;
+    figures[4] = 7;
+    figures[5] = 0;
+    figures[6] = 5;
+    figures[7] = 2;
+    figures[8] = 13;
+    figures[9] = 6;
+    figures[10] = 1;
+    figures[11] = 17;
+    figures[12] = 3;
+    figures[13] = 4;
+    figures[14] = 19;
+    figures[15] = 16;
+    figures[16] = 15;
+    figures[17] = 11;
+    figures[18] = 18;
+    figures[19] = 8;
+    figures[20] = 13;
+    figures[21] = 6;
+    figures[22] = 1;
+    figures[23] = 17;
+
+    track_position();
+}
+
+init_variables_5_sets_2() {
+    figures[0] = 3;
+    figures[1] = 15;
+    figures[2] = 10;
+    figures[3] = 7;
+    figures[4] = 2;
+    figures[5] = 1;
+    figures[6] = 19;
+    figures[7] = 18;
+    figures[8] = 17;
+    figures[9] = 12;
+    figures[10] = 16;
+    figures[11] = 9;
+    figures[12] = 4;
+    figures[13] = 5;
+    figures[14] = 8;
+    figures[15] = 0;
+    figures[16] = 6;
+    figures[17] = 13;
+    figures[18] = 14;
+    figures[19] = 11;
+    figures[20] = 19;
+    figures[21] = 18;
+    figures[22] = 17;
+    figures[23] = 12;
+
+    track_position();
+}
+
+init_variables_5_sets_3() {
+    figures[0] = 3;
+    figures[1] = 10;
+    figures[2] = 8;
+    figures[3] = 6;
+    figures[4] = 15;
+    figures[5] = 17;
+    figures[6] = 9;
+    figures[7] = 13;
+    figures[8] = 0;
+    figures[9] = 12;
+    figures[10] = 19;
+    figures[11] = 11;
+    figures[12] = 2;
+    figures[13] = 16;
+    figures[14] = 4;
+    figures[15] = 7;
+    figures[16] = 1;
+    figures[17] = 5;
+    figures[18] = 18;
+    figures[19] = 14;
+    figures[20] = 6;
+    figures[21] = 15;
+    figures[22] = 17;
+    figures[23] = 9;
+
+    track_position();
+}
+
+init_variables_6_sets_1() {
+    figures[0] = 19;
+    figures[1] = 8;
+    figures[2] = 0;
+    figures[3] = 7;
+    figures[4] = 13;
+    figures[5] = 16;
+    figures[6] = 4;
+    figures[7] = 5;
+    figures[8] = 11;
+    figures[9] = 23;
+    figures[10] = 21;
+    figures[11] = 20;
+    figures[12] = 1;
+    figures[13] = 10;
+    figures[14] = 2;
+    figures[15] = 18;
+    figures[16] = 22;
+    figures[17] = 14;
+    figures[18] = 12;
+    figures[19] = 9;
+    figures[20] = 15;
+    figures[21] = 17;
+    figures[22] = 6;
+    figures[23] = 3;
+
+    track_position();
+}
+
+init_variables_6_sets_2() {
+    figures[0] = 21;
+    figures[1] = 14;
+    figures[2] = 23;
+    figures[3] = 11;
+    figures[4] = 9;
+    figures[5] = 1;
+    figures[6] = 0;
+    figures[7] = 3;
+    figures[8] = 6;
+    figures[9] = 12;
+    figures[10] = 15;
+    figures[11] = 4;
+    figures[12] = 19;
+    figures[13] = 20;
+    figures[14] = 16;
+    figures[15] = 17;
+    figures[16] = 5;
+    figures[17] = 18;
+    figures[18] = 10;
+    figures[19] = 22;
+    figures[20] = 13;
+    figures[21] = 8;
+    figures[22] = 2;
+    figures[23] = 7;
+
     track_position();
 }
 
@@ -230,21 +507,21 @@ track_position() {
     position[7][2][0] = assign_group(figures[23]);
 }
 
-draw_background(screen) {
-    abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
-}
+// draw_background(screen) {
+//     abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+// }
 
-anchor_background() {
-    #ifndef G2D
-    return;
-    #endif
-    CheckAngles();
-    for (new screen = 0; screen < 3; screen++) {
-        abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-        abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
-        abi_CMD_G2D_END();
-    }
-}
+// anchor_background() {
+//     #ifndef G2D
+//     return;
+//     #endif
+//     CheckAngles();
+//     for (new screen = 0; screen < 3; screen++) {
+//         abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+//         abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+//         abi_CMD_G2D_END();
+//     }
+// }
 
 assign_group(picture) {
     if (picture <= 3) {
@@ -263,7 +540,7 @@ assign_group(picture) {
 }
 
 check_match() {
-    if(countMoves == 0){        
+    if (countMoves == 0) {
         return;
     }
     for (new cube = 0; cube < 8; cube++) {
@@ -351,28 +628,31 @@ reset() {
     CheckAngles();
     for (new screen = 0; screen < 3; screen++) {
         abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-        draw_background(screen);
+        //draw_background(screen);
+        abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         abi_CMD_G2D_END();
         strformat(string, sizeof(string), true, "%d", score);
         abi_CMD_TEXT(string, 0, 120, 120, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         abi_CMD_REDRAW(screen);
     }
     delay();
-    if (countCompleted <= 2) {
-        init_variables_3_sets();
-    } else if ((countCompleted > 2) && (countCompleted <= 5)) {
-        init_variables_4_sets();
-    } else if ((countCompleted > 5) && (countCompleted <= 8)) {
-        init_variables_5_sets();
-    } else if (countCompleted > 8) {
-        init_variables_6_sets();
+    switch (countCompleted) {
+        case 1 : init_variables_3_sets_2();
+        case 2 : init_variables_3_sets_3();
+        case 3 : init_variables_4_sets_1();
+        case 4 : init_variables_4_sets_2();
+        case 5 : init_variables_4_sets_3();
+        case 6 : init_variables_5_sets_1();
+        case 7 : init_variables_5_sets_2();
+        case 8 : init_variables_5_sets_3();
+        case 9 :  {
+            if ((countCompleted % 2) == 0) {
+                init_variables_6_sets_1();
+            } else {
+                init_variables_6_sets_2();
+            }
+        }
     }
-}
-
-swap_slots(figures[], n, rand) {
-    new temp = figures[rand];
-    figures[rand] = figures[n];
-    figures[n] = temp;
 }
 
 delay() {
