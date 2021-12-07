@@ -1,6 +1,7 @@
 #include "cubios_abi.pwn"
 #include "trbl.pwn"
 #include "math.pwn"
+#include "topology.pwn"
 #include "run.pwn"
 
 #define DISPLAY_WIDTH   240
@@ -48,7 +49,7 @@
 
 new string[4];
 
-new score = 0;
+new current_score = 0;
 new highscore = 10000;
 new items[3];
 new health[8] = [HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW, HEALTH_LOW];
@@ -88,11 +89,12 @@ ONTICK() {
     horse_location[0] = abi_leftCubeN(cow_location[0], cow_location[1]);
     horse_location[1] = abi_leftFaceN(cow_location[0], cow_location[1]);
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
+        Topology_FindTopMostModule(1);
         abi_CMD_FILL(7, 54, 14);
-        if ((abi_cubeN == highscore_location[0]) && (screenI == highscore_location[1])) {
+        /*if ((abi_cubeN == highscore_location[0]) && (screenI == highscore_location[1])) {
             abi_CMD_BITMAP(HIGHSCORE_GOLD, 120, 120, 180, MIRROR_BLANK);
         } else if ((abi_cubeN == score_location[0]) && (screenI == score_location[1])) {
-            strformat(string, sizeof(string), true, "Score: %d", score);
+            strformat(string, sizeof(string), true, "Score: %d", current_score);
             abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 270, TEXT_ALIGN_CENTER, 255, 255, 255);
         } else if ((abi_cubeN == instruction_location[0]) && (screenI == instruction_location[1])) {
             strformat(string, sizeof(string), true, "1x Tap: ");
@@ -133,12 +135,9 @@ ONTICK() {
             if (items[screenI] != 0) {
                 abi_CMD_BITMAP(items[screenI], 120, 120, get_item_angle(screenI), MIRROR_BLANK);
             }
-            if (abi_MTD_GetTapsCount() >= 3) {
-                draw_items(Random(0, 100));
-            }
             if (
-                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceGyroZ((screenI + 1) % 3)) &&
-                (abi_MTD_GetFaceAccelZ(screenI) < abi_MTD_GetFaceGyroZ((screenI + 2) % 3))
+                (abi_cubeN == topology_TopmostModule) &&
+                (screenI == topology_TopmostScreen)
             ) {
                 if (is_inventory_item(screenI)) {
                     abi_CMD_BITMAP(ARROW_CURVED, 120, 120, 270, MIRROR_BLANK);
@@ -148,8 +147,13 @@ ONTICK() {
                 if (abi_MTD_GetTapsCount() == 1) {
                     use_item(screenI);
                 }
+                if (abi_MTD_GetTapsCount() == 3) {
+                    draw_items(Random(0, 100));
+                }
             }
-        }
+        }*/
+        strformat(string, sizeof(string), true, "Module: %d", topology_TopmostModules[0]);
+        abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 270, TEXT_ALIGN_CENTER, 255, 255, 255);
         abi_CMD_REDRAW(screenI);
     }
     if (0 == abi_cubeN) {
@@ -162,7 +166,7 @@ ON_CMD_NET_RX(const pkt[]) {
     switch (abi_ByteN(pkt, 4)) {
         case CMD_SEND_ITEM:  {
             health[abi_ByteN(pkt, 8)] = abi_ByteN(pkt, 9);
-            score = abi_ByteN(pkt, 10);
+            current_score = abi_ByteN(pkt, 10);
         }
     }
 }
@@ -230,11 +234,11 @@ feed_animal(animal, healthpoints, points) {
     } else if (health[animal] > HEALTH_FULL) {
         health[animal] = HEALTH_FULL;
     }
-    score = score + points;
-    if (score < 0) {
-        score = 0;
+    current_score = current_score + points;
+    if (current_score < 0) {
+        current_score = 0;
     }
-    send_item(animal, health[animal], score);
+    send_item(animal, health[animal], current_score);
 }
 
 is_inventory_item(face) {
