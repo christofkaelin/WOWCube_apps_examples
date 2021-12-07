@@ -152,7 +152,7 @@ ONTICK() {
                 }
             }
         }*/
-        strformat(string, sizeof(string), true, "Module: %d", topology_TopmostModules);
+        strformat(string, sizeof(string), true, "Module: %d", topology_TopmostModule);
         abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 270, TEXT_ALIGN_CENTER, 255, 255, 255);
         abi_CMD_REDRAW(screenI);
     }
