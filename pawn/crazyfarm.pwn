@@ -91,7 +91,7 @@ ONTICK() {
     for (new screenI = 0; screenI < FACES_MAX; screenI++) {
         Topology_FindTopMostModule();
         abi_CMD_FILL(7, 54, 14);
-        /*if ((abi_cubeN == highscore_location[0]) && (screenI == highscore_location[1])) {
+        if ((abi_cubeN == highscore_location[0]) && (screenI == highscore_location[1])) {
             abi_CMD_BITMAP(HIGHSCORE_GOLD, 120, 120, 180, MIRROR_BLANK);
         } else if ((abi_cubeN == score_location[0]) && (screenI == score_location[1])) {
             strformat(string, sizeof(string), true, "Score: %d", current_score);
@@ -151,9 +151,7 @@ ONTICK() {
                     draw_items(Random(0, 100));
                 }
             }
-        }*/
-        strformat(string, sizeof(string), true, "Module: %d", topology_TopmostModule);
-        abi_CMD_TEXT(string, 0, DISPLAY_WIDTH / 2, 120, TEXT_SIZE, 270, TEXT_ALIGN_CENTER, 255, 255, 255);
+        }
         abi_CMD_REDRAW(screenI);
     }
     if (0 == abi_cubeN) {
