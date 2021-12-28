@@ -26,6 +26,9 @@ new score = 0;
 new countCompleted = 0;
 new countMoves = 0;
 
+new count_delay;
+new bool:is_reset = false;
+
 ONTICK() {
     check_match();
     if (0 == abi_cubeN) {
@@ -33,7 +36,13 @@ ONTICK() {
     }
 }
 
-ON_PHYSICS_TICK() {}
+ON_PHYSICS_TICK() {
+    if (is_reset) {
+        count_delay++;
+        //printf("Delay: %d\n", count_delay);
+        reset();
+    }
+}
 
 RENDER() {
     CheckAngles();
@@ -522,7 +531,6 @@ check_match() {
             new groupDiagonal = position[diagonalCube][diagonalFace][0];
             new tempFigure = figures[cube];
             if ((groupCurrent == groupLeft) && (groupCurrent == groupTop) && (groupCurrent == groupDiagonal)) {
-                countCompleted++;
                 switch (groupCurrent) {
                     case 0 :  {
                         for (new n = 0; n < 24; n++) {
@@ -563,61 +571,59 @@ check_match() {
 }
 
 reset() {
+    is_reset = true;
     RENDER();
-    delay();
 
-    for (new n = 0; n < 24; n++) {
-        figures[n] = BACKGROUND;
+    if (count_delay >= 40) {
+        is_reset = false;
     }
 
-    if (countCompleted <= 2) {
-        score = score + 100;
-    } else if ((countCompleted > 2) && (countCompleted <= 5)) {
-        score = score + 300;
-    } else if ((countCompleted > 5) && (countCompleted <= 8)) {
-        score = score + 600;
-    } else if (countCompleted > 8) {
-        score = score + 1000;
-    }
-
-    score = score - (countMoves * 5);
-    countMoves = 0;
-
-    CheckAngles();
-    for (new screen = 0; screen < 3; screen++) {
-        abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
-        abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
-        abi_CMD_G2D_END();
-        strformat(string, sizeof(string), true, "%d", score);
-        abi_CMD_TEXT(string, 0, 120, 120, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
-        abi_CMD_REDRAW(screen);
-    }
-
-    delay();
-
-    if (countCompleted < 9) {
-        switch (countCompleted) {
-            case 1 : init_variables_3_sets_2();
-            case 2 : init_variables_3_sets_3();
-            case 3 : init_variables_4_sets_1();
-            case 4 : init_variables_4_sets_2();
-            case 5 : init_variables_4_sets_3();
-            case 6 : init_variables_5_sets_1();
-            case 7 : init_variables_5_sets_2();
-            case 8 : init_variables_5_sets_3();
+    if (!is_reset) {
+        countCompleted++;
+        for (new n = 0; n < 24; n++) {
+            figures[n] = BACKGROUND;
         }
-    } else {
-        if ((countCompleted % 2) == 0) {
-            init_variables_6_sets_1();
+
+        if (countCompleted <= 2) {
+            score = score + 100;
+        } else if ((countCompleted > 2) && (countCompleted <= 5)) {
+            score = score + 300;
+        } else if ((countCompleted > 5) && (countCompleted <= 8)) {
+            score = score + 600;
+        } else if (countCompleted > 8) {
+            score = score + 1000;
+        }
+
+        score = score - (countMoves * 5);
+        countMoves = 0;
+
+        CheckAngles();
+        for (new screen = 0; screen < 3; screen++) {
+            abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+            abi_CMD_G2D_ADD_SPRITE(BACKGROUND, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_END();
+            strformat(string, sizeof(string), true, "%d", score);
+            abi_CMD_TEXT(string, 0, 120, 120, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_REDRAW(screen);
+        }
+        if (countCompleted < 9) {
+            switch (countCompleted) {
+                case 1 : init_variables_3_sets_2();
+                case 2 : init_variables_3_sets_3();
+                case 3 : init_variables_4_sets_1();
+                case 4 : init_variables_4_sets_2();
+                case 5 : init_variables_4_sets_3();
+                case 6 : init_variables_5_sets_1();
+                case 7 : init_variables_5_sets_2();
+                case 8 : init_variables_5_sets_3();
+            }
         } else {
-            init_variables_6_sets_2();
+            if ((countCompleted % 2) == 0) {
+                init_variables_6_sets_1();
+            } else {
+                init_variables_6_sets_2();
+            }
         }
-    }
-}
-
-delay() {
-    new delay = 0;
-    while (delay < 99000000) {
-        delay++;
+        count_delay = 0;
     }
 }
