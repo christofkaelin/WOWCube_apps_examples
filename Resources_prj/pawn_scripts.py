@@ -266,7 +266,7 @@ class jigsaw(pawn_base.PawnModule):
         self.name = 'jigsaw'
         self.scriptId = 13
         self.ScriptResourceList = [
-            self.FILE_TEMPLATE_PNG % ii for ii in range(0, 31)
+            self.FILE_TEMPLATE_PNG % ii for ii in range(0, 34)
         ]
         self.ScriptResourcePath = 'jigsaw'
         self.ScriptFileName = 'jigsaw.amx'
