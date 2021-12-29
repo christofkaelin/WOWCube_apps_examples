@@ -16,7 +16,7 @@
 #define SET_4_COMPLETE 29
 #define SET_5_COMPLETE 30
 
-new background = 33;
+new background = 24;
 new string[4];
 new figures[24];
 new position[8][3][6]; //position[cube][face][group]
