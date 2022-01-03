@@ -7,7 +7,7 @@
 #define DISPLAY_WIDTH   240
 #define DISPLAY_HEIGHT  240
 
-#define TEXT_SIZE 10
+#define FONT_SIZE 10
 
 #define SET_0_COMPLETE 25
 #define SET_1_COMPLETE 26
@@ -130,18 +130,19 @@ RENDER() {
             strformat(string, sizeof(string), true, "%d", score);
             switch (newAngles[screen]) {
                 case 0 :  {
-                    abi_CMD_TEXT(string, 0, 200, 220, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT(string, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
                 }
                 case 90 :  {
-                    abi_CMD_TEXT(string, 0, 20, 200, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT(string, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
                 }
                 case 180 :  {
-                    abi_CMD_TEXT(string, 0, 40, 20, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT(string, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
                 }
                 case 270 :  {
-                    abi_CMD_TEXT(string, 0, 220, 40, TEXT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+                    abi_CMD_TEXT(string, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
                 }
             }
+            abi_CMD_REDRAW(screen);
         }
         abi_CMD_G2D_END();
     }
