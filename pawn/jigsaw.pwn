@@ -141,10 +141,10 @@ RENDER() {
                 case 270 :  {
                     abi_CMD_TEXT(string, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
                 }
-            }
-            abi_CMD_REDRAW(screen);
+            }            
         }
         abi_CMD_G2D_END();
+        abi_CMD_REDRAW(screen);
     }
 }
 ON_CMD_NET_RX(const pkt[]) {}
