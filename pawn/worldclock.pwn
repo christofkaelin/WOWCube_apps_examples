@@ -4,7 +4,6 @@
 #include "math.pwn"
 #include "run.pwn"
 #include "angles.pwn"
-#include <time>
 
 #define DISPLAY_WIDTH   240
 #define DISPLAY_HEIGHT  240
@@ -13,15 +12,15 @@ new gmt;
 new city[4];
 
 getHour() {
-    return (gettime() % 86400) / 3600;
+    return ((abi_GetTime()/1000) % 86400) / 3600;
 }
 
 getMin() {
-    return (gettime() % 3600) / 60;
+    return ((abi_GetTime()/1000) % 3600) / 60;
 }
 
 getSec() {
-    return gettime() % 60;
+    return (abi_GetTime()/1000) % 60;
 }
 
 setCity(gmt) {
@@ -81,6 +80,9 @@ ONTICK() {
     new screenI;
     //recalculate angle based on trbl
     CheckAngles();
+    /*new time[4];
+    strformat(time, sizeof(time), true, "%d\n", abi_GetTime());
+    print(time);*/
     for (screenI = 0; screenI < FACES_MAX; screenI++) {
         //clear screen before output
         abi_CMD_FILL(0, 0, 0);
@@ -95,13 +97,13 @@ ONTICK() {
         setCity(gmt);
         switch (newAngles[screenI]) {
             case 180:
-                abi_CMD_TEXT(city, 0, DISPLAY_WIDTH / 2, (DISPLAY_HEIGHT / 3) * 2, 6, newAngles[screenI], TEXT_ALIGN_CENTER, 0, 0, 0);
+                abi_CMD_TEXT(city, 0, DISPLAY_WIDTH / 2, (DISPLAY_HEIGHT / 3) * 2, 6, newAngles[screenI], TEXT_ALIGN_CENTER, 0, 0, 8);
             case 90:
-                abi_CMD_TEXT(city, 0, (DISPLAY_WIDTH / 3) * 2, DISPLAY_HEIGHT / 2, 6, newAngles[screenI], TEXT_ALIGN_CENTER, 0, 0, 0);
+                abi_CMD_TEXT(city, 0, (DISPLAY_WIDTH / 3) * 2, DISPLAY_HEIGHT / 2, 6, newAngles[screenI], TEXT_ALIGN_CENTER, 0, 0, 8);
             case 270:
-                abi_CMD_TEXT(city, 0, DISPLAY_WIDTH / 3, DISPLAY_HEIGHT / 2, 6, newAngles[screenI], TEXT_ALIGN_CENTER, 0, 0, 0);
+                abi_CMD_TEXT(city, 0, DISPLAY_WIDTH / 3, DISPLAY_HEIGHT / 2, 6, newAngles[screenI], TEXT_ALIGN_CENTER, 0, 0, 8);
             case 0:
-                abi_CMD_TEXT(city, 0, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 3, 6, newAngles[screenI], TEXT_ALIGN_CENTER, 0, 0, 0);
+                abi_CMD_TEXT(city, 0, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 3, 6, newAngles[screenI], TEXT_ALIGN_CENTER, 0, 0, 8);
         }
 
         // draw hours
