@@ -17,7 +17,6 @@
 #define SET_5_COMPLETE 30
 
 new background = 24;
-new string[4];
 new figures[24];
 new position[8][3][6]; //position[cube][face][group]
 new score = 100;
@@ -127,24 +126,9 @@ RENDER() {
             abi_CMD_G2D_ADD_SPRITE(figures[23], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if (!is_in_reset) {
-            strformat(string, sizeof(string), true, "%d", score);
-            switch (newAngles[screen]) {
-                case 0 :  {
-                    abi_CMD_TEXT(string, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
-                }
-                case 90 :  {
-                    abi_CMD_TEXT(string, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
-                }
-                case 180 :  {
-                    abi_CMD_TEXT(string, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
-                }
-                case 270 :  {
-                    abi_CMD_TEXT(string, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
-                }
-            }            
+            draw_HUD(screen);
         }
         abi_CMD_G2D_END();
-        abi_CMD_REDRAW(screen);
     }
 }
 ON_CMD_NET_RX(const pkt[]) {}
@@ -521,6 +505,27 @@ assign_group(picture) {
         return 4;
     } else if (picture > 19 && picture <= 23) {
         return 5;
+    }
+}
+
+draw_HUD(screen) {
+    switch (newAngles[screen]) {
+        case 0 :  {
+            //abi_CMD_TEXT(string, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+        }
+        case 90 :  {
+            //abi_CMD_TEXT(string, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+        }
+        case 180 :  {
+            //abi_CMD_TEXT(string, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+        }
+        case 270 :  {
+            //abi_CMD_TEXT(string, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+        }
     }
 }
 
