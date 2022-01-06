@@ -512,16 +512,16 @@ draw_HUD(screen) {
     abi_CMD_G2D_BEGIN_DISPLAY(screen, false);
     switch (newAngles[screen]) {
         case 0 :  {            
-            abi_CMD_TEXT_ITOA(score, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255, true);
         }
         case 90 :  {            
-            abi_CMD_TEXT_ITOA(score, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255, true);
         }
         case 180 :  {            
-            abi_CMD_TEXT_ITOA(score, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255, true);
         }
         case 270 :  {          
-            abi_CMD_TEXT_ITOA(score, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255, true);
         }
     }
     abi_CMD_G2D_END();
