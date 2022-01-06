@@ -36,7 +36,6 @@ ONTICK() {
 ON_PHYSICS_TICK() {
     if (is_in_reset) {
         count_delay++;
-        //printf("Delay: %d\n", count_delay);
         reset();
     }
 }
@@ -125,10 +124,10 @@ RENDER() {
             abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[23], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
-        abi_CMD_G2D_END();
         if (!is_in_reset) {
             draw_HUD(screen);
         }
+        abi_CMD_G2D_END();        
     }
 }
 ON_CMD_NET_RX(const pkt[]) {}
@@ -509,7 +508,6 @@ assign_group(picture) {
 }
 
 draw_HUD(screen) {
-    abi_CMD_G2D_BEGIN_DISPLAY(screen, false);
     switch (newAngles[screen]) {
         case 0 :  {            
             abi_CMD_TEXT_ITOA(score, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255, true);
@@ -524,7 +522,6 @@ draw_HUD(screen) {
             abi_CMD_TEXT_ITOA(score, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255, true);
         }
     }
-    abi_CMD_G2D_END();
 }
 
 check_match() {
@@ -594,7 +591,7 @@ reset() {
     is_in_reset = true;
     RENDER();
 
-    if (count_delay >= 40) {
+    if (count_delay >= 60) {
         is_in_reset = false;
     }
 
