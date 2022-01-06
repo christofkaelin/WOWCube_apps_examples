@@ -125,10 +125,10 @@ RENDER() {
             abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
             abi_CMD_G2D_ADD_SPRITE(figures[23], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
+        abi_CMD_G2D_END();
         if (!is_in_reset) {
             draw_HUD(screen);
         }
-        abi_CMD_G2D_END();
     }
 }
 ON_CMD_NET_RX(const pkt[]) {}
@@ -509,24 +509,22 @@ assign_group(picture) {
 }
 
 draw_HUD(screen) {
+    abi_CMD_G2D_BEGIN_DISPLAY(screen, false);
     switch (newAngles[screen]) {
-        case 0 :  {
-            //abi_CMD_TEXT(string, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+        case 0 :  {            
             abi_CMD_TEXT_ITOA(score, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
-        case 90 :  {
-            //abi_CMD_TEXT(string, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+        case 90 :  {            
             abi_CMD_TEXT_ITOA(score, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
-        case 180 :  {
-            //abi_CMD_TEXT(string, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+        case 180 :  {            
             abi_CMD_TEXT_ITOA(score, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
-        case 270 :  {
-            //abi_CMD_TEXT(string, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+        case 270 :  {          
             abi_CMD_TEXT_ITOA(score, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
     }
+    abi_CMD_G2D_END();
 }
 
 check_match() {
