@@ -44,91 +44,91 @@ ON_PHYSICS_TICK() {
 RENDER() {
     CheckAngles();
     for (new screen = 0; screen < 3; screen++) {
-        //abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
+        abi_CMD_G2D_BEGIN_DISPLAY(screen, true);
         if ((abi_cubeN == 0) && (screen == 0)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[0], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[0], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 0) && (screen == 1)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[1], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[1], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 0) && (screen == 2)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[2], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[2], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 1) && (screen == 0)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[3], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[3], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 1) && (screen == 1)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[4], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[4], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 1) && (screen == 2)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[5], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[5], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 2) && (screen == 0)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[6], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[6], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 2) && (screen == 1)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[7], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[7], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 2) && (screen == 2)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[8], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[8], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 3) && (screen == 0)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[9], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[9], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 3) && (screen == 1)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[10], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[10], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 3) && (screen == 2)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[11], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[11], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 4) && (screen == 0)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[12], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[12], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 4) && (screen == 1)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[13], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[13], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 4) && (screen == 2)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[14], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[14], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 5) && (screen == 0)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[15], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[15], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 5) && (screen == 1)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[16], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[16], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 5) && (screen == 2)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[17], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[17], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 6) && (screen == 0)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[18], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[18], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 6) && (screen == 1)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[19], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[19], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 6) && (screen == 2)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[20], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[20], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if ((abi_cubeN == 7) && (screen == 0)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[21], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[21], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 7) && (screen == 1)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[22], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[22], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         } else if ((abi_cubeN == 7) && (screen == 2)) {
-            abi_CMD_BITMAP(background, 120, 120, newAngles[screen], MIRROR_BLANK);
-            abi_CMD_BITMAP(figures[23], 120, 120, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(background, false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
+            abi_CMD_G2D_ADD_SPRITE(figures[23], false, 120, 120, 0xFF, 0, newAngles[screen], MIRROR_BLANK);
         }
         if (!is_in_reset) {
             draw_HUD(screen);
         }
-        abi_CMD_REDRAW(screen);
+        abi_CMD_G2D_END();
     }
 }
 ON_CMD_NET_RX(const pkt[]) {}
@@ -509,24 +509,22 @@ assign_group(picture) {
 }
 
 draw_HUD(screen) {
-    new string[4];
-    strformat(string, sizeof(string), true, "%d", score);
     switch (newAngles[screen]) {
         case 0 :  {
-            abi_CMD_TEXT(string, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
-            //abi_CMD_TEXT_ITOA(score, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            //abi_CMD_TEXT(string, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 200, 220, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
         case 90 :  {
-            abi_CMD_TEXT(string, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
-            //abi_CMD_TEXT_ITOA(score, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            //abi_CMD_TEXT(string, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 20, 200, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
         case 180 :  {
-            abi_CMD_TEXT(string, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
-            //abi_CMD_TEXT_ITOA(score, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            //abi_CMD_TEXT(string, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 40, 20, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
         case 270 :  {
-            abi_CMD_TEXT(string, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
-            //abi_CMD_TEXT_ITOA(score, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            //abi_CMD_TEXT(string, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
+            abi_CMD_TEXT_ITOA(score, 0, 220, 40, FONT_SIZE, newAngles[screen], TEXT_ALIGN_CENTER, 255, 255, 255);
         }
     }
 }
